@@ -716,7 +716,7 @@ namespace GRBL_Plotter
             //isNUllParameter();
             //if (dxcb!="")
             //{
-            MessageBox.Show("");
+            MessageBox.Show("165489465465465465");
                 openFileDialog1.FileName = "";
                 openFileDialog1.Filter = "gcode files (*.nc)|*.nc|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|All files (*.*)|*.*";
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
