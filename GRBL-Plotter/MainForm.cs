@@ -199,7 +199,7 @@ namespace GRBL_Plotter
                 //pictureBox1.BackColor = Properties.Settings.Default.colorBackground;
                 //                visuGCode.setColors();
                 penUp.Color = Properties.Settings.Default.colorPenUp;
-               
+
                 penDown.Color = Properties.Settings.Default.colorPenDown;
                 penHeightMap.Color = Properties.Settings.Default.colorHeightMap;
                 penRuler.Color = Properties.Settings.Default.colorRuler;
@@ -611,7 +611,7 @@ namespace GRBL_Plotter
             #region 判断非空
             if (txt_ModelSetting.Text == "")
             {
-                MessageBox.Show("模式设置不能为空");return;
+                MessageBox.Show("模式设置不能为空"); return;
             }
             else if (!(System.Text.RegularExpressions.Regex.IsMatch(txt_ModelSetting.Text, @"^[0-2]{1,1}$")))
             {
@@ -716,16 +716,15 @@ namespace GRBL_Plotter
             //isNUllParameter();
             //if (dxcb!="")
             //{
-            MessageBox.Show("165489465465465465");
-                openFileDialog1.FileName = "";
-                openFileDialog1.Filter = "gcode files (*.nc)|*.nc|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|All files (*.*)|*.*";
-                if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-               
+            openFileDialog1.FileName = "";
+            openFileDialog1.Filter = "gcode files (*.nc)|*.nc|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|All files (*.*)|*.*";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+
                 generateGCode = openFileDialog1.FileName;
-                    isHeightMapApplied = false;
-                }
-        //    }
+                isHeightMapApplied = false;
+            }
+            //    }
         }
         // handle MRU List
         private int MRUnumber = 20;
@@ -933,7 +932,7 @@ namespace GRBL_Plotter
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
-            string gcode = GCodeFromDXF.ConvertFile(source,txt_knife.Text);
+            string gcode = GCodeFromDXF.ConvertFile(source, txt_knife.Text);
             if (gcode.Length > 2)
             {
                 fCTBCode.Text = gcode;
@@ -2344,8 +2343,8 @@ namespace GRBL_Plotter
                 e.Graphics.DrawString(String.Format("Worl-Pos:\r\nX:{0,7:0.00}\r\nY:{1,7:0.00}", picAbsPosX, picAbsPosY), new Font("Lucida Console", 8), Brushes.Black, stringpos);
                 e.Graphics.DrawString(String.Format("Zooming: {0,2:0.00}%", 100 / zoomRange), new Font("Lucida Console", 8), Brushes.Black, new Point(5, 5));
 
-                
-                e.Graphics.Transform = pBoxTransform; 
+
+                e.Graphics.Transform = pBoxTransform;
                 e.Graphics.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)
                 e.Graphics.TranslateTransform((float)-minx, (float)(-yRange - miny));       // apply offset
                                                                                             //     if (picBoxCopy == 0)
@@ -2687,7 +2686,7 @@ namespace GRBL_Plotter
         private void pasteFromClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         { loadFromClipboard(); }
 
-   
+
 
 
         private void btnOverrideFR0_Click(object sender, EventArgs e)
@@ -2714,23 +2713,23 @@ namespace GRBL_Plotter
 
         private void saveToToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
-                SaveFileDialog dial = new SaveFileDialog();
-                dial.Title = "请选择文件夹";
-                dial.Filter = "GCode|*.txt";
-                if (dial.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    string file = dial.FileName;
-                    File.WriteAllText(file, fCTBCode.Text);
-                    MessageBox.Show("保存成功！");
-                }
-            
+
+            SaveFileDialog dial = new SaveFileDialog();
+            dial.Title = "请选择文件夹";
+            dial.Filter = "GCode|*.txt";
+            if (dial.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string file = dial.FileName;
+                File.WriteAllText(file, fCTBCode.Text);
+                MessageBox.Show("保存成功！");
+            }
+
         }
 
         private void txt_ModelSetting_Enter(object sender, EventArgs e)
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
-            if (ci.ToString()=="zh")
+            if (ci.ToString() == "zh")
             {
                 label35.Text = "0:仅钻孔 1:先钻后攻 2:铣槽";
             }
@@ -2747,7 +2746,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "铣削时用颜色识别刀号0:黄色 1:绿色";
             }
-            else if(ci.ToString()=="en")
+            else if (ci.ToString() == "en")
             {
                 label35.Text = "Milling with color identification tool number 0: yellow 1: green";
             }
@@ -2803,7 +2802,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "R point on the initial plane of the cutting tool under milling groove";
             }
-           
+
         }
 
         private void txt_yuanDepth_Enter(object sender, EventArgs e)
@@ -2817,7 +2816,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "The depth of the tool under the Z axis when milling round";
             }
-            
+
         }
 
         private void txt_yuanCutting_Enter(object sender, EventArgs e)
@@ -2831,7 +2830,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Milling circle Z axis direction from point R first downward distance";
             }
-            
+
         }
 
         private void txt_yuanWidth_Enter(object sender, EventArgs e)
@@ -2845,7 +2844,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Single increment of XY plane when milling a circle";
             }
-            
+
         }
 
         private void txt_yuanSingleCutting_Enter(object sender, EventArgs e)
@@ -2859,7 +2858,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "The depth of feed per cutting on the Z axis of the milling circle";
             }
-           
+
         }
 
         private void txt_yuanDistance_Enter(object sender, EventArgs e)
@@ -2873,7 +2872,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Distance from the unmachined surface when cutting quickly";
             }
-           
+
         }
 
         private void txt_yuanSpeed_Enter(object sender, EventArgs e)
@@ -2887,7 +2886,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Milling slot running speed setting";
             }
-           
+
         }
 
         private void txt_juDepth_Enter(object sender, EventArgs e)
@@ -2901,7 +2900,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "The depth of the cutter under the Z axis when milling the rectangle";
             }
-            
+
         }
 
         private void txt_juCutting_Enter(object sender, EventArgs e)
@@ -2915,7 +2914,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Milling moment Z axis direction from point R first downward distance";
             }
-            
+
         }
 
         private void txt_juWidth_Enter(object sender, EventArgs e)
@@ -2929,7 +2928,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Single increment of XY plane at milling moment";
             }
-            
+
         }
 
         private void txt_juSingleCutting_Enter(object sender, EventArgs e)
@@ -2943,7 +2942,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Milling moment Z-axis feed depth per cutting";
             }
-            
+
         }
 
         private void txt_juDistance_Enter(object sender, EventArgs e)
@@ -2957,7 +2956,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Distance from the unmachined surface when cutting quickly";
             }
-            
+
         }
 
         private void txt_juSpeed_Enter(object sender, EventArgs e)
@@ -2971,7 +2970,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "Milling moment speed setting";
             }
-           
+
         }
 
         private void txt_X_Enter(object sender, EventArgs e)
@@ -2985,7 +2984,7 @@ namespace GRBL_Plotter
             {
                 label35.Text = "X axis tool position setting";
             }
-           
+
         }
 
         private void txt_Y_Enter(object sender, EventArgs e)
@@ -3031,7 +3030,7 @@ namespace GRBL_Plotter
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (generateGCode!="")
+            if (generateGCode != "")
             {
                 loadFile(generateGCode);
             }
