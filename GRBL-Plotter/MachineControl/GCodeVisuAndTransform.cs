@@ -30,6 +30,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace GRBL_Plotter
 {
@@ -58,6 +59,7 @@ namespace GRBL_Plotter
         private double zLimit = 0.0;
         private bool containsG2G3 = false;
         private bool containsG91 = false;
+        public static List<MyShape> list = new List<MyShape>();
 
         public void setPosTool(double x, double y, double z)
         { toolPosX = x; toolPosY = y; toolPosZ = z; }
@@ -814,8 +816,12 @@ namespace GRBL_Plotter
                 passLimit = true;
             path.StartFigure();                 // Start Figure but never close to avoid connecting first and last point
             if (motionMode == 0 || motionMode == 1)
-            {   if ((nx != ox) || (ny != oy))
+            {
+                Rectangle ret = new Rectangle();
+                if ((nx != ox) || (ny != oy))
                 {
+                    ret = new Rectangle((int)ox, (int)oy, (int)nx, (int)ny);
+                    list.Add(new MyShape() { Name = "一条线", Rectangle = ret });
                     path.AddLine((float)ox, (float)oy, (float)nx, (float)ny);
                     onlyZ = 0;  // x or y has changed
                 }
@@ -858,8 +864,11 @@ namespace GRBL_Plotter
                 if (motionMode == 3) { da=-(360 + a2 - a1); }
                 if (da > 360) { da -= 360; }
                 if (da < -360) { da += 360; }
+                //Rectangle ret = new Rectangle();
                 if (motionMode == 2)
-                {   path.AddArc(x1, y1, 2 * radius, 2 * radius, a1, da);
+                {
+                    //ret = new Rectangle(x1, y1, 2 * radius, 2 * radius, a1, da);
+                    path.AddArc(x1, y1, 2 * radius, 2 * radius, a1, da);
                     xyzSize.setDimensionCircle(x1 + radius, y1 + radius, radius, a1, da);        // calculate new dimensions
                 }
                 else
@@ -894,33 +903,75 @@ namespace GRBL_Plotter
             createMarker(pathTool, (float)toolPosX, (float)toolPosY, msize, 2);
             createMarker(pathMarker, (float)markerPosX, (float)markerPosY, msize, 3);
         }
+        public class MyShape
+        {
+            public string Name;
+            public Rectangle Rectangle;
+        }
         private void createRuler(double maxX, double maxY)
         {
+            Rectangle myRectangle = new Rectangle();
             for (int i = 0; i < maxX; i++)          // horizontal ruler
-            {   pathRuler.StartFigure();
+            {
+                pathRuler.StartFigure();
                 if (i % 5 == 0)
-                {   if (i % 100 == 0)
-                    { pathRuler.AddLine((float)i, 0, (float)i, -5F); }  // 100                    
-                    else if ((i % 10 == 0) && (maxX < 1000))
-                    { pathRuler.AddLine((float)i, 0, (float)i, -3F); }  // 10                  
-                    else if (maxX < 500)
-                    { pathRuler.AddLine((float)i, 0, (float)i, -2F); }  // 5
+                {
+                    if (i % 100 == 0) // 100    
+                    {
+                        myRectangle = new Rectangle(i, 0, i, (int)-5F);
+                        list.Add(new MyShape() { Name="线条",Rectangle = myRectangle });
+                        pathRuler.AddLine((float)i, 0, (float)i, -5F);
                     }
-                    else if (maxX < 200)
-                    { pathRuler.AddLine((float)i, 0, (float)i, -1F); }  // 1
+                    else if ((i % 10 == 0) && (maxX < 1000))// 10  
+                    {
+                        myRectangle = new Rectangle(i, 0, i, (int)-3F);
+                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                        pathRuler.AddLine((float)i, 0, (float)i, -3F);
+                    }
+                    else if (maxX < 500)// 5
+                    {
+                        myRectangle = new Rectangle(i, 0, i, (int)-2F);
+                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                        pathRuler.AddLine((float)i, 0, (float)i, -2F);
+                    }
+                }
+                else if (maxX < 200)
+                {
+                    myRectangle = new Rectangle(i, 0, i, (int)-1F);
+                    list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                    pathRuler.AddLine((float)i, 0, (float)i, -1F);
+                }  // 1
             }
             for (int i = 0; i < maxY; i++)          // vertical ruler
-            {   pathRuler.StartFigure();
+            {
+                pathRuler.StartFigure();
                 if (i % 5 == 0)
-                {   if (i % 100 == 0)
-                    { pathRuler.AddLine(0, (float)i, -5F, (float)i); } // 100                   
-                    else if ((i % 10 == 0) && (maxY < 1000))
-                    { pathRuler.AddLine(0, (float)i, -3F, (float)i); } // 10           
-                    else if (maxY < 500)
-                    { pathRuler.AddLine(0, (float)i, -2F, (float)i); } // 5
+                {
+                    if (i % 100 == 0) // 100      
+                    {
+                        myRectangle = new Rectangle(0, i, (int)-5F, i);
+                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                        pathRuler.AddLine(0, (float)i, -5F, (float)i);
+                    }             
+                    else if ((i % 10 == 0) && (maxY < 1000)) // 10  
+                    {
+                        myRectangle = new Rectangle(0, i, (int)-3F, i);
+                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                        pathRuler.AddLine(0, (float)i, -3F, (float)i);
+                    }         
+                    else if (maxY < 500) // 5
+                    {
+                        myRectangle = new Rectangle(0, i, (int)-2F, i);
+                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                        pathRuler.AddLine(0, (float)i, -2F, (float)i);
+                    }
                 }
-                else if (maxY < 200)
-                { pathRuler.AddLine(0, (float)i, -1F, (float)i); }     // 1
+                else if (maxY < 200)// 1
+                {
+                    myRectangle = new Rectangle(0, i, (int)-5F, i);
+                    list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                    pathRuler.AddLine(0, (float)i, -1F, (float)i);
+                }     
             }
         }
         private void createMarker(GraphicsPath path, float centerX,float centerY, float dimension,int style,bool rst=true)

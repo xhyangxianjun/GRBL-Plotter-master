@@ -118,6 +118,36 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 21</value>
+  </data>
+  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="createGCodeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 21</value>
+  </data>
+  <data name="createGCodeToolStripMenuItem.Text" xml:space="preserve">
+    <value>创建G代码</value>
+  </data>
+  <data name="gCodeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 21</value>
+  </data>
+  <data name="gCodeToolStripMenuItem.Text" xml:space="preserve">
+    <value>G代码转换</value>
+  </data>
+  <data name="machineToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 21</value>
+  </data>
+  <data name="machineToolStripMenuItem.Text" xml:space="preserve">
+    <value>机控制</value>
+  </data>
+  <data name="aboutToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 21</value>
+  </data>
+  <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
+    <value>关于</value>
+  </data>
   <data name="loadToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 22</value>
   </data>
@@ -163,6 +193,12 @@
   <data name="loadMachineParametersToolStripMenuItem.Text" xml:space="preserve">
     <value>导入机器配置</value>
   </data>
+  <data name="toolStripMenuItem3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="toolStripMenuItem3.Text" xml:space="preserve">
+    <value>语言</value>
+  </data>
   <data name="englishToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 22</value>
   </data>
@@ -181,18 +217,6 @@
   <data name="chineseToolStripMenuItem.Text" xml:space="preserve">
     <value>中文</value>
   </data>
-  <data name="toolStripMenuItem3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="toolStripMenuItem3.Text" xml:space="preserve">
-    <value>语言</value>
-  </data>
-  <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 21</value>
-  </data>
-  <data name="fileToolStripMenuItem.Text" xml:space="preserve">
-    <value>文件</value>
-  </data>
   <data name="textWizzardToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 22</value>
   </data>
@@ -210,12 +234,6 @@
   </data>
   <data name="createSimpleShapesToolStripMenuItem.Text" xml:space="preserve">
     <value>创建简单的形状</value>
-  </data>
-  <data name="createGCodeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>77, 21</value>
-  </data>
-  <data name="createGCodeToolStripMenuItem.Text" xml:space="preserve">
-    <value>创建G代码</value>
   </data>
   <data name="mirrorXToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 22</value>
@@ -322,12 +340,6 @@
   <data name="ersetzteG23DurchLinienToolStripMenuItem.Text" xml:space="preserve">
     <value>用G01替换G2/3</value>
   </data>
-  <data name="gCodeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>77, 21</value>
-  </data>
-  <data name="gCodeToolStripMenuItem.Text" xml:space="preserve">
-    <value>G代码转换</value>
-  </data>
   <data name="heightMapToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>155, 22</value>
   </data>
@@ -358,17 +370,11 @@
   <data name="setupToolStripMenuItem.Text" xml:space="preserve">
     <value>设置</value>
   </data>
-  <data name="machineToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 21</value>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>G代码文件</value>
   </data>
-  <data name="machineToolStripMenuItem.Text" xml:space="preserve">
-    <value>机控制</value>
-  </data>
-  <data name="aboutToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 21</value>
-  </data>
-  <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
-    <value>关于</value>
+  <data name="btnOverrideSSGB.Text" xml:space="preserve">
+    <value>主轴转速超限(仅GRBL 1.1)</value>
   </data>
   <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
     <value>35, 12</value>
@@ -376,8 +382,8 @@
   <data name="label8.Text" xml:space="preserve">
     <value>设置:</value>
   </data>
-  <data name="btnOverrideSSGB.Text" xml:space="preserve">
-    <value>主轴转速超限(仅GRBL 1.1)</value>
+  <data name="btnOverrideFRGB.Text" xml:space="preserve">
+    <value>进料速率覆盖(仅GRBL 1.1)</value>
   </data>
   <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>35, 12</value>
@@ -385,8 +391,8 @@
   <data name="label5.Text" xml:space="preserve">
     <value>设置:</value>
   </data>
-  <data name="btnOverrideFRGB.Text" xml:space="preserve">
-    <value>进料速率覆盖(仅GRBL 1.1)</value>
+  <data name="groupBox4.Text" xml:space="preserve">
+    <value>XY起始点</value>
   </data>
   <data name="btnOffsetApply.Text" xml:space="preserve">
     <value>应用偏移</value>
@@ -402,9 +408,6 @@
   </data>
   <data name="label1.Text" xml:space="preserve">
     <value>X轴偏移</value>
-  </data>
-  <data name="groupBox4.Text" xml:space="preserve">
-    <value>XY起始点</value>
   </data>
   <data name="lbDimension.Text" xml:space="preserve">
     <value>维</value>
@@ -424,8 +427,8 @@
   <data name="lblFileProgress.Text" xml:space="preserve">
     <value>进步</value>
   </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>刀位点文件</value>
+  <data name="cmsCode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 114</value>
   </data>
   <data name="cmsCodeSelect.Size" type="System.Drawing.Size, System.Drawing">
     <value>99, 22</value>
@@ -456,9 +459,6 @@
   </data>
   <data name="saveToToolStripMenuItem.Text" xml:space="preserve">
     <value>另存为</value>
-  </data>
-  <data name="cmsCode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 114</value>
   </data>
   <data name="btnJogZeroXY.Text" xml:space="preserve">
     <value>移动XY = 0</value>
@@ -612,6 +612,9 @@
   <data name="btnZeroA.Location" type="System.Drawing.Point, System.Drawing">
     <value>73, 356</value>
   </data>
+  <data name="groupBox6.Text" xml:space="preserve">
+    <value>控制/慢跑</value>
+  </data>
   <data name="groupBox3.Text" xml:space="preserve">
     <value>移动</value>
   </data>
@@ -639,9 +642,6 @@
   <data name="cBSpindle.Text" xml:space="preserve">
     <value>主轴</value>
   </data>
-  <data name="groupBox6.Text" xml:space="preserve">
-    <value>控制/慢跑</value>
-  </data>
   <data name="fCTBCode.ServiceColors" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdGYXN0Q29sb3JlZFRleHRCb3gsIFZlcnNpb249Mi4xNi4xMS4w
@@ -659,6 +659,9 @@
         AAAAlgABAAH7/////P///woAAAAAAAAAAKQAAQAB+v////z///8KAAAAAAAAAACWAAEAAfn////8////
         CgAAAAAAAAAAjQABAAH4/////P///woAAAAAAAAAAKQAAQAB9/////z///8KAAAAAAAAAACWAAEACw==
 </value>
+  </data>
+  <data name="cmsPictureBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 176</value>
   </data>
   <data name="pasteFromClipboardToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>170, 22</value>
@@ -710,9 +713,6 @@
   </data>
   <data name="switchTheColorToolStripMenuItem.Text" xml:space="preserve">
     <value>切换颜色</value>
-  </data>
-  <data name="cmsPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 176</value>
   </data>
   <data name="tLPRechtsUntenRechts.Size" type="System.Drawing.Size, System.Drawing">
     <value>8, 301</value>
@@ -864,11 +864,17 @@
   <data name="label32.Size" type="System.Drawing.Size, System.Drawing">
     <value>21, 14</value>
   </data>
+  <data name="groupBox5.Text" xml:space="preserve">
+    <value>自定义按钮</value>
+  </data>
   <data name="btnCustom1.Text" xml:space="preserve">
     <value>自定义1</value>
   </data>
-  <data name="groupBox5.Text" xml:space="preserve">
-    <value>自定义按钮</value>
+  <data name="groupBox2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 11.25pt</value>
+  </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>DXF 参数</value>
   </data>
   <data name="txt_Z.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
@@ -1334,12 +1340,6 @@
   </data>
   <data name="label_wy.Size" type="System.Drawing.Size, System.Drawing">
     <value>10, 18</value>
-  </data>
-  <data name="groupBox2.Font" type="System.Drawing.Font, System.Drawing">
-    <value>宋体, 11.25pt</value>
-  </data>
-  <data name="groupBox2.Text" xml:space="preserve">
-    <value>DXF 参数</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

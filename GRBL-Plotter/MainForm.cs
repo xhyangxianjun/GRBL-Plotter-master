@@ -42,6 +42,7 @@ using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Diagnostics;
+using System.Linq;
 
 namespace GRBL_Plotter
 {
@@ -82,6 +83,7 @@ namespace GRBL_Plotter
         private string lastLoadSource = "Nothing loaded";
         string dxcb = "";
         string generateGCode = "";
+        Point colorPoint = new Point();
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -717,11 +719,13 @@ namespace GRBL_Plotter
             //if (dxcb!="")
             //{
             openFileDialog1.FileName = "";
-            openFileDialog1.Filter = "gcode files (*.nc)|*.nc|SVG files (*.svg)|*.svg|DXF files (*.dxf)|*.dxf|All files (*.*)|*.*";
+            openFileDialog1.Filter = "DXF files (*.dxf)|*.dxf|SVG files (*.svg)|*.svg|gcode files (*.nc)|*.nc|All files (*.*)|*.*";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-
-                generateGCode = openFileDialog1.FileName;
+                loadFile(openFileDialog1.FileName);
+                //fCTBCode.ForeColor = Color.White;
+                generateGCode = fCTBCode.Text;
+                fCTBCode.Text = "";
                 isHeightMapApplied = false;
             }
             //    }
@@ -2395,6 +2399,7 @@ namespace GRBL_Plotter
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             pictureBox1.Invalidate();
+            colorPoint = e.Location;
         }
 
         // find closest coordinate in GCode and mark
@@ -3015,16 +3020,33 @@ namespace GRBL_Plotter
 
         private void switchTheColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int lineNr = fCTBCodeClickedLineNow;
-            ColorDialog colorDia = new ColorDialog();
-
-            if (colorDia.ShowDialog() == DialogResult.OK)
+            GCodeVisuAndTransform.MyShape myshape=GCodeVisuAndTransform.list.FirstOrDefault(p => p.Rectangle.Contains(colorPoint));
+            if (myshape!=null)
             {
-                //获取所选择的颜色
-                Color colorChoosed = colorDia.Color;
-                //改变颜色
-                Properties.Settings.Default.colorPenDown = colorChoosed;
-                loadSettings(sender, e);
+                ColorDialog colorDia = new ColorDialog();
+
+                if (colorDia.ShowDialog() == DialogResult.OK)
+                {
+                    //获取所选择的颜色
+                    Color colorChoosed = colorDia.Color;
+                    //改变颜色
+                    Properties.Settings.Default.colorPenDown = colorChoosed;
+                    Pen myPen = new Pen(colorChoosed, 2);
+                    Graphics g = pictureBox1.CreateGraphics();
+                    GraphicsPath Gr = new GraphicsPath();
+
+                    if (myshape.Name == "一条线")
+                    {
+                        Gr.AddLine(myshape.Rectangle.X, myshape.Rectangle.Y, myshape.Rectangle.Width, myshape.Rectangle.Height);
+                        g.DrawPath(myPen, Gr);
+                    }
+                    else
+                    {
+                        Gr.AddRectangle(myshape.Rectangle);
+                        g.DrawPath(myPen, Gr);
+                    }
+                    loadSettings(sender, e);
+                }
             }
         }
 
@@ -3032,12 +3054,14 @@ namespace GRBL_Plotter
         {
             if (generateGCode != "")
             {
-                loadFile(generateGCode);
+                fCTBCode.Text = generateGCode;
             }
             else
             {
                 MessageBox.Show("请选择要生成G代码的文件");
             }
         }
+
+       
     }
 }
