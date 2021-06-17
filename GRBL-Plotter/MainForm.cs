@@ -2984,14 +2984,7 @@ namespace GRBL_Plotter
         }
         private void switchTheColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //double minx = GCodeVisuAndTransform.drawingSize.minX;                  // extend dimensions
-            //double maxx = GCodeVisuAndTransform.drawingSize.maxX;
-            //double miny = GCodeVisuAndTransform.drawingSize.minY;
-            //double maxy = GCodeVisuAndTransform.drawingSize.maxY;
-            //double xRange = (maxx - minx);                                              // calculate new size
-            //double yRange = (maxy - miny);
-            //double picScaling = Math.Min(pictureBox1.Width / (xRange), pictureBox1.Height / (yRange));               // calculate scaling px/unit
-
+            //更改颜色
             GCodeVisuAndTransform.MyShape myshape = GCodeVisuAndTransform.list.FirstOrDefault(p => p.Rectangle.Contains(colorPoint));
             if (myshape != null)
             {
@@ -2999,18 +2992,13 @@ namespace GRBL_Plotter
 
                 if (colorDia.ShowDialog() == DialogResult.OK)
                 {
-                    //获取所选择的颜色
-                     colorChoosed = colorDia.Color;
+                    colorChoosed = colorDia.Color;
                     Graphics g = pictureBox1.CreateGraphics();
-                   
+
                     foreach (var item in GCodeVisuAndTransform.list)
                     {
                         if (myshape.Name == "线条" && item.Rectangle == myshape.Rectangle)
                         {
-                            //g.Transform = pBoxTransform;
-                            //g.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)
-                            //g.TranslateTransform((float)-minx, (float)(-yRange - miny));       // apply offset
-
                             UpdateGr.AddLine(myshape.Rectangle.X, myshape.Rectangle.Y, myshape.Rectangle.Width, myshape.Rectangle.Height);
                         }
                         else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧")
@@ -3018,8 +3006,6 @@ namespace GRBL_Plotter
                             UpdateGr.AddRectangle(myshape.Rectangle);
                         }
                     }
-
-                    //loadSettings(sender, e);
                 }
             }
         }
