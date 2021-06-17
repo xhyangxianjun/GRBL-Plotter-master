@@ -84,6 +84,8 @@ namespace GRBL_Plotter
         string dxcb = "";
         string generateGCode = "";
         Point colorPoint = new Point();
+        GraphicsPath UpdateGr = new GraphicsPath();
+        Color colorChoosed = new Color();
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -115,6 +117,7 @@ namespace GRBL_Plotter
         // initialize Main form
         private void MainForm_Load(object sender, EventArgs e)
         {
+          
             Properties.Settings.Default.colorPenDown = Color.Red;
             Properties.Settings.Default.colorRuler = Color.Blue;
             Properties.Settings.Default.colorPenUp = Color.Green;
@@ -2276,7 +2279,8 @@ namespace GRBL_Plotter
         private int picBoxCopy = 0;
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            double minx = GCodeVisuAndTransform.drawingSize.minX;                  // extend dimensions
+
+            double minx = GCodeVisuAndTransform.drawingSize.minX;                  // extend dimensions/扩展维度
             double maxx = GCodeVisuAndTransform.drawingSize.maxX;
             double miny = GCodeVisuAndTransform.drawingSize.minY;
             double maxy = GCodeVisuAndTransform.drawingSize.maxY;
@@ -2301,21 +2305,22 @@ namespace GRBL_Plotter
 
                 if (pictureBox1.PointToClient(MousePosition).X > (pictureBox1.Width - 100))
                 { offX = -75; }
+
                 Point stringpos = new Point(pictureBox1.PointToClient(MousePosition).X + offX, pictureBox1.PointToClient(MousePosition).Y - 10);
                 e.Graphics.DrawString(String.Format("Worl-Pos:\r\nX:{0,7:0.00}\r\nY:{1,7:0.00}", picAbsPosX, picAbsPosY), new Font("Lucida Console", 8), Brushes.Black, stringpos);
                 e.Graphics.DrawString(String.Format("Zooming: {0,2:0.00}%", 100 / zoomRange), new Font("Lucida Console", 8), Brushes.Black, new Point(5, 5));
 
-
                 e.Graphics.Transform = pBoxTransform;
                 e.Graphics.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)
-                e.Graphics.TranslateTransform((float)-minx, (float)(-yRange - miny));       // apply offset
-                                                                                            //     if (picBoxCopy == 0)
+                e.Graphics.TranslateTransform((float)-minx, (float)(-yRange - miny));
                 onPaint_drawToolPath(e.Graphics);
+
                 e.Graphics.DrawPath(penMarker, GCodeVisuAndTransform.pathMarker);
                 e.Graphics.DrawPath(penTool, GCodeVisuAndTransform.pathTool);
-            }
-        }
 
+            }
+
+        }
         private void onPaint_scaling(Graphics e)
         {
             double minx = GCodeVisuAndTransform.drawingSize.minX;                  // extend dimensions
@@ -2330,10 +2335,12 @@ namespace GRBL_Plotter
         }
         private void onPaint_drawToolPath(Graphics e)
         {
+            Pen pen = new Pen(colorChoosed,0.4f);
             e.DrawPath(penHeightMap, GCodeVisuAndTransform.pathHeightMap);
             e.DrawPath(penRuler, GCodeVisuAndTransform.pathRuler);
             e.DrawPath(penDown, GCodeVisuAndTransform.pathPenDown);
             e.DrawPath(penUp, GCodeVisuAndTransform.pathPenUp);
+            e.DrawPath(pen, UpdateGr);
         }
         private void onPaint_setBackground()
         {
@@ -2357,7 +2364,7 @@ namespace GRBL_Plotter
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             pictureBox1.Invalidate();
-            colorPoint = e.Location;
+            colorPoint = new Point((int)picAbsPosX, (int)picAbsPosY);
         }
 
         // find closest coordinate in GCode and mark
@@ -2975,35 +2982,44 @@ namespace GRBL_Plotter
                 label35.Text = "Z axis tool position setting";
             }
         }
-
         private void switchTheColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            GCodeVisuAndTransform.MyShape myshape=GCodeVisuAndTransform.list.FirstOrDefault(p => p.Rectangle.Contains(colorPoint));
-            if (myshape!=null)
+            //double minx = GCodeVisuAndTransform.drawingSize.minX;                  // extend dimensions
+            //double maxx = GCodeVisuAndTransform.drawingSize.maxX;
+            //double miny = GCodeVisuAndTransform.drawingSize.minY;
+            //double maxy = GCodeVisuAndTransform.drawingSize.maxY;
+            //double xRange = (maxx - minx);                                              // calculate new size
+            //double yRange = (maxy - miny);
+            //double picScaling = Math.Min(pictureBox1.Width / (xRange), pictureBox1.Height / (yRange));               // calculate scaling px/unit
+
+            GCodeVisuAndTransform.MyShape myshape = GCodeVisuAndTransform.list.FirstOrDefault(p => p.Rectangle.Contains(colorPoint));
+            if (myshape != null)
             {
                 ColorDialog colorDia = new ColorDialog();
 
                 if (colorDia.ShowDialog() == DialogResult.OK)
                 {
                     //获取所选择的颜色
-                    Color colorChoosed = colorDia.Color;
-                    //改变颜色
-                    Properties.Settings.Default.colorPenDown = colorChoosed;
-                    Pen myPen = new Pen(colorChoosed, 2);
+                     colorChoosed = colorDia.Color;
                     Graphics g = pictureBox1.CreateGraphics();
-                    GraphicsPath Gr = new GraphicsPath();
+                   
+                    foreach (var item in GCodeVisuAndTransform.list)
+                    {
+                        if (myshape.Name == "线条" && item.Rectangle == myshape.Rectangle)
+                        {
+                            //g.Transform = pBoxTransform;
+                            //g.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)
+                            //g.TranslateTransform((float)-minx, (float)(-yRange - miny));       // apply offset
 
-                    if (myshape.Name == "一条线")
-                    {
-                        Gr.AddLine(myshape.Rectangle.X, myshape.Rectangle.Y, myshape.Rectangle.Width, myshape.Rectangle.Height);
-                        g.DrawPath(myPen, Gr);
+                            UpdateGr.AddLine(myshape.Rectangle.X, myshape.Rectangle.Y, myshape.Rectangle.Width, myshape.Rectangle.Height);
+                        }
+                        else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧")
+                        {
+                            UpdateGr.AddRectangle(myshape.Rectangle);
+                        }
                     }
-                    else
-                    {
-                        Gr.AddRectangle(myshape.Rectangle);
-                        g.DrawPath(myPen, Gr);
-                    }
-                    loadSettings(sender, e);
+
+                    //loadSettings(sender, e);
                 }
             }
         }
@@ -3019,7 +3035,5 @@ namespace GRBL_Plotter
                 MessageBox.Show("请选择要生成G代码的文件");
             }
         }
-
-       
     }
 }

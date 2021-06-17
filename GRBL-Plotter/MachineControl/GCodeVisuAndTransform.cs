@@ -821,7 +821,7 @@ namespace GRBL_Plotter
                 if ((nx != ox) || (ny != oy))
                 {
                     ret = new Rectangle((int)ox, (int)oy, (int)nx, (int)ny);
-                    list.Add(new MyShape() { Name = "一条线", Rectangle = ret });
+                    list.Add(new MyShape() { Name = "线条", Rectangle = ret });
                     path.AddLine((float)ox, (float)oy, (float)nx, (float)ny);
                     onlyZ = 0;  // x or y has changed
                 }
@@ -919,26 +919,26 @@ namespace GRBL_Plotter
                     if (i % 100 == 0) // 100    
                     {
                         myRectangle = new Rectangle(i, 0, i, (int)-5F);
-                        list.Add(new MyShape() { Name="线条",Rectangle = myRectangle });
+                        //list.Add(new MyShape() { Name="线条",Rectangle = myRectangle });
                         pathRuler.AddLine((float)i, 0, (float)i, -5F);
                     }
                     else if ((i % 10 == 0) && (maxX < 1000))// 10  
                     {
                         myRectangle = new Rectangle(i, 0, i, (int)-3F);
-                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                        //list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
                         pathRuler.AddLine((float)i, 0, (float)i, -3F);
                     }
                     else if (maxX < 500)// 5
                     {
                         myRectangle = new Rectangle(i, 0, i, (int)-2F);
-                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                       // list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
                         pathRuler.AddLine((float)i, 0, (float)i, -2F);
                     }
                 }
                 else if (maxX < 200)
                 {
                     myRectangle = new Rectangle(i, 0, i, (int)-1F);
-                    list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                   // list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
                     pathRuler.AddLine((float)i, 0, (float)i, -1F);
                 }  // 1
             }
@@ -950,26 +950,26 @@ namespace GRBL_Plotter
                     if (i % 100 == 0) // 100      
                     {
                         myRectangle = new Rectangle(0, i, (int)-5F, i);
-                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                       // list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
                         pathRuler.AddLine(0, (float)i, -5F, (float)i);
                     }             
                     else if ((i % 10 == 0) && (maxY < 1000)) // 10  
                     {
                         myRectangle = new Rectangle(0, i, (int)-3F, i);
-                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                       // list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
                         pathRuler.AddLine(0, (float)i, -3F, (float)i);
                     }         
                     else if (maxY < 500) // 5
                     {
                         myRectangle = new Rectangle(0, i, (int)-2F, i);
-                        list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                      //  list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
                         pathRuler.AddLine(0, (float)i, -2F, (float)i);
                     }
                 }
                 else if (maxY < 200)// 1
                 {
                     myRectangle = new Rectangle(0, i, (int)-5F, i);
-                    list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
+                   // list.Add(new MyShape() { Name = "线条", Rectangle = myRectangle });
                     pathRuler.AddLine(0, (float)i, -1F, (float)i);
                 }     
             }
