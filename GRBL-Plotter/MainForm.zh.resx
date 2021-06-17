@@ -475,9 +475,6 @@
   <data name="btnKillAlarm.Text" xml:space="preserve">
     <value>杀了报警</value>
   </data>
-  <data name="tBURL.Text" xml:space="preserve">
-    <value>粘贴SVG / DXF文件的URL在这里</value>
-  </data>
   <data name="btnJogStop.Text" xml:space="preserve">
     <value>停止慢跑</value>
   </data>
@@ -714,9 +711,6 @@
   <data name="switchTheColorToolStripMenuItem.Text" xml:space="preserve">
     <value>切换颜色</value>
   </data>
-  <data name="tLPRechtsUntenRechts.Size" type="System.Drawing.Size, System.Drawing">
-    <value>8, 301</value>
-  </data>
   <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
     <value>76, 353</value>
   </data>
@@ -875,6 +869,12 @@
   </data>
   <data name="groupBox2.Text" xml:space="preserve">
     <value>DXF 参数</value>
+  </data>
+  <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>805, 181</value>
+  </data>
+  <data name="button2.Text" xml:space="preserve">
+    <value>生成G代码</value>
   </data>
   <data name="txt_Z.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>

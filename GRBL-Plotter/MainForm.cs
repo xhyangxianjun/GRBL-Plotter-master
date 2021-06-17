@@ -781,7 +781,7 @@ namespace GRBL_Plotter
         {
             if (fileName.IndexOf("http") >= 0)
             {
-                tBURL.Text = fileName;
+                //tBURL.Text = fileName;
                 return;
             }
             else
@@ -840,7 +840,7 @@ namespace GRBL_Plotter
         private void getURL(string filename)
         {
             var MyIni = new IniFile(filename);
-            tBURL.Text = MyIni.Read("URL", "InternetShortcut");
+            //tBURL.Text = MyIni.Read("URL", "InternetShortcut");
         }
 
         // drag and drop file or URL
@@ -857,52 +857,10 @@ namespace GRBL_Plotter
                 loadFile(files[0]);
             }
             else
-            { tBURL.Text = s; }
+            { }
             this.WindowState = FormWindowState.Minimized;
             this.Show();
             this.WindowState = FormWindowState.Normal;
-        }
-        private void tBURL_TextChanged(object sender, EventArgs e)
-        {
-            var parts = tBURL.Text.Split('.');
-            string ext = parts[parts.Length - 1];   // get extension
-            if (ext.ToLower().IndexOf("svg") >= 0)
-            {
-                startConvertSVG(tBURL.Text);
-                setLastLoadedFile("Data from URL: " + tBURL.Text);
-                tBURL.Text = "";
-            }
-            else if (ext.ToLower().IndexOf("dxf") >= 0)
-            {
-                startConvertDXF(tBURL.Text);
-                setLastLoadedFile("Data from URL: " + tBURL.Text);
-                tBURL.Text = "";
-            }
-            else if ((ext.ToLower().IndexOf("bmp") >= 0) || (ext.ToLower().IndexOf("gif") >= 0) || (ext.ToLower().IndexOf("png") >= 0) || (ext.ToLower().IndexOf("jpg") >= 0))
-            {
-                if (_image_form == null)
-                {
-                    _image_form = new GCodeFromImage(true);
-                    _image_form.FormClosed += formClosed_ImageToGCode;
-                    _image_form.btnGenerate.Click += getGCodeFromImage;      // assign btn-click event
-                }
-                else
-                {
-                    _image_form.Visible = false;
-                }
-                _image_form.Show(this);
-                _image_form.loadURL(tBURL.Text);
-                setLastLoadedFile("Data from URL: " + tBURL.Text);
-                tBURL.Text = "";
-            }
-            else
-            {
-                if (tBURL.Text.Length > 5)
-                {
-                    MessageBox.Show("URL extension is not 'svg' or 'dxf'\r\nTry SVG import anyway, but without setting 'Recent File' list.");
-                    startConvertSVG(tBURL.Text);
-                }
-            }
         }
         public void reStartConvertSVG(object sender, EventArgs e)   // event from setup form//来自设置表单的事件
         {
