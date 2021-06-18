@@ -129,7 +129,7 @@ namespace GRBL_Plotter
         private class gcodeLine
         {
             public int lineNumber;          // line number in fCTBCode
-            public string codeLine;         // copy of original gcode line
+            public string codeLine;         // copy of original gcode line//原始的gcode行拷贝
             public byte motionMode;         // G0,1,2,3
             public bool isdistanceModeG90;  // G90,91
             public byte spindleState;       // M3,4,5
@@ -196,7 +196,7 @@ namespace GRBL_Plotter
                 actualM = 0; actualO = 0; actualP = 0; actualL = 1;
                 singleLine = GCode[index].ToUpper().Trim(); // get line
                 getGCodeLine(singleLine);                   // parse line, fill up newLine.xyz and actualM,P,O
-                calcAbsPosition(newLine, oldLine);          // calc abs position
+                calcAbsPosition(newLine, oldLine);          // calc abs position//生成XY轴位置
                 if ((actualM == 98) && processSubs)
                     newLine.codeLine = "(" + GCode[index] + ")";
                 else

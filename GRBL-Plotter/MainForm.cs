@@ -902,7 +902,7 @@ namespace GRBL_Plotter
             {
                 fCTBCode.Text = gcode;
                 fCTBCode.UnbookmarkLine(fCTBCodeClickedLineLast);
-                redrawGCodePath();
+                redrawGCodePath();//画图的函数
                 SaveRecentFile(source);
                 //isFileLoaded = true;
                 this.Text = appName + " | Source: " + source;
@@ -2311,7 +2311,7 @@ namespace GRBL_Plotter
                 e.Graphics.DrawString(String.Format("Zooming: {0,2:0.00}%", 100 / zoomRange), new Font("Lucida Console", 8), Brushes.Black, new Point(5, 5));
 
                 e.Graphics.Transform = pBoxTransform;
-                e.Graphics.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)
+                e.Graphics.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)/应用扩展
                 e.Graphics.TranslateTransform((float)-minx, (float)(-yRange - miny));
                 onPaint_drawToolPath(e.Graphics);
 
@@ -2986,6 +2986,17 @@ namespace GRBL_Plotter
         {
             //更改颜色
             GCodeVisuAndTransform.MyShape myshape = GCodeVisuAndTransform.list.FirstOrDefault(p => p.Rectangle.Contains(colorPoint));
+
+            //double minx = GCodeVisuAndTransform.drawingSize.minX;                  // extend dimensions/扩展维度
+            //double maxx = GCodeVisuAndTransform.drawingSize.maxX;
+            //double miny = GCodeVisuAndTransform.drawingSize.minY;
+            //double maxy = GCodeVisuAndTransform.drawingSize.maxY;
+            //double xRange = (maxx - minx);                                              // calculate new size
+            //double yRange = (maxy - miny);
+            //double picScaling = Math.Min(pictureBox1.Width / (xRange), pictureBox1.Height / (yRange));               // calculate scaling px/unit
+
+
+
             if (myshape != null)
             {
                 ColorDialog colorDia = new ColorDialog();
@@ -2994,12 +3005,36 @@ namespace GRBL_Plotter
                 {
                     colorChoosed = colorDia.Color;
                     Graphics g = pictureBox1.CreateGraphics();
+                    //double relposX = zoomOffsetX + zoomRange * (Convert.ToDouble(pictureBox1.PointToClient(MousePosition).X) / pictureBox1.Width);
+                    //double relposY = zoomOffsetY + zoomRange * (Convert.ToDouble(pictureBox1.PointToClient(MousePosition).Y) / pictureBox1.Height);
+                    //double ratioVisu = xRange / yRange;
+                    //double ratioPic = Convert.ToDouble(pictureBox1.Width) / pictureBox1.Height;
+                    //if (ratioVisu > ratioPic)
+                    //    relposY = relposY * ratioVisu / ratioPic;
+                    //else
+                    //    relposX = relposX * ratioPic / ratioVisu;
+
+                    //picAbsPosX = relposX * xRange + minx;
+                    //picAbsPosY = yRange - relposY * yRange + miny;
+                    //int offX = +5;
+
+                    //if (pictureBox1.PointToClient(MousePosition).X > (pictureBox1.Width - 100))
+                    //{ offX = -75; }
+
+                    //Point stringpos = new Point(pictureBox1.PointToClient(MousePosition).X + offX, pictureBox1.PointToClient(MousePosition).Y - 10);
+                    //g.DrawString(String.Format("Worl-Pos:\r\nX:{0,7:0.00}\r\nY:{1,7:0.00}", picAbsPosX, picAbsPosY), new Font("Lucida Console", 8), Brushes.Black, stringpos);
+                    //g.DrawString(String.Format("Zooming: {0,2:0.00}%", 100 / zoomRange), new Font("Lucida Console", 8), Brushes.Black, new Point(5, 5));
+
+                    //g.Transform = pBoxTransform;
+                    //g.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)/应用扩展
+                    //g.TranslateTransform((float)-minx, (float)(-yRange - miny));
 
                     foreach (var item in GCodeVisuAndTransform.list)
                     {
                         if (myshape.Name == "线条" && item.Rectangle == myshape.Rectangle)
                         {
                             UpdateGr.AddLine(myshape.Rectangle.X, myshape.Rectangle.Y, myshape.Rectangle.Width, myshape.Rectangle.Height);
+                           // g.DrawPath(new Pen(colorChoosed,0.4f), UpdateGr);
                         }
                         else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧")
                         {

@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="d:\visual studio 2015\team tools\static analysis tools\fxcop\Xml\CodeAnalysisReport.xsl"?>
+<FxCopReport Version="14.0">
+ <Targets>
+  <Target Name="D:\康纯医疗\工作资料\GRBL-Plotter-master\运行目录\GRBL-Plotter.exe">
+   <Modules>
+    <Module Name="grbl-plotter.exe">
+     <Namespaces>
+      <Namespace Name="GRBL_Plotter">
+       <Types>
+        <Type Name="GCodeFromImage" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose(System.Boolean)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="loadedImage" TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213" Status="Active" Created="2021-06-18 02:12:16Z" FixCategory="NonBreaking">
+             <Issue Certainty="75" Level="Warning" Path="D:\康纯医疗\工作资料\GRBL-Plotter-master\GRBL-Plotter\GCodeCreation" File="GCodeFromImage.Designer.cs" Line="15">'GCodeFromImage' 包含 IDisposable 类型的字段 'GCodeFromImage.loadedImage': 'Bitmap'。请更改 'GCodeFromImage' 的 Dispose 方法，使其针对该字段调用 Dispose 或 Close。</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="IniFile" Kind="Class" Accessibility="Assembly" ExternallyVisible="False">
+         <Members>
+          <Member Name="#GetPrivateProfileString(System.String,System.String,System.String,System.Text.StringBuilder,System.Int32,System.String)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Status="Active" Created="2021-06-18 02:12:16Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="CriticalWarning">由于是 P/Invoke 方法，因此，应在名为 NativeMethods、SafeNativeMethods 或 UnsafeNativeMethods 的类中定义 'IniFile.GetPrivateProfileString(string, string, string, StringBuilder, int, string)'。</Issue>
+            </Message>
+           </Messages>
+          </Member>
+          <Member Name="#WritePrivateProfileString(System.String,System.String,System.String,System.String)" Kind="Method" Static="True" Accessibility="Private" ExternallyVisible="False">
+           <Messages>
+            <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Status="Active" Created="2021-06-18 02:12:16Z" FixCategory="Breaking">
+             <Issue Certainty="95" Level="CriticalWarning">由于是 P/Invoke 方法，因此，应在名为 NativeMethods、SafeNativeMethods 或 UnsafeNativeMethods 的类中定义 'IniFile.WritePrivateProfileString(string, string, string, string)'。</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+        <Type Name="MainForm" Kind="Class" Accessibility="Public" ExternallyVisible="True">
+         <Members>
+          <Member Name="#Dispose(System.Boolean)" Kind="Method" Static="False" Accessibility="Family" ExternallyVisible="True">
+           <Messages>
+            <Message Id="UpdateGr" TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213" Status="Active" Created="2021-06-18 02:12:16Z" FixCategory="NonBreaking">
+             <Issue Certainty="75" Level="Warning" Path="D:\康纯医疗\工作资料\GRBL-Plotter-master\GRBL-Plotter" File="MainForm.Designer.cs" Line="33">'MainForm' 包含 IDisposable 类型的字段 'MainForm.UpdateGr': 'GraphicsPath'。请更改 'MainForm' 的 Dispose 方法，使其针对该字段调用 Dispose 或 Close。</Issue>
+            </Message>
+            <Message Id="pBoxTransform" TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213" Status="Active" Created="2021-06-18 02:12:16Z" FixCategory="NonBreaking">
+             <Issue Certainty="75" Level="Warning" Path="D:\康纯医疗\工作资料\GRBL-Plotter-master\GRBL-Plotter" File="MainForm.Designer.cs" Line="33">'MainForm' 包含 IDisposable 类型的字段 'MainForm.pBoxTransform': 'Matrix'。请更改 'MainForm' 的 Dispose 方法，使其针对该字段调用 Dispose 或 Close。</Issue>
+            </Message>
+            <Message Id="penHeightMap" TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213" Status="Active" Created="2021-06-18 02:12:16Z" FixCategory="NonBreaking">
+             <Issue Certainty="75" Level="Warning" Path="D:\康纯医疗\工作资料\GRBL-Plotter-master\GRBL-Plotter" File="MainForm.Designer.cs" Line="33">'MainForm' 包含 IDisposable 类型的字段 'MainForm.penHeightMap': 'Pen'。请更改 'MainForm' 的 Dispose 方法，使其针对该字段调用 Dispose 或 Close。</Issue>
+            </Message>
+           </Messages>
+          </Member>
+         </Members>
+        </Type>
+       </Types>
+      </Namespace>
+     </Namespaces>
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <Rule TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213">
+   <Name>应释放可释放的字段</Name>
+   <Description>如果实现了 IDisposable 的类型拥有同样实现 IDisposable 的字段，则封装类型的 Dispose() 实现应对每个可释放字段调用 Dispose()。</Description>
+   <Resolution Name="Default">{0} 包含 IDisposable 类型的字段 {1}: {2}。请更改 {0} 的 Dispose 方法，使其针对该字段调用 Dispose 或 Close。</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182328.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="75">Warning</MessageLevel>
+   <File Name="usagerules.dll" Version="14.0.0.0" />
+  </Rule>
+  <Rule TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060">
+   <Name>将 P/Invoke 移动到 NativeMethods 类</Name>
+   <Description>此类型包含具有 DllImport 特性的成员。具有 DllImport 特性的成员应包含在名为 NativeMethods、SafeNativeMethods 或 UnsafeNativeMethods 的类中。</Description>
+   <Resolution Name="Default">由于是 P/Invoke 方法，因此，应在名为 NativeMethods、SafeNativeMethods 或 UnsafeNativeMethods 的类中定义 {0}。</Resolution>
+   <Owner />
+   <Url>http://msdn.microsoft.com/library/ms182161.aspx</Url>
+   <Email>[none]</Email>
+   <MessageLevel Certainty="95">CriticalWarning</MessageLevel>
+   <File Name="designrules.dll" Version="14.0.0.0" />
+  </Rule>
+ </Rules>
+ <Localized>
+  <String Key="Category">类别</String>
+  <String Key="Certainty">确定性</String>
+  <String Key="CollapseAll">全部折叠</String>
+  <String Key="CheckId">检查 ID</String>
+  <String Key="Error">错误</String>
+  <String Key="Errors">错误</String>
+  <String Key="ExpandAll">全部展开</String>
+  <String Key="Help">帮助</String>
+  <String Key="Line">行</String>
+  <String Key="Messages">消息</String>
+  <String Key="LocationNotStoredInPdb">[位置未存储在 Pdb 中]</String>
+  <String Key="Project">项目</String>
+  <String Key="Resolution">解析</String>
+  <String Key="Rule">规则</String>
+  <String Key="RuleFile">规则文件</String>
+  <String Key="RuleDescription">规则说明</String>
+  <String Key="Source">源</String>
+  <String Key="Status">状态</String>
+  <String Key="Target">目标</String>
+  <String Key="Warning">警告</String>
+  <String Key="Warnings">警告</String>
+  <String Key="ReportTitle">代码分析报告</String>
+ </Localized>
+</FxCopReport>
