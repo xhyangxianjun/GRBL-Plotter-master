@@ -820,8 +820,59 @@ namespace GRBL_Plotter
                 Rectangle ret = new Rectangle();
                 if ((nx != ox) || (ny != oy))
                 {
-                    ret = new Rectangle((int)ox, (int)oy, (int)nx, (int)ny);
-                    list.Add(new MyShape() { Name = "线条", Rectangle = ret });
+                    nx=Math.Round(nx);
+                    ox = Math.Round(ox);
+                    ny = Math.Round(ny);
+                    oy = Math.Round(oy);
+                    int x = 0;
+                    int y = 0;
+                    string isnull = "";
+                    if (ox>nx)
+                    {
+                        isnull = "x";
+                         x = (int)ox - (int)nx;
+                    }
+                    else
+                    {
+                         x = (int)nx - (int)ox;
+                    }
+                    if (oy>ny)
+                    {
+                        isnull = "y";
+                        y = (int)oy - (int)ny;
+                    }
+                    else
+                    {
+                         y = (int)ny - (int)oy;
+                    }
+                   
+                    if (x==0)
+                    {
+                        x = 3;
+                    }
+
+                    if (y == 0)
+                    {
+                        y = 3;
+                    }
+                    ret = new Rectangle((int)ox, (int)oy, (int)x, (int)y);
+                    if (isnull=="x")
+                    {
+                        list.Add(new MyShape() { Name = "线条", Rectangle = ret, isNUllnumberX = 1 });
+                    }
+                    else if(isnull=="y")
+                    {
+                        list.Add(new MyShape() { Name = "线条", Rectangle = ret,isNUllnumberY=1});
+                    }
+                    else if (isnull=="xy")
+                    {
+                        list.Add(new MyShape() { Name = "线条", Rectangle = ret, isNUllnumberX = 1, isNUllnumberY = 1 });
+                    }
+                    else
+                    {
+                        list.Add(new MyShape() { Name = "线条", Rectangle = ret});
+                    }
+                    
                     path.AddLine((float)ox, (float)oy, (float)nx, (float)ny);
                     onlyZ = 0;  // x or y has changed
                 }
@@ -907,6 +958,8 @@ namespace GRBL_Plotter
         {
             public string Name;
             public Rectangle Rectangle;
+            public int isNUllnumberX;
+            public int isNUllnumberY;
         }
         private void createRuler(double maxX, double maxY)
         {

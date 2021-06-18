@@ -84,8 +84,8 @@ namespace GRBL_Plotter
         string dxcb = "";
         string generateGCode = "";
         Point colorPoint = new Point();
-        GraphicsPath UpdateGr = new GraphicsPath();
-        Color colorChoosed = new Color();
+        
+        List<MyColor> list = new List<MyColor>();
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -766,7 +766,7 @@ namespace GRBL_Plotter
             try
             {
                 StreamReader listToRead =
-                new StreamReader(System.Environment.CurrentDirectory + "\\Recent.txt");
+                new StreamReader(System.Environment.CurrentDirectory + "\\.txt");
                 string line;
                 MRUlist.Clear();
                 while ((line = listToRead.ReadLine()) != null) //read each line until end of file
@@ -2335,12 +2335,15 @@ namespace GRBL_Plotter
         }
         private void onPaint_drawToolPath(Graphics e)
         {
-            Pen pen = new Pen(colorChoosed,0.4f);
+           
             e.DrawPath(penHeightMap, GCodeVisuAndTransform.pathHeightMap);
             e.DrawPath(penRuler, GCodeVisuAndTransform.pathRuler);
             e.DrawPath(penDown, GCodeVisuAndTransform.pathPenDown);
             e.DrawPath(penUp, GCodeVisuAndTransform.pathPenUp);
-            e.DrawPath(pen, UpdateGr);
+            foreach (var item in list)
+            {
+                e.DrawLine(item.pen, item.rect.X, item.rect.Y, item.rect.Width, item.rect.Height);
+            }
         }
         private void onPaint_setBackground()
         {
@@ -2982,20 +2985,15 @@ namespace GRBL_Plotter
                 label35.Text = "Z axis tool position setting";
             }
         }
+        public class MyColor
+        {
+            public Rectangle rect;
+            public Pen pen;
+        }
         private void switchTheColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //更改颜色
             GCodeVisuAndTransform.MyShape myshape = GCodeVisuAndTransform.list.FirstOrDefault(p => p.Rectangle.Contains(colorPoint));
-
-            //double minx = GCodeVisuAndTransform.drawingSize.minX;                  // extend dimensions/扩展维度
-            //double maxx = GCodeVisuAndTransform.drawingSize.maxX;
-            //double miny = GCodeVisuAndTransform.drawingSize.minY;
-            //double maxy = GCodeVisuAndTransform.drawingSize.maxY;
-            //double xRange = (maxx - minx);                                              // calculate new size
-            //double yRange = (maxy - miny);
-            //double picScaling = Math.Min(pictureBox1.Width / (xRange), pictureBox1.Height / (yRange));               // calculate scaling px/unit
-
-
 
             if (myshape != null)
             {
@@ -3003,42 +3001,50 @@ namespace GRBL_Plotter
 
                 if (colorDia.ShowDialog() == DialogResult.OK)
                 {
-                    colorChoosed = colorDia.Color;
+                    Pen p = new Pen(colorDia.Color, 0.4f);
+                    //colorChoosed = colorDia.Color;
                     Graphics g = pictureBox1.CreateGraphics();
-                    //double relposX = zoomOffsetX + zoomRange * (Convert.ToDouble(pictureBox1.PointToClient(MousePosition).X) / pictureBox1.Width);
-                    //double relposY = zoomOffsetY + zoomRange * (Convert.ToDouble(pictureBox1.PointToClient(MousePosition).Y) / pictureBox1.Height);
-                    //double ratioVisu = xRange / yRange;
-                    //double ratioPic = Convert.ToDouble(pictureBox1.Width) / pictureBox1.Height;
-                    //if (ratioVisu > ratioPic)
-                    //    relposY = relposY * ratioVisu / ratioPic;
-                    //else
-                    //    relposX = relposX * ratioPic / ratioVisu;
-
-                    //picAbsPosX = relposX * xRange + minx;
-                    //picAbsPosY = yRange - relposY * yRange + miny;
-                    //int offX = +5;
-
-                    //if (pictureBox1.PointToClient(MousePosition).X > (pictureBox1.Width - 100))
-                    //{ offX = -75; }
-
-                    //Point stringpos = new Point(pictureBox1.PointToClient(MousePosition).X + offX, pictureBox1.PointToClient(MousePosition).Y - 10);
-                    //g.DrawString(String.Format("Worl-Pos:\r\nX:{0,7:0.00}\r\nY:{1,7:0.00}", picAbsPosX, picAbsPosY), new Font("Lucida Console", 8), Brushes.Black, stringpos);
-                    //g.DrawString(String.Format("Zooming: {0,2:0.00}%", 100 / zoomRange), new Font("Lucida Console", 8), Brushes.Black, new Point(5, 5));
-
-                    //g.Transform = pBoxTransform;
-                    //g.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)/应用扩展
-                    //g.TranslateTransform((float)-minx, (float)(-yRange - miny));
 
                     foreach (var item in GCodeVisuAndTransform.list)
                     {
-                        if (myshape.Name == "线条" && item.Rectangle == myshape.Rectangle)
+                        if (myshape.Name == "线条" && item.Rectangle.X == myshape.Rectangle.X&& item.Rectangle.Y== myshape.Rectangle.Y)
                         {
-                            UpdateGr.AddLine(myshape.Rectangle.X, myshape.Rectangle.Y, myshape.Rectangle.Width, myshape.Rectangle.Height);
-                           // g.DrawPath(new Pen(colorChoosed,0.4f), UpdateGr);
+                            
+                            int x = 0;
+                            int y = 0;
+                            //UpdateGr.AddLine((int)296, (int)171, (int)342, (int)171);
+                            if (item.Rectangle.Width==3)
+                            {
+                                item.Rectangle.Width = 0;
+                            }
+                            if (item.Rectangle.Height == 3)
+                            {
+                                item.Rectangle.Height = 0;
+                            }
+                            
+                             x = item.Rectangle.X + item.Rectangle.Width;
+                             y= item.Rectangle.Y + item.Rectangle.Height;
+                            if (item.isNUllnumberX == 1)
+                            {
+                                x = item.Rectangle.X - item.Rectangle.Width;
+                            }
+                            else if (item.isNUllnumberY == 1)
+                            {
+                                y = item.Rectangle.Y - item.Rectangle.Height;
+                            }
+                            else if(item.isNUllnumberX == 1&& item.isNUllnumberY == 1)
+                            {
+                                x = item.Rectangle.X - item.Rectangle.Width;
+                                y = item.Rectangle.Y - item.Rectangle.Height;
+                            }
+                            Rectangle UpdateGr = new Rectangle(item.Rectangle.X, item.Rectangle.Y, x, y);
+                            list.Add(new MyColor() { rect = UpdateGr, pen = p });
+                            //UpdateGr.AddLine();
+                           // g.DrawPath(new Pen(colorChoosed), UpdateGr);
                         }
                         else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧")
                         {
-                            UpdateGr.AddRectangle(myshape.Rectangle);
+                            //UpdateGr.AddRectangle(myshape.Rectangle);
                         }
                     }
                 }
