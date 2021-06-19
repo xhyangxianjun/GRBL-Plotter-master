@@ -63,7 +63,7 @@ namespace GRBL_Plotter //DXFImporter
         /// <param name="file">String keeping file-name or URL</param>
         /// <returns>String with GCode of imported data</returns>
         /// 
-        public static string ConvertFile(string file,string knife)
+        public static string ConvertFile(string file,string knife,string z,string r,string f,string s)
         {
             drawingList = new ArrayList();
             objectIdentifier = new ArrayList();
@@ -90,6 +90,7 @@ namespace GRBL_Plotter //DXFImporter
                 else { MessageBox.Show("File does not exist: " + file); return ""; }
             }
             string knifer = gcode.Knife(knife);
+            string parameter = gcode.Parameter(Convert.ToInt32(z), Convert.ToInt32(r), Convert.ToInt32(f), Convert.ToInt32(s));
             string header = gcode.GetHeader("DXF import",file);
             string footer = gcode.GetFooter();
             gcodeUseSpindle = Properties.Settings.Default.importGCZEnable;
@@ -99,7 +100,7 @@ namespace GRBL_Plotter //DXFImporter
             finalString.Append(gcodeString[0]);     //.Replace(',', '.')
             if (gcodeUseSpindle) gcode.SpindleOff(finalString, "Stop spindle - Option Z-Axis");
 
-            return knifer+header + finalString.ToString().Replace(',', '.') + footer;
+            return knifer+parameter + header + finalString.ToString().Replace(',', '.') + footer;
             //return finalString.ToString().Replace(',', '.');
         }
 

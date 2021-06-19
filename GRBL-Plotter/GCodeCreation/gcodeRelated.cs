@@ -503,6 +503,16 @@ namespace GRBL_Plotter
             }
             return knife;
         }
+        public static string Parameter(int z, int r, int f, int s)
+        {
+            string par = "";
+
+                if (gcodeRelative)
+                    par = string.Format("G99 G43 H2 G81 X0.000 Y0.000 Z-{0} R{1} F{2} M3 S{3}", z,r,f,s);
+                else
+                    par = string.Format("G99 G43 H2 G81 X0.000 Y0.000 Z-{0} R{1} F{2} M3 S{3}", z.ToString("0.000"), r.ToString("0.000"), f, s);
+            return par;
+        }
         public static string GetHeader(string cmt,string source="")
         {
             gcodeTime += gcodeDistance / gcodeXYFeed;

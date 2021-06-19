@@ -766,7 +766,7 @@ namespace GRBL_Plotter
             try
             {
                 StreamReader listToRead =
-                new StreamReader(System.Environment.CurrentDirectory + "\\.txt");
+                new StreamReader(System.Environment.CurrentDirectory + "\\Recent.txt");
                 string line;
                 MRUlist.Clear();
                 while ((line = listToRead.ReadLine()) != null) //read each line until end of file
@@ -897,7 +897,7 @@ namespace GRBL_Plotter
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
-            string gcode = GCodeFromDXF.ConvertFile(source, txt_knife.Text);
+            string gcode = GCodeFromDXF.ConvertFile(source, txt_knife.Text, txt_yuanDepth.Text, txt_caoPlane.Text, txt_yuanSpeed.Text, txt_caoRevolutions.Text);
             if (gcode.Length > 2)
             {
                 fCTBCode.Text = gcode;
