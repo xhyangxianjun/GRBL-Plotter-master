@@ -3007,37 +3007,37 @@ namespace GRBL_Plotter
 
                     foreach (var item in GCodeVisuAndTransform.list)
                     {
-                        if (myshape.Name == "线条" && item.Rectangle.X == myshape.Rectangle.X&& item.Rectangle.Y== myshape.Rectangle.Y)
+                        if (myshape.Name == "线条" && item.Rectangle==myshape.Rectangle)
                         {
                             
-                            int x = 0;
-                            int y = 0;
-                            //UpdateGr.AddLine((int)296, (int)171, (int)342, (int)171);
-                            if (item.Rectangle.Width==3)
-                            {
-                                item.Rectangle.Width = 0;
-                            }
-                            if (item.Rectangle.Height == 3)
-                            {
-                                item.Rectangle.Height = 0;
-                            }
+                            //int x = 0;
+                            //int y = 0;
+                            ////UpdateGr.AddLine((int)296, (int)171, (int)342, (int)171);
+                            //if (item.Rectangle.Width==3)
+                            //{
+                            //    item.Rectangle.Width = 0;
+                            //}
+                            //if (item.Rectangle.Height == 3)
+                            //{
+                            //    item.Rectangle.Height = 0;
+                            //}
                             
-                             x = item.Rectangle.X + item.Rectangle.Width;
-                             y= item.Rectangle.Y + item.Rectangle.Height;
-                            if (item.isNUllnumberX == 1)
-                            {
-                                x = item.Rectangle.X - item.Rectangle.Width;
-                            }
-                            else if (item.isNUllnumberY == 1)
-                            {
-                                y = item.Rectangle.Y - item.Rectangle.Height;
-                            }
-                            else if(item.isNUllnumberX == 1&& item.isNUllnumberY == 1)
-                            {
-                                x = item.Rectangle.X - item.Rectangle.Width;
-                                y = item.Rectangle.Y - item.Rectangle.Height;
-                            }
-                            Rectangle UpdateGr = new Rectangle(item.Rectangle.X, item.Rectangle.Y, x, y);
+                            // x = item.Rectangle.X + item.Rectangle.Width;
+                            // y= item.Rectangle.Y + item.Rectangle.Height;
+                            //if (item.isNUllnumberX == 1)
+                            //{
+                            //    x = item.Rectangle.X - item.Rectangle.Width;
+                            //}
+                            //else if (item.isNUllnumberY == 1)
+                            //{
+                            //    y = item.Rectangle.Y - item.Rectangle.Height;
+                            //}
+                            //else if(item.isNUllnumberX == 1&& item.isNUllnumberY == 1)
+                            //{
+                            //    x = item.Rectangle.X - item.Rectangle.Width;
+                            //    y = item.Rectangle.Y - item.Rectangle.Height;
+                            //}
+                            Rectangle UpdateGr = new Rectangle(item.original.X, item.original.Y, item.original.Width, item.original.Height);
                             list.Add(new MyColor() { rect = UpdateGr, pen = p });
                             //UpdateGr.AddLine();
                            // g.DrawPath(new Pen(colorChoosed), UpdateGr);

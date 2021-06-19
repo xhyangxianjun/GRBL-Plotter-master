@@ -89,8 +89,10 @@ namespace GRBL_Plotter //DXFImporter
                 }
                 else { MessageBox.Show("File does not exist: " + file); return ""; }
             }
+            string parameter = "";
             string knifer = gcode.Knife(knife);
-            string parameter = gcode.Parameter(Convert.ToInt32(z), Convert.ToInt32(r), Convert.ToInt32(f), Convert.ToInt32(s));
+            if (z != "" && r != "" && f != "" && s != "")
+            { parameter = gcode.Parameter(Convert.ToInt32(z), Convert.ToInt32(r), Convert.ToInt32(f), Convert.ToInt32(s));}
             string header = gcode.GetHeader("DXF import",file);
             string footer = gcode.GetFooter();
             gcodeUseSpindle = Properties.Settings.Default.importGCZEnable;
