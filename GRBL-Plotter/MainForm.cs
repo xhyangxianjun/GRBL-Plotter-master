@@ -782,6 +782,7 @@ namespace GRBL_Plotter
 
         private void loadFile(string fileName)
         {
+            list = new List<MyColor>();
             if (fileName.IndexOf("http") >= 0)
             {
                 //tBURL.Text = fileName;
