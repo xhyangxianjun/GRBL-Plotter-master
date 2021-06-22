@@ -402,6 +402,9 @@ namespace GRBL_Plotter
         { MoveArc(gcodeString, gnr, (float)coordxy.X, (float)coordxy.Y, (float)coordij.X, (float)coordij.Y, applyXYFeedRate, cmt, avoidG23); }
         public static void Arc(StringBuilder gcodeString, int gnr, float x, float y, float i, float j, string cmt = "", bool avoidG23 = false)
         { MoveArc(gcodeString, gnr, x, y, i, j, applyXYFeedRate, cmt, avoidG23); }
+        public static void Arc(StringBuilder gcodeString, int gnr, float x, float y, float i, float j,double Z, double R, double F, double S, string knife,string cmt = "", bool avoidG23 = false)
+        { MoveArc(gcodeString, gnr, x, y, i, j, applyXYFeedRate,Z,R,F,S,knife, cmt, avoidG23); }
+
         private static void MoveArc(StringBuilder gcodeString, int gnr, float x, float y, float i, float j, bool applyFeed, string cmt="", bool avoidG23 = false)
         {
             string feed = "";
@@ -427,6 +430,48 @@ namespace GRBL_Plotter
                 lastg = gnr;
             }
 //            gcodeDistance += fdistance(lastx, lasty, x, y);
+            gcodeTime += fdistance(lastx, lasty, x, y) / gcodeXYFeed;
+            lastx = x; lasty = y; lastf = gcodeXYFeed;
+            gcodeLines++;
+        }
+        private static void MoveArc(StringBuilder gcodeString, int gnr, float x, float y, float i, float j, bool applyFeed, double Z, double R, double F, double S,string knife, string cmt = "", bool avoidG23 = false)
+        {
+            string feed = "";
+            float x_relative = x - lastx;
+            float y_relative = y - lasty;
+
+            if (applyFeed)
+            {
+                feed = string.Format("F{0}", F);
+                applyXYFeedRate = false;                        // don't set feed next time
+            }
+            if (cmt.Length > 0) cmt = string.Format("({0})", cmt);
+            if (gcodeNoArcs || avoidG23)
+            {
+                splitArc(gcodeString, gnr, lastx, lasty, x, y, i, j, applyFeed, cmt);
+            }
+            else
+            {
+                string knifer = gcode.Knife(knife);
+                string zhongjian = "M8\r\n";
+                //转数
+                string re = gcode.Revolutions(S.ToString());
+                gcodeString.AppendFormat(knifer);
+                gcodeString.AppendFormat(zhongjian);
+                gcodeString.AppendFormat(re);
+                if (gcodeRelative)
+                    gcodeString.AppendFormat("G99 G43 H2 G{0} X{1} Y{2} Z{3} R{4} {5} M3 S{6}\r\n", frmtCode(gnr), frmtNum(x), frmtNum(y), frmtNum(Z), R.ToString("0.000"), feed, S);
+                else
+                {
+                    //写第三条G03
+                    //81 X0.000 Y0.000 Z-25.000 R2.000 F30 M3 S800
+                    gcodeString.AppendFormat("G99 G43 H2 G{0} X{1} Y{2} Z{3} R{4} {5} M3 S{6}\r\n", frmtCode(gnr), frmtNum(x), frmtNum(y), frmtNum(Z), R.ToString("0.000"), feed, S);
+                }
+                string zuihou = "G80\r\nG91 G28 Z0\r\nG90 G40 G49\r\nM9\r\n";
+                gcodeString.AppendFormat(zuihou);
+                lastg = gnr;
+            }
+            //            gcodeDistance += fdistance(lastx, lasty, x, y);
             gcodeTime += fdistance(lastx, lasty, x, y) / gcodeXYFeed;
             lastx = x; lasty = y; lastf = gcodeXYFeed;
             gcodeLines++;
@@ -502,6 +547,18 @@ namespace GRBL_Plotter
                     knife = string.Format("M06 T0{0}\r\n", knife);
             }
             return knife;
+        }
+        public static string Revolutions(string S)
+        {
+            if (S != "")
+            {
+                if (gcodeRelative)
+                    S = string.Format("M3 S{0}\r\n", S);
+                else
+                    //写第一条刀指令
+                    S = string.Format("M3 S{0}\r\n", S);
+            }
+            return S;
         }
         public static string Parameter(int z, int r, int f, int s)
         {

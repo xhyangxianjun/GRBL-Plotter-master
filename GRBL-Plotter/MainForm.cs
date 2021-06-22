@@ -84,6 +84,7 @@ namespace GRBL_Plotter
         string dxcb = "";
         string generateGCode = "";
         Point colorPoint = new Point();
+        string isnull = "";
         
         List<MyColor> list = new List<MyColor>();
         public MainForm()
@@ -727,7 +728,7 @@ namespace GRBL_Plotter
             {
                 loadFile(openFileDialog1.FileName);
                 //fCTBCode.ForeColor = Color.White;
-                generateGCode = fCTBCode.Text;
+                generateGCode = openFileDialog1.FileName;
                 fCTBCode.Text = "";
                 isHeightMapApplied = false;
             }
@@ -778,9 +779,11 @@ namespace GRBL_Plotter
         private void RecentFile_click(object sender, EventArgs e)
         {
             loadFile(sender.ToString());
+            generateGCode = sender.ToString();
+            fCTBCode.Text = "";
         }
 
-        private void loadFile(string fileName)
+        private void loadFile(string fileName,bool generation=false)
         {
             list = new List<MyColor>();
             if (fileName.IndexOf("http") >= 0)
@@ -805,7 +808,9 @@ namespace GRBL_Plotter
             if (ext == ".svg")
             { startConvertSVG(fileName); }
             else if (ext == ".dxf")
-            { startConvertDXF(fileName); }
+            {
+                startConvertDXF(fileName,generation);
+            }
             else if (ext == ".nc")
             {
                 tbFile.Text = fileName;
@@ -894,13 +899,14 @@ namespace GRBL_Plotter
             updateControls();
         }
 
-        private void startConvertDXF(string source)
+        private void startConvertDXF(string source,bool generation=false)
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
-            string gcode = GCodeFromDXF.ConvertFile(source, txt_knife.Text, txt_yuanDepth.Text, txt_caoPlane.Text, txt_yuanSpeed.Text, txt_caoRevolutions.Text);
+            string gcode = GCodeFromDXF.ConvertFile(source, txt_caoPlane.Text.Trim(), txt_yuanCutting.Text.Trim(), txt_yuanWidth.Text.Trim(), txt_yuanSingleCutting.Text.Trim(), txt_yuanDistance.Text.Trim(), generation);
             if (gcode.Length > 2)
             {
+                generateGCode = gcode;
                 fCTBCode.Text = gcode;
                 fCTBCode.UnbookmarkLine(fCTBCodeClickedLineLast);
                 redrawGCodePath();//画图的函数
@@ -911,7 +917,7 @@ namespace GRBL_Plotter
             this.Cursor = Cursors.Default;
             updateControls();
         }
-
+       
         bool blockRTBEvents = false;
         private void loadGcode()
         {
@@ -2774,7 +2780,7 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "进行钻孔时选择的刀号（1-6）";
+                label35.Text = "进行钻孔时选择的刀号（1-12）";
             }
             else if (ci.ToString() == "en")
             {
@@ -2830,7 +2836,7 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "钻孔时倒角设定的深度";
+                label35.Text = "钻孔时设定主轴的转数";
             }
             else if (ci.ToString() == "en")
             {
@@ -2844,7 +2850,7 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "钻孔时设定的转数";
+                label35.Text = "钻孔时设定运行的速度";
             }
             else if (ci.ToString() == "en")
             {
@@ -3029,22 +3035,65 @@ namespace GRBL_Plotter
                 }
             }
         }
+        public void isNUllParameter1()
+        {
+            #region 判断非空
+            int num = 0;
+            try
+            {
+                num = Convert.ToInt32(txt_caoPlane.Text);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("钻孔刀号输入有误，请重新输入"); return;
+                throw;
+            }
+
+            if (txt_caoPlane.Text == "")
+            {
+                MessageBox.Show("钻孔刀号不能为空"); return;
+            }
+            else if (0 < num && num > 12||num<=0)
+            {
+                MessageBox.Show("钻孔刀号输入有误，请重新输入"); return;
+            }
+            else if (txt_yuanCutting.Text == "")
+            {
+                MessageBox.Show("钻孔平面R点不能为空"); return;
+            }
+            else if (txt_yuanWidth.Text == "")
+            {
+                MessageBox.Show("钻孔时设定的深度不能为空"); return;
+            }
+            else if (txt_yuanSingleCutting.Text == "")
+            {
+                MessageBox.Show("钻孔时倒角设定的深度不能为空"); return;
+            }
+            else if (txt_yuanDistance.Text == "")
+            {
+                MessageBox.Show("钻孔时设定的转数"); return;
+            }
+            isnull = "00";
+            #endregion
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            bool MyGeneration = true;
             if (generateGCode != "")
             {
-                fCTBCode.Text = generateGCode;
+                isNUllParameter1();
+                if (isnull!="")
+                {
+                    loadFile(generateGCode, MyGeneration);
+                    fCTBCode.Text = generateGCode;
+                }
             }
             else
             {
                 MessageBox.Show("请选择要生成G代码的文件");
             }
         }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }

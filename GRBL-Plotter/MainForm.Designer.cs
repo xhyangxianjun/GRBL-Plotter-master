@@ -2217,7 +2217,6 @@ namespace GRBL_Plotter
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
             this.toolTip1.SetToolTip(this.groupBox2, resources.GetString("groupBox2.ToolTip"));
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // button2
             // 

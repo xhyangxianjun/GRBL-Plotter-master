@@ -63,7 +63,7 @@ namespace GRBL_Plotter //DXFImporter
         /// <param name="file">String keeping file-name or URL</param>
         /// <returns>String with GCode of imported data</returns>
         /// 
-        public static string ConvertFile(string file,string knife,string z,string r,string f,string s)
+        public static string ConvertFile(string file, string knife, string R, string Z, string S, string F,bool generation=false)
         {
             drawingList = new ArrayList();
             objectIdentifier = new ArrayList();
@@ -83,40 +83,50 @@ namespace GRBL_Plotter //DXFImporter
                 if (File.Exists(file))
                 {
                     try
-                    {   GetVectorDXF(file); }
+                    {
+                       GetVectorDXF(file,Z,R,F,S,knife,generation);
+                    }
                     catch (Exception e)
                     {   MessageBox.Show("Error '" + e.ToString() + "' in DXF file " + file ); return ""; }
                 }
                 else { MessageBox.Show("File does not exist: " + file); return ""; }
             }
-            string parameter = "";
-            string knifer = gcode.Knife(knife);
-            if (z != "" && r != "" && f != "" && s != "")
-            { parameter = gcode.Parameter(Convert.ToInt32(z), Convert.ToInt32(r), Convert.ToInt32(f), Convert.ToInt32(s));}
-            string header = gcode.GetHeader("DXF import",file);
+            //string parameter = "";
+          
+            string header = "G54 G80 G90 G40 G49\r\n";
+           
+            //结束程序G代码
             string footer = gcode.GetFooter();
+            // parameter = gcode.Parameter(Convert.ToInt32(z), Convert.ToInt32(r), Convert.ToInt32(f), Convert.ToInt32(s));
+
+            //string header = gcode.GetHeader("DXF import",file);
+
             gcodeUseSpindle = Properties.Settings.Default.importGCZEnable;
-
+            
             finalString.Clear();
-            if (gcodeUseSpindle) gcode.SpindleOn(finalString, "Start spindle - Option Z-Axis");
+            //if (gcodeUseSpindle) gcode.SpindleOn(finalString, "Start spindle - Option Z-Axis");
             finalString.Append(gcodeString[0]);     //.Replace(',', '.')
-            if (gcodeUseSpindle) gcode.SpindleOff(finalString, "Stop spindle - Option Z-Axis");
+            //if (gcodeUseSpindle) gcode.SpindleOff(finalString, "Stop spindle - Option Z-Axis");
 
-            return knifer+parameter + header + finalString.ToString().Replace(',', '.') + footer;
+            return header+ finalString.ToString().Replace(',', '.')+ footer;
             //return finalString.ToString().Replace(',', '.');
         }
 
-       
+
         /// <summary>
         /// Load and parse DXF code
         /// </summary>
         /// <param name="filename">String keeping file-name</param>
         /// <returns></returns>
-        private static void GetVectorDXF(string filename)
+        private static void GetVectorDXF(string filename, string Z, string R, string F, string S,string knife, bool generation = false)
         {
             DXFDocument doc = new DXFDocument();
             doc.Load(filename);
-            gcodePenUp("DXF Start");
+            if (!generation)
+            {
+                gcodePenUp("DXF Start");
+            }
+
             lastGCX = -1; lastGCY = -1; lastSetGCX = -1; lastSetGCY = -1;
             foreach (DXFEntity dxfEntity in doc.Entities)
             {
@@ -140,7 +150,8 @@ namespace GRBL_Plotter //DXFImporter
                     foreach (DXFBlock block in doc.Blocks)
                     {
                         if (block.BlockName.ToString() == ins.BlockName)
-                        {   if (dxfComments)
+                        {
+                            if (dxfComments)
                             {
                                 gcode.Comment(gcodeString[gcodeStringIndex], "Color: " + block.ColorNumber.ToString());
                                 gcode.Comment(gcodeString[gcodeStringIndex], "Block: " + block.BlockName.ToString() + " at " + ins_x.ToString() + " " + ins_y.ToString());
@@ -155,10 +166,24 @@ namespace GRBL_Plotter //DXFImporter
                     }
                 }
                 else
-                    processEntities(dxfEntity);
+                {
+                    if (generation)
+                    {
+                        processEntities(dxfEntity, Convert.ToDouble(Z), Convert.ToDouble(R), Convert.ToDouble(F), Convert.ToDouble(S),knife);
+                    }
+                    else
+                    {
+                        processEntities(dxfEntity);
+                    }
+                }
             }
             if (askPenUp)   // retrieve missing pen up
-            { gcode.PenUp(gcodeString[gcodeStringIndex]); askPenUp = false; }
+            {
+                if (!generation)
+                {
+                    gcode.PenUp(gcodeString[gcodeStringIndex]); askPenUp = false;
+                }
+            }
         }
 
         /// <summary>
@@ -361,6 +386,30 @@ namespace GRBL_Plotter //DXFImporter
                     }
                     index++;
                 }
+                gcodeStopPath();
+            }
+            #endregion
+            else
+                gcode.Comment(gcodeString[gcodeStringIndex], "Unknown: " + entity.GetType().ToString());
+        }
+        private static void processEntities(DXFEntity entity, double Z, double R, double F, double S,string knife, double offsetX = 0, double offsetY = 0)
+        {
+            double x, y;
+            if (dxfComments)
+            {
+                gcode.Comment(gcodeString[gcodeStringIndex], "Entity: " + entity.GetType().ToString());
+                gcode.Comment(gcodeString[gcodeStringIndex], "Color:  " + entity.ColorNumber.ToString());
+            }
+            #region DXFCircle
+            if (entity.GetType() == typeof(DXFCircle))
+            {
+                DXFCircle circle = (DXFCircle)entity;
+                x = (float)circle.Center.X + (float)offsetX;
+                y = (float)circle.Center.Y + (float)offsetY;
+                //gcodeStartPath(x + circle.Radius, y, "Start Circle");
+             
+                gcode.Arc(gcodeString[gcodeStringIndex], 81, (float)x + (float)circle.Radius, (float)y, -(float)circle.Radius, 0, Z, R, F, S,knife, "");
+                
                 gcodeStopPath();
             }
             #endregion
