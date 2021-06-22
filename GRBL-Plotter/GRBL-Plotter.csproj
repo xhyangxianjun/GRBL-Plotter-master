@@ -343,9 +343,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Content Include="Recent.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\modell1.png" />
     <None Include="Resources\modell2.png" />
     <None Include="Resources\modell3.png" />
@@ -428,7 +425,6 @@
     <None Include="Resources\turn_l.png" />
     <None Include="Resources\flip_vertical.png" />
     <None Include="Resources\flip_horizontal.png" />
-    <None Include="Resources\flip_horizontal.bmp" />
     <None Include="Resources\Image1.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

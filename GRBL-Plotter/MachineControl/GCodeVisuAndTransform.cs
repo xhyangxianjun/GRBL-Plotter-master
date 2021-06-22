@@ -822,10 +822,10 @@ namespace GRBL_Plotter
                 Rectangle original = new Rectangle();
                 if ((nx != ox) || (ny != oy))
                 {
-                    nx = Math.Round(nx);
-                    ox = Math.Round(ox);
-                    ny = Math.Round(ny);
-                    oy = Math.Round(oy);
+                    nx = Math.Truncate(nx);
+                    ox = Math.Truncate(ox);
+                    ny = Math.Truncate(ny);
+                    oy = Math.Truncate(oy);
                     path.AddLine((float)ox, (float)oy, (float)nx, (float)ny);
                     original = new Rectangle((int)ox, (int)oy, (int)nx, (int)ny);
                     onlyZ = 0;  // x or y has changed
@@ -852,15 +852,15 @@ namespace GRBL_Plotter
 
                     if (x == 0)
                     {
-                        x = 3;
+                        x = 2;
                     }
 
                     if (y == 0)
                     {
-                        y = 3;
+                        y = 2;
                     }
-                    ox = ox - 2;
-                    oy = oy - 2;
+                    ox = ox - 1;
+                    oy = oy - 1;
                     ret = new Rectangle((int)ox, (int)oy, (int)x, (int)y);
 
                     list.Add(new MyShape() { Name = "线条", Rectangle = ret, original = original, });
@@ -904,15 +904,27 @@ namespace GRBL_Plotter
                 if (motionMode == 3) { da=-(360 + a2 - a1); }
                 if (da > 360) { da -= 360; }
                 if (da < -360) { da += 360; }
-                //Rectangle ret = new Rectangle();
+                Rectangle ret = new Rectangle();
+                Point Point = new Point();
                 if (motionMode == 2)
                 {
                     //ret = new Rectangle(x1, y1, 2 * radius, 2 * radius, a1, da);
+                    //int width=2 * (int)radius;
+                    //ret = new Rectangle((int)x1, (int)y1, width, width);
+                    //Point.X = (int)a1;
+                    //Point.Y = (int)da;
+                    //list.Add(new MyShape() { Name = "圆弧", Rectangle = ret,point=Point }); 
                     path.AddArc(x1, y1, 2 * radius, 2 * radius, a1, da);
                     xyzSize.setDimensionCircle(x1 + radius, y1 + radius, radius, a1, da);        // calculate new dimensions
                 }
                 else
-                {   path.AddArc(x1, y1, 2 * radius, 2 * radius, a1, -da);
+                {
+                    //int width = 2 * (int)radius;
+                    //ret = new Rectangle((int)x1, (int)y1, width, width);
+                    //Point.X = (int)a1;
+                    //Point.Y = (int)-da;
+                    //list.Add(new MyShape() { Name = "圆弧", Rectangle = ret, point = Point });
+                    path.AddArc(x1, y1, 2 * radius, 2 * radius, a1, -da);
                     xyzSize.setDimensionCircle(x1 + radius, y1 + radius, radius, a1, -da);       // calculate new dimensions
                 }
             }
@@ -948,8 +960,7 @@ namespace GRBL_Plotter
             public string Name;
             public Rectangle Rectangle;
             public Rectangle original;
-            public int isNUllnumberX;
-            public int isNUllnumberY;
+            public Point point;
         }
         private void createRuler(double maxX, double maxY)
         {

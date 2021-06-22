@@ -2343,6 +2343,10 @@ namespace GRBL_Plotter
             e.DrawPath(penUp, GCodeVisuAndTransform.pathPenUp);
             foreach (var item in list)
             {
+                if (item.coPo!=null)
+                {
+                    e.DrawArc(item.pen, item.rect.X, item.rect.Y, item.rect.Width, item.rect.Height,item.coPo.X,item.coPo.Y);
+                }
                 e.DrawLine(item.pen, item.rect.X, item.rect.Y, item.rect.Width, item.rect.Height);
             }
         }
@@ -2744,11 +2748,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣刀的直径值";
+                label35.Text = "用于设定孔的直径直";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Diameter value of milling cutter";
+                label35.Text = "Used to set the diameter of the hole straight";
             }
         }
 
@@ -2757,11 +2761,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "进行铣槽时选择的刀号(1-6)";
+                label35.Text = "0时表示不进行倒角，1-6时表示倒角刀号";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The tool number selected for milling grooves (1-6)";
+                label35.Text = "0 means no chamfering, and 1-6 means chamfering knife number";
             }
         }
 
@@ -2770,11 +2774,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣槽下刀初始平面R点";
+                label35.Text = "进行钻孔时选择的刀号（1-6）";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "R point on the initial plane of the cutting tool under milling groove";
+                label35.Text = "Cutter number selected during drilling (1-6)";
             }
 
         }
@@ -2784,11 +2788,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣圆时Z轴下刀的深度";
+                label35.Text = "钻孔时的单次切削量 0：G81 非0为G73";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The depth of the tool under the Z axis when milling round";
+                label35.Text = "When drilling, the single cutting amount is 0: G81, non-0 is G73";
             }
 
         }
@@ -2798,11 +2802,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣圆Z轴方向从R点首次向下的距离";
+                label35.Text = "进行钻孔时的平面R点";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Milling circle Z axis direction from point R first downward distance";
+                label35.Text = "Plane point R at the time of drilling";
             }
 
         }
@@ -2812,11 +2816,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣圆时XY平面单次增量";
+                label35.Text = "钻孔时设定的深度";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Single increment of XY plane when milling a circle";
+                label35.Text = "The depth set at the time of drilling";
             }
 
         }
@@ -2826,11 +2830,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣圆Z轴每次切削进给的深度";
+                label35.Text = "钻孔时倒角设定的深度";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The depth of feed per cutting on the Z axis of the milling circle";
+                label35.Text = "The depth set by chamfering during drilling";
             }
 
         }
@@ -2840,11 +2844,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "快速下刀时，离未加工表面距离";
+                label35.Text = "钻孔时设定的转数";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Distance from the unmachined surface when cutting quickly";
+                label35.Text = "The number of revolutions set during drilling";
             }
 
         }
@@ -2854,11 +2858,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣槽运行速度设定";
+                label35.Text = "钻孔时设定运行的速度";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Milling slot running speed setting";
+                label35.Text = "Set the running speed while drilling";
             }
 
         }
@@ -2868,11 +2872,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣矩形时Z轴下刀的深度";
+                label35.Text = "进行攻丝时选择的刀号（1-6）";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The depth of the cutter under the Z axis when milling the rectangle";
+                label35.Text = "The knife size selected for tapping (1-6)";
             }
 
         }
@@ -2882,11 +2886,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣矩Z轴方向从R点首次向下的距离";
+                label35.Text = "进行攻丝时设定的平面R点";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Milling moment Z axis direction from point R first downward distance";
+                label35.Text = "Plane R point set when tapping";
             }
 
         }
@@ -2896,11 +2900,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣矩时XY平面单次增量";
+                label35.Text = "攻丝时设定的深度";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Single increment of XY plane at milling moment";
+                label35.Text = "The depth set during tapping";
             }
 
         }
@@ -2910,11 +2914,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣矩Z轴每次切削进给的深度";
+                label35.Text = "攻丝时主轴设定的转速";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Milling moment Z-axis feed depth per cutting";
+                label35.Text = "The set speed of the spindle during tapping";
             }
 
         }
@@ -2924,11 +2928,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "快速下刀时，离未加工表面距离";
+                label35.Text = "攻丝时主轴设定的速度";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Distance from the unmachined surface when cutting quickly";
+                label35.Text = "The speed set by the spindle during tapping";
             }
 
         }
@@ -2990,6 +2994,7 @@ namespace GRBL_Plotter
         {
             public Rectangle rect;
             public Pen pen;
+            public Point coPo;
         }
         private void switchTheColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -3010,41 +3015,14 @@ namespace GRBL_Plotter
                     {
                         if (myshape.Name == "线条" && item.Rectangle==myshape.Rectangle)
                         {
-                            
-                            //int x = 0;
-                            //int y = 0;
-                            ////UpdateGr.AddLine((int)296, (int)171, (int)342, (int)171);
-                            //if (item.Rectangle.Width==3)
-                            //{
-                            //    item.Rectangle.Width = 0;
-                            //}
-                            //if (item.Rectangle.Height == 3)
-                            //{
-                            //    item.Rectangle.Height = 0;
-                            //}
-                            
-                            // x = item.Rectangle.X + item.Rectangle.Width;
-                            // y= item.Rectangle.Y + item.Rectangle.Height;
-                            //if (item.isNUllnumberX == 1)
-                            //{
-                            //    x = item.Rectangle.X - item.Rectangle.Width;
-                            //}
-                            //else if (item.isNUllnumberY == 1)
-                            //{
-                            //    y = item.Rectangle.Y - item.Rectangle.Height;
-                            //}
-                            //else if(item.isNUllnumberX == 1&& item.isNUllnumberY == 1)
-                            //{
-                            //    x = item.Rectangle.X - item.Rectangle.Width;
-                            //    y = item.Rectangle.Y - item.Rectangle.Height;
-                            //}
                             Rectangle UpdateGr = new Rectangle(item.original.X, item.original.Y, item.original.Width, item.original.Height);
                             list.Add(new MyColor() { rect = UpdateGr, pen = p });
-                            //UpdateGr.AddLine();
-                           // g.DrawPath(new Pen(colorChoosed), UpdateGr);
                         }
-                        else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧")
+                        else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧"&&item.point==myshape.point)
                         {
+                            Rectangle upd = new Rectangle(item.Rectangle.X, item.Rectangle.Y, item.Rectangle.Width, item.Rectangle.Height);
+                            Point point = new Point(item.point.X, item.point.Y);
+                            list.Add(new MyColor() { rect = upd, pen = p, coPo = point });
                             //UpdateGr.AddRectangle(myshape.Rectangle);
                         }
                     }
@@ -3062,6 +3040,11 @@ namespace GRBL_Plotter
             {
                 MessageBox.Show("请选择要生成G代码的文件");
             }
+        }
+
+        private void groupBox2_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

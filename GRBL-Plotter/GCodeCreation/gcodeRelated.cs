@@ -183,7 +183,7 @@ namespace GRBL_Plotter
         {
             if (cmt.Length > 0) cmt = string.Format("({0})", cmt);
             gcodeString.AppendFormat("M{0:00} {1}\r\n",0,cmt);
-            gcodeLines++;
+            gcodeLines++; 
             gcodePauseCounter++;
         }
 
@@ -506,14 +506,10 @@ namespace GRBL_Plotter
         public static string Parameter(int z, int r, int f, int s)
         {
             string par = "";
-            if (z > 0 && r > 0 && f > 0 && s > 0)
-            {
                 if (gcodeRelative)
-                    par = string.Format("G99 G43 H2 G81 X0.000 Y0.000 Z-{0} R{1} F{2} M3 S{3}", z, r, f, s);
+                    par = string.Format("G99 G43 H2 G81 X0.000 Y0.000 Z-{0} R{1} F{2} M3 S{3}\r\n", z, r, f, s);
                 else
-                    par = string.Format("G99 G43 H2 G81 X0.000 Y0.000 Z-{0} R{1} F{2} M3 S{3}", z.ToString("0.000"), r.ToString("0.000"), f, s);
-            }
-
+                    par = string.Format("G99 G43 H2 G81 X0.000 Y0.000 Z-{0} R{1} F{2} M3 S{3}\r\n", z.ToString("0.000"), r.ToString("0.000"), f, s);
             return par;
         }
         public static string GetHeader(string cmt,string source="")

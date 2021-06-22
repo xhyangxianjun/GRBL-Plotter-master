@@ -57,16 +57,16 @@ namespace GRBL_Plotter
             // 
             // button1
             // 
-            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             resources.ApplyResources(this.button1, "button1");
+            this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Name = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // pictureBox1
             // 
+            resources.ApplyResources(this.pictureBox1, "pictureBox1");
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
             this.pictureBox1.Image = global::GRBL_Plotter.Properties.Resources.modell3;
-            resources.ApplyResources(this.pictureBox1, "pictureBox1");
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.TabStop = false;
             // 
@@ -98,7 +98,6 @@ namespace GRBL_Plotter
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "AboutForm";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.AboutForm_Load);
