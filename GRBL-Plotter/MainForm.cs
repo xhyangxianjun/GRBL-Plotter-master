@@ -43,6 +43,7 @@ using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace GRBL_Plotter
 {
@@ -83,6 +84,7 @@ namespace GRBL_Plotter
         private string lastLoadSource = "Nothing loaded";
         string dxcb = "";
         string generateGCode = "";
+        string Fcode = "";
         Point colorPoint = new Point();
         string isnull = "";
         
@@ -729,6 +731,7 @@ namespace GRBL_Plotter
                 loadFile(openFileDialog1.FileName);
                 //fCTBCode.ForeColor = Color.White;
                 generateGCode = openFileDialog1.FileName;
+                Fcode = fCTBCode.Text;
                 fCTBCode.Text = "";
                 isHeightMapApplied = false;
             }
@@ -780,6 +783,7 @@ namespace GRBL_Plotter
         {
             loadFile(sender.ToString());
             generateGCode = sender.ToString();
+            Fcode = fCTBCode.Text;
             fCTBCode.Text = "";
         }
 
@@ -903,10 +907,15 @@ namespace GRBL_Plotter
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
-            string gcode = GCodeFromDXF.ConvertFile(source, txt_caoPlane.Text.Trim(), txt_yuanCutting.Text.Trim(), txt_yuanWidth.Text.Trim(), txt_yuanSingleCutting.Text.Trim(), txt_yuanDistance.Text.Trim(), generation);
+            int model = 0;
+            if (txt_ModelSetting.Text.Trim() != "")
+            {
+                model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
+            }
+            string gcode = GCodeFromDXF.ConvertFile(source,model , txt_caoPlane.Text.Trim(), txt_yuanSpeed.Text.Trim(), txt_yuanCutting.Text.Trim(), txt_yuanWidth.Text.Trim(), txt_yuanSingleCutting.Text.Trim(), txt_yuanDistance.Text.Trim(), txt_juCutting.Text.Trim(), txt_juWidth.Text.Trim(), txt_juSingleCutting.Text.Trim(), txt_juDistance.Text.Trim(), generation);
             if (gcode.Length > 2)
             {
-                generateGCode = gcode;
+                Fcode = gcode;
                 fCTBCode.Text = gcode;
                 fCTBCode.UnbookmarkLine(fCTBCodeClickedLineLast);
                 redrawGCodePath();//画图的函数
@@ -2864,11 +2873,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "钻孔时设定运行的速度";
+                label35.Text = "进行攻丝时选择的刀号（1-12）";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Set the running speed while drilling";
+                label35.Text = "The knife size selected for tapping (1-6)";
             }
 
         }
@@ -2878,11 +2887,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "进行攻丝时选择的刀号（1-6）";
+                label35.Text = "攻丝时的单次切削量";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The knife size selected for tapping (1-6)";
+                label35.Text = "The amount of a single cut in tapping";
             }
 
         }
@@ -3038,22 +3047,37 @@ namespace GRBL_Plotter
         public void isNUllParameter1()
         {
             #region 判断非空
+            if (txt_ModelSetting.Text == "")
+            {
+                MessageBox.Show("模式设置为空"); return;
+            }
+            int model = 0;
+            try
+            {
+                model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("模式设置有误，请重新设置"); return;
+            }
+            if (0<model&&model>2||model<0)
+            {
+                MessageBox.Show("模式设置有误，请重新设置"); return;
+            }
+            if (txt_caoPlane.Text == "")
+            {
+                MessageBox.Show("钻孔刀号不能为空"); return;
+            }
             int num = 0;
             try
             {
                 num = Convert.ToInt32(txt_caoPlane.Text);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show("钻孔刀号输入有误，请重新输入"); return;
-                throw;
             }
-
-            if (txt_caoPlane.Text == "")
-            {
-                MessageBox.Show("钻孔刀号不能为空"); return;
-            }
-            else if (0 < num && num > 12||num<=0)
+            if (0 < num && num > 12||num<=0)
             {
                 MessageBox.Show("钻孔刀号输入有误，请重新输入"); return;
             }
@@ -3073,6 +3097,46 @@ namespace GRBL_Plotter
             {
                 MessageBox.Show("钻孔时设定的转数"); return;
             }
+            if (model==2)
+            {
+                #region 先钻后功
+                if (txt_yuanSpeed.Text == "")
+                {
+                    MessageBox.Show("攻丝刀号不能为空"); return;
+                }
+               // Match m = Regex.Match(this.txt_juCutting.Text, @"^[0-9]*$");
+                int num1 = 0;
+                try
+                {
+                    num1 = Convert.ToInt32(txt_yuanSpeed.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("攻丝刀号输入有误，请重新输入"); return;
+                }
+                if (0 < num1 && num1 > 12 || num1 <= 0)
+                {
+                    MessageBox.Show("攻丝刀号输入有误，请重新输入"); return;
+                }
+               
+                else if (txt_juCutting.Text=="")
+                {
+                    MessageBox.Show("攻丝平面R点不能为空"); return;
+                }
+                else if (txt_juWidth.Text == "")
+                {
+                    MessageBox.Show("攻丝深度Z不能为空"); return;
+                }
+                else if (txt_juSingleCutting.Text == "")
+                {
+                    MessageBox.Show("攻丝转数S不能为空"); return;
+                }
+                else if (txt_juDistance.Text == "")
+                {
+                    MessageBox.Show("攻丝速度F不能为空"); return;
+                }
+                #endregion
+            }
             isnull = "00";
             #endregion
         }
@@ -3083,10 +3147,10 @@ namespace GRBL_Plotter
             if (generateGCode != "")
             {
                 isNUllParameter1();
-                if (isnull!="")
+                if (isnull != "")
                 {
                     loadFile(generateGCode, MyGeneration);
-                    fCTBCode.Text = generateGCode;
+                    fCTBCode.Text = Fcode;
                 }
             }
             else

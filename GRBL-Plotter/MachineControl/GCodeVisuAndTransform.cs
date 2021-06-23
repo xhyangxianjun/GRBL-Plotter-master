@@ -827,8 +827,9 @@ namespace GRBL_Plotter
                     ny = Math.Truncate(ny);
                     oy = Math.Truncate(oy);
                     path.AddLine((float)ox, (float)oy, (float)nx, (float)ny);
+                    onlyZ = 0;
                     original = new Rectangle((int)ox, (int)oy, (int)nx, (int)ny);
-                    onlyZ = 0;  // x or y has changed
+                   // x or y has changed
                     int x = 0;
                     int y = 0;
                     if (ox > nx)
@@ -904,8 +905,8 @@ namespace GRBL_Plotter
                 if (motionMode == 3) { da=-(360 + a2 - a1); }
                 if (da > 360) { da -= 360; }
                 if (da < -360) { da += 360; }
-                Rectangle ret = new Rectangle();
-                Point Point = new Point();
+                //Rectangle ret = new Rectangle();
+                //Point Point = new Point();
                 if (motionMode == 2)
                 {
                     //ret = new Rectangle(x1, y1, 2 * radius, 2 * radius, a1, da);
