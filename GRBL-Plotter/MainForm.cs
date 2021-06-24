@@ -95,6 +95,7 @@ namespace GRBL_Plotter
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo(ci.ToString());
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
+           
             InitializeComponent();
             gcode.setup();
             updateDrawing();
@@ -120,7 +121,43 @@ namespace GRBL_Plotter
         // initialize Main form
         private void MainForm_Load(object sender, EventArgs e)
         {
-          
+            CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
+            IList<string> list = new List<string>();
+            IList<string> list1 = new List<string>();
+            IList<string> list2= new List<string>();
+            if (ci.ToString() == "zh")
+            {
+                list.Add("请选择");
+                list.Add("钻孔");
+                list.Add("先钻后功");
+                list.Add("铣槽");
+                list1.Add("请选择");
+                list1.Add("仅钻白孔");
+                list1.Add("仅钻红孔");
+                list1.Add("全钻");
+                list2.Add("请选择");
+                list2.Add("仅功白孔");
+                list2.Add("仅功红孔");
+                list2.Add("全功");
+            }
+            else if (ci.ToString() == "en")
+            {
+                list.Add("Please select a");
+                list.Add("drilling");
+                list.Add("After the first drill work");
+                list.Add("slotting");
+                list1.Add("Please select a");
+                list1.Add("Only drill Bai Kong");
+                list1.Add("Only red holes");
+                list1.Add("The whole drill");
+                list2.Add("Please select a");
+                list2.Add("Only work Bai Kong");
+                list2.Add("Only work the red hole");
+                list2.Add("All the work");
+            }
+            com_ModelSetting.DataSource = list;
+            com_drillingSetting.DataSource = list1;
+            com_TappingSetting.DataSource = list2;
             Properties.Settings.Default.colorPenDown = Color.Red;
             Properties.Settings.Default.colorRuler = Color.Blue;
             Properties.Settings.Default.colorPenUp = Color.Green;
@@ -617,31 +654,31 @@ namespace GRBL_Plotter
         public void isNUllParameter()
         {
             #region 判断非空
-            if (txt_ModelSetting.Text == "")
-            {
-                MessageBox.Show("模式设置不能为空"); return;
-            }
-            else if (!(System.Text.RegularExpressions.Regex.IsMatch(txt_ModelSetting.Text, @"^[0-2]{1,1}$")))
-            {
-                MessageBox.Show("模式设置有误,请重新设置"); return;
-            }
-            else if (txt_ColorSetting.Text == "")
-            {
-                MessageBox.Show("颜色设置不能为空"); return;
-            }
-            else if (!(System.Text.RegularExpressions.Regex.IsMatch(txt_ColorSetting.Text, @"^[0-1]{1,1}$")))
-            {
-                MessageBox.Show("颜色设置有误,请重新设置"); return;
-            }
-            else if (txt_knife.Text == "")
-            {
-                MessageBox.Show("铣削刀号不能为空"); return;
-            }
-            else if (!(System.Text.RegularExpressions.Regex.IsMatch(txt_knife.Text, @"^[1-6]{1,1}$")))
-            {
-                MessageBox.Show("铣削刀号输入有误,请重新输入"); return;
-            }
-            else if (txt_CutterDiameter.Text == "")
+            //if (txt_ModelSetting.Text == "")
+            //{
+            //    MessageBox.Show("模式设置不能为空"); return;
+            //}
+            //else if (!(System.Text.RegularExpressions.Regex.IsMatch(txt_ModelSetting.Text, @"^[0-2]{1,1}$")))
+            //{
+            //    MessageBox.Show("模式设置有误,请重新设置"); return;
+            //}
+            // if (txt_ColorSetting.Text == "")
+            //{
+            //    MessageBox.Show("颜色设置不能为空"); return;
+            //}
+            //else if (!(System.Text.RegularExpressions.Regex.IsMatch(txt_ColorSetting.Text, @"^[0-1]{1,1}$")))
+            //{
+            //    MessageBox.Show("颜色设置有误,请重新设置"); return;
+            //}
+            //else if (txt_knife.Text == "")
+            //{
+            //    MessageBox.Show("铣削刀号不能为空"); return;
+            //}
+            // if (!(System.Text.RegularExpressions.Regex.IsMatch(txt_knife.Text, @"^[1-6]{1,1}$")))
+            //{
+            //    MessageBox.Show("铣削刀号输入有误,请重新输入"); return;
+            //}
+             if (txt_CutterDiameter.Text == "")
             {
                 MessageBox.Show("刀具直径值不能为空"); return;
             }
@@ -696,22 +733,6 @@ namespace GRBL_Plotter
             else if (txt_juDistance.Text == "")
             {
                 MessageBox.Show("铣矩预留距离V不能为空"); return;
-            }
-            else if (txt_juSpeed.Text == "")
-            {
-                MessageBox.Show("铣矩运行速度F不能为空"); return;
-            }
-            else if (txt_X.Text == "")
-            {
-                MessageBox.Show("X轴对刀不能为空"); return;
-            }
-            else if (txt_Y.Text == "")
-            {
-                MessageBox.Show("Y轴对刀不能为空"); return;
-            }
-            else if (txt_Z.Text == "")
-            {
-                MessageBox.Show("Z轴对刀不能为空"); return;
             }
             dxcb = "22";
             #endregion
@@ -908,10 +929,10 @@ namespace GRBL_Plotter
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
             int model = 0;
-            if (txt_ModelSetting.Text.Trim() != "")
-            {
-                model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
-            }
+            //if (txt_ModelSetting.Text.Trim() != "")
+            //{
+            //    model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
+            //}
             string gcode = GCodeFromDXF.ConvertFile(source,model , txt_caoPlane.Text.Trim(), txt_yuanSpeed.Text.Trim(), txt_yuanCutting.Text.Trim(), txt_yuanWidth.Text.Trim(), txt_yuanSingleCutting.Text.Trim(), txt_yuanDistance.Text.Trim(), txt_juCutting.Text.Trim(), txt_juWidth.Text.Trim(), txt_juSingleCutting.Text.Trim(), txt_juDistance.Text.Trim(), generation);
             if (gcode.Length > 2)
             {
@@ -2737,11 +2758,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "铣削时用颜色识别刀号0:黄色 1:绿色";
+                label35.Text = "钻孔时0：仅钻百孔 1：仅钻红孔 2：全钻";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "Milling with color identification tool number 0: yellow 1: green";
+                label35.Text = "When drilling 0: only 100 holes 1: only red holes 2: full drilling";
             }
         }
 
@@ -2750,11 +2771,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "进行铣槽时选择的刀号(1-6)";
+                label35.Text = "攻丝时0：仅钻百孔 1：仅钻红孔 2：全钻";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The tool number selected for milling grooves (1-6)";
+                label35.Text = "When tapping, 0: only 100 holes are drilled 1: only red holes are drilled 2: all holes are drilled";
             }
         }
 
@@ -2831,13 +2852,37 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "钻孔时设定的深度";
+                label35.Text = "钻孔时白孔设定的深度";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The depth set at the time of drilling";
+                label35.Text = "The depth set by the white hole during drilling";
             }
 
+        }
+        private void txt_hongkou_Enter(object sender, EventArgs e)
+        {
+            CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
+            if (ci.ToString() == "zh")
+            {
+                label35.Text = "钻孔时红孔设定的深度";
+            }
+            else if (ci.ToString() == "en")
+            {
+                label35.Text = "The depth set by the red hole when drilling";
+            }
+        }
+        private void txt_daojiao_Enter(object sender, EventArgs e)
+        {
+            CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
+            if (ci.ToString() == "zh")
+            {
+                label35.Text = "钻孔时倒角设定的深度";
+            }
+            else if (ci.ToString() == "en")
+            {
+                label35.Text = "The depth set by chamfering during drilling";
+            }
         }
 
         private void txt_yuanSingleCutting_Enter(object sender, EventArgs e)
@@ -2915,15 +2960,26 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "攻丝时设定的深度";
+                label35.Text = "进行通孔攻丝时设定的深度";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The depth set during tapping";
+                label35.Text = "The depth set for through-hole tapping";
             }
 
         }
-
+        private void txt_mangkong_Enter(object sender, EventArgs e)
+        {
+            CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
+            if (ci.ToString() == "zh")
+            {
+                label35.Text = "进行盲孔攻丝时设定的深度";
+            }
+            else if (ci.ToString() == "en")
+            {
+                label35.Text = "The set depth for blind hole tapping";
+            }
+        }
         private void txt_juSingleCutting_Enter(object sender, EventArgs e)
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -2943,11 +2999,11 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "攻丝时主轴设定的速度";
+                label35.Text = "攻丝时牙距设定";
             }
             else if (ci.ToString() == "en")
             {
-                label35.Text = "The speed set by the spindle during tapping";
+                label35.Text = "Tapping tooth spacing setting";
             }
 
         }
@@ -3047,23 +3103,23 @@ namespace GRBL_Plotter
         public void isNUllParameter1()
         {
             #region 判断非空
-            if (txt_ModelSetting.Text == "")
-            {
-                MessageBox.Show("模式设置为空"); return;
-            }
+            //if (txt_ModelSetting.Text == "")
+            //{
+            //    MessageBox.Show("模式设置为空"); return;
+            //}
             int model = 0;
-            try
-            {
-                model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("模式设置有误，请重新设置"); return;
-            }
-            if (0<model&&model>2||model<0)
-            {
-                MessageBox.Show("模式设置有误，请重新设置"); return;
-            }
+            //try
+            //{
+            //    model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
+            //}
+            //catch (Exception)
+            //{
+            //    MessageBox.Show("模式设置有误，请重新设置"); return;
+            //}
+            //if (0<model&&model>2||model<0)
+            //{
+            //    MessageBox.Show("模式设置有误，请重新设置"); return;
+            //}
             if (txt_caoPlane.Text == "")
             {
                 MessageBox.Show("钻孔刀号不能为空"); return;
@@ -3158,6 +3214,7 @@ namespace GRBL_Plotter
                 MessageBox.Show("请选择要生成G代码的文件");
             }
         }
-        
+
+       
     }
 }

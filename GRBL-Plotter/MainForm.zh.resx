@@ -870,136 +870,130 @@
   <data name="groupBox2.Text" xml:space="preserve">
     <value>DXF 参数</value>
   </data>
+  <data name="com_TappingSetting.Location" type="System.Drawing.Point, System.Drawing">
+    <value>117, 86</value>
+  </data>
+  <data name="com_TappingSetting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 23</value>
+  </data>
+  <data name="com_drillingSetting.Location" type="System.Drawing.Point, System.Drawing">
+    <value>117, 52</value>
+  </data>
+  <data name="com_drillingSetting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 23</value>
+  </data>
+  <data name="com_ModelSetting.Location" type="System.Drawing.Point, System.Drawing">
+    <value>117, 19</value>
+  </data>
+  <data name="com_ModelSetting.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 23</value>
+  </data>
   <data name="button2.Location" type="System.Drawing.Point, System.Drawing">
     <value>716, 187</value>
   </data>
   <data name="button2.Text" xml:space="preserve">
     <value>生成G代码</value>
   </data>
-  <data name="txt_Z.Location" type="System.Drawing.Point, System.Drawing">
-    <value>796, 85</value>
-  </data>
-  <data name="txt_Z.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
-  </data>
-  <data name="txt_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>796, 51</value>
-  </data>
-  <data name="txt_Y.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
-  </data>
-  <data name="txt_X.Location" type="System.Drawing.Point, System.Drawing">
-    <value>796, 17</value>
-  </data>
-  <data name="txt_X.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
-  </data>
   <data name="txt_caoPlane.Location" type="System.Drawing.Point, System.Drawing">
-    <value>122, 187</value>
+    <value>117, 188</value>
   </data>
   <data name="txt_caoPlane.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_caoRevolutions.Location" type="System.Drawing.Point, System.Drawing">
-    <value>122, 153</value>
+    <value>117, 154</value>
   </data>
   <data name="txt_caoRevolutions.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_CutterDiameter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>122, 119</value>
+    <value>117, 120</value>
   </data>
   <data name="txt_CutterDiameter.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
-  <data name="txt_knife.Location" type="System.Drawing.Point, System.Drawing">
-    <value>122, 85</value>
-  </data>
-  <data name="txt_knife.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
-  </data>
-  <data name="txt_ColorSetting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>122, 51</value>
-  </data>
-  <data name="txt_ColorSetting.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
-  </data>
   <data name="txt_yuanSpeed.Location" type="System.Drawing.Point, System.Drawing">
-    <value>354, 190</value>
+    <value>559, 46</value>
   </data>
   <data name="txt_yuanSpeed.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_yuanDistance.Location" type="System.Drawing.Point, System.Drawing">
-    <value>354, 155</value>
+    <value>559, 15</value>
   </data>
   <data name="txt_yuanDistance.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_yuanSingleCutting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>354, 120</value>
+    <value>340, 190</value>
   </data>
   <data name="txt_yuanSingleCutting.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
+  <data name="txt_daojiao.Location" type="System.Drawing.Point, System.Drawing">
+    <value>340, 155</value>
+  </data>
+  <data name="txt_daojiao.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 25</value>
+  </data>
+  <data name="txt_hongkou.Location" type="System.Drawing.Point, System.Drawing">
+    <value>340, 120</value>
+  </data>
+  <data name="txt_hongkou.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 25</value>
+  </data>
   <data name="txt_yuanWidth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>354, 85</value>
+    <value>340, 85</value>
   </data>
   <data name="txt_yuanWidth.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_yuanCutting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>354, 50</value>
+    <value>340, 50</value>
   </data>
   <data name="txt_yuanCutting.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
-  <data name="txt_juSpeed.Location" type="System.Drawing.Point, System.Drawing">
-    <value>576, 192</value>
-  </data>
-  <data name="txt_juSpeed.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
-  </data>
   <data name="txt_juDistance.Location" type="System.Drawing.Point, System.Drawing">
-    <value>576, 157</value>
+    <value>765, 50</value>
   </data>
   <data name="txt_juDistance.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_juSingleCutting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>576, 122</value>
+    <value>765, 18</value>
   </data>
   <data name="txt_juSingleCutting.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
+  <data name="txt_mangkong.Location" type="System.Drawing.Point, System.Drawing">
+    <value>559, 191</value>
+  </data>
+  <data name="txt_mangkong.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 25</value>
+  </data>
   <data name="txt_juWidth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>576, 87</value>
+    <value>559, 155</value>
   </data>
   <data name="txt_juWidth.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_juCutting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>576, 52</value>
+    <value>559, 120</value>
   </data>
   <data name="txt_juCutting.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_juDepth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>576, 17</value>
+    <value>559, 85</value>
   </data>
   <data name="txt_juDepth.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_yuanDepth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>354, 15</value>
+    <value>340, 15</value>
   </data>
   <data name="txt_yuanDepth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
-  </data>
-  <data name="txt_ModelSetting.Location" type="System.Drawing.Point, System.Drawing">
-    <value>122, 17</value>
-  </data>
-  <data name="txt_ModelSetting.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="label35.Location" type="System.Drawing.Point, System.Drawing">
@@ -1014,47 +1008,11 @@
   <data name="label34.Text" xml:space="preserve">
     <value>注释:</value>
   </data>
-  <data name="label21.Font" type="System.Drawing.Font, System.Drawing">
-    <value>宋体, 10.5pt</value>
-  </data>
-  <data name="label21.Location" type="System.Drawing.Point, System.Drawing">
-    <value>714, 96</value>
-  </data>
-  <data name="label21.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 14</value>
-  </data>
-  <data name="label21.Text" xml:space="preserve">
-    <value>Z轴对刀:</value>
-  </data>
-  <data name="label22.Font" type="System.Drawing.Font, System.Drawing">
-    <value>宋体, 10.5pt</value>
-  </data>
-  <data name="label22.Location" type="System.Drawing.Point, System.Drawing">
-    <value>714, 61</value>
-  </data>
-  <data name="label22.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 14</value>
-  </data>
-  <data name="label22.Text" xml:space="preserve">
-    <value>Y轴对刀:</value>
-  </data>
-  <data name="label24.Font" type="System.Drawing.Font, System.Drawing">
-    <value>宋体, 10.5pt</value>
-  </data>
-  <data name="label24.Location" type="System.Drawing.Point, System.Drawing">
-    <value>714, 26</value>
-  </data>
-  <data name="label24.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 14</value>
-  </data>
-  <data name="label24.Text" xml:space="preserve">
-    <value>X轴对刀:</value>
-  </data>
   <data name="label30.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label30.Location" type="System.Drawing.Point, System.Drawing">
-    <value>236, 194</value>
+    <value>455, 53</value>
   </data>
   <data name="label30.Size" type="System.Drawing.Size, System.Drawing">
     <value>98, 14</value>
@@ -1062,11 +1020,23 @@
   <data name="label30.Text" xml:space="preserve">
     <value>攻丝刀号选择:</value>
   </data>
+  <data name="label22.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 10.5pt</value>
+  </data>
+  <data name="label22.Location" type="System.Drawing.Point, System.Drawing">
+    <value>243, 163</value>
+  </data>
+  <data name="label22.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 14</value>
+  </data>
+  <data name="label22.Text" xml:space="preserve">
+    <value>钻倒角深度Z:</value>
+  </data>
   <data name="label29.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label29.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 124</value>
+    <value>257, 194</value>
   </data>
   <data name="label29.Size" type="System.Drawing.Size, System.Drawing">
     <value>77, 14</value>
@@ -1074,11 +1044,23 @@
   <data name="label29.Text" xml:space="preserve">
     <value>钻孔转数S:</value>
   </data>
+  <data name="label21.Font" type="System.Drawing.Font, System.Drawing">
+    <value>宋体, 10.5pt</value>
+  </data>
+  <data name="label21.Location" type="System.Drawing.Point, System.Drawing">
+    <value>229, 124</value>
+  </data>
+  <data name="label21.Size" type="System.Drawing.Size, System.Drawing">
+    <value>105, 14</value>
+  </data>
+  <data name="label21.Text" xml:space="preserve">
+    <value>钻红钻孔深度Z:</value>
+  </data>
   <data name="label27.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label27.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 159</value>
+    <value>476, 19</value>
   </data>
   <data name="label27.Size" type="System.Drawing.Size, System.Drawing">
     <value>77, 14</value>
@@ -1090,13 +1072,13 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label20.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 89</value>
+    <value>229, 89</value>
   </data>
   <data name="label20.Size" type="System.Drawing.Size, System.Drawing">
-    <value>77, 14</value>
+    <value>105, 14</value>
   </data>
   <data name="label20.Text" xml:space="preserve">
-    <value>钻孔深度Z:</value>
+    <value>钻白钻孔深度Z:</value>
   </data>
   <data name="label18.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 10.5pt</value>
@@ -1182,11 +1164,20 @@
   <data name="label12.Text" xml:space="preserve">
     <value>钻孔设置:</value>
   </data>
+  <data name="label23.Location" type="System.Drawing.Point, System.Drawing">
+    <value>440, 195</value>
+  </data>
+  <data name="label23.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 15</value>
+  </data>
+  <data name="label23.Text" xml:space="preserve">
+    <value>攻丝红孔深度Z:</value>
+  </data>
   <data name="label28.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label28.Location" type="System.Drawing.Point, System.Drawing">
-    <value>462, 23</value>
+    <value>448, 91</value>
   </data>
   <data name="label28.Size" type="System.Drawing.Size, System.Drawing">
     <value>105, 14</value>
@@ -1198,13 +1189,13 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label31.Location" type="System.Drawing.Point, System.Drawing">
-    <value>490, 93</value>
+    <value>448, 161</value>
   </data>
   <data name="label31.Size" type="System.Drawing.Size, System.Drawing">
-    <value>77, 14</value>
+    <value>105, 14</value>
   </data>
   <data name="label31.Text" xml:space="preserve">
-    <value>攻丝深度Z:</value>
+    <value>攻丝白孔深度Z:</value>
   </data>
   <data name="label11.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 10.5pt</value>
@@ -1222,7 +1213,7 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label26.Location" type="System.Drawing.Point, System.Drawing">
-    <value>476, 58</value>
+    <value>462, 126</value>
   </data>
   <data name="label26.Size" type="System.Drawing.Size, System.Drawing">
     <value>91, 14</value>
@@ -1249,13 +1240,13 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label25.Location" type="System.Drawing.Point, System.Drawing">
-    <value>490, 128</value>
+    <value>680, 24</value>
   </data>
   <data name="label25.Size" type="System.Drawing.Size, System.Drawing">
     <value>77, 14</value>
   </data>
   <data name="label25.Text" xml:space="preserve">
-    <value>攻丝转数S:</value>
+    <value>攻丝转速S:</value>
   </data>
   <data name="label_ma.Location" type="System.Drawing.Point, System.Drawing">
     <value>187, 330</value>
@@ -1267,31 +1258,19 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label19.Location" type="System.Drawing.Point, System.Drawing">
-    <value>490, 163</value>
+    <value>708, 56</value>
   </data>
   <data name="label19.Size" type="System.Drawing.Size, System.Drawing">
-    <value>77, 14</value>
+    <value>49, 14</value>
   </data>
   <data name="label19.Text" xml:space="preserve">
-    <value>攻丝速度F:</value>
+    <value>牙距F:</value>
   </data>
   <data name="label_wa.Location" type="System.Drawing.Point, System.Drawing">
     <value>152, 391</value>
   </data>
   <data name="label_wa.Size" type="System.Drawing.Size, System.Drawing">
     <value>10, 10</value>
-  </data>
-  <data name="label23.Font" type="System.Drawing.Font, System.Drawing">
-    <value>宋体, 10.5pt</value>
-  </data>
-  <data name="label23.Location" type="System.Drawing.Point, System.Drawing">
-    <value>462, 198</value>
-  </data>
-  <data name="label23.Size" type="System.Drawing.Size, System.Drawing">
-    <value>105, 14</value>
-  </data>
-  <data name="label23.Text" xml:space="preserve">
-    <value>铣矩运行速度F:</value>
   </data>
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
     <value>46, 346</value>

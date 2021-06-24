@@ -286,35 +286,33 @@ namespace GRBL_Plotter
             this.btnCustom3 = new System.Windows.Forms.Button();
             this.btnCustom4 = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.com_TappingSetting = new System.Windows.Forms.ComboBox();
+            this.com_drillingSetting = new System.Windows.Forms.ComboBox();
+            this.com_ModelSetting = new System.Windows.Forms.ComboBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.txt_Z = new System.Windows.Forms.TextBox();
-            this.txt_Y = new System.Windows.Forms.TextBox();
-            this.txt_X = new System.Windows.Forms.TextBox();
             this.txt_caoPlane = new System.Windows.Forms.TextBox();
             this.txt_caoRevolutions = new System.Windows.Forms.TextBox();
             this.txt_CutterDiameter = new System.Windows.Forms.TextBox();
-            this.txt_knife = new System.Windows.Forms.TextBox();
-            this.txt_ColorSetting = new System.Windows.Forms.TextBox();
             this.txt_yuanSpeed = new System.Windows.Forms.TextBox();
             this.txt_yuanDistance = new System.Windows.Forms.TextBox();
             this.txt_yuanSingleCutting = new System.Windows.Forms.TextBox();
+            this.txt_daojiao = new System.Windows.Forms.TextBox();
+            this.txt_hongkou = new System.Windows.Forms.TextBox();
             this.txt_yuanWidth = new System.Windows.Forms.TextBox();
             this.txt_yuanCutting = new System.Windows.Forms.TextBox();
-            this.txt_juSpeed = new System.Windows.Forms.TextBox();
             this.txt_juDistance = new System.Windows.Forms.TextBox();
             this.txt_juSingleCutting = new System.Windows.Forms.TextBox();
+            this.txt_mangkong = new System.Windows.Forms.TextBox();
             this.txt_juWidth = new System.Windows.Forms.TextBox();
             this.txt_juCutting = new System.Windows.Forms.TextBox();
             this.txt_juDepth = new System.Windows.Forms.TextBox();
             this.txt_yuanDepth = new System.Windows.Forms.TextBox();
-            this.txt_ModelSetting = new System.Windows.Forms.TextBox();
             this.label35 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label24 = new System.Windows.Forms.Label();
             this.label30 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
             this.label29 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -324,6 +322,7 @@ namespace GRBL_Plotter
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.label31 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -334,7 +333,6 @@ namespace GRBL_Plotter
             this.label_ma = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label_wa = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -2148,35 +2146,33 @@ namespace GRBL_Plotter
             // groupBox2
             // 
             resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Controls.Add(this.com_TappingSetting);
+            this.groupBox2.Controls.Add(this.com_drillingSetting);
+            this.groupBox2.Controls.Add(this.com_ModelSetting);
             this.groupBox2.Controls.Add(this.button2);
-            this.groupBox2.Controls.Add(this.txt_Z);
-            this.groupBox2.Controls.Add(this.txt_Y);
-            this.groupBox2.Controls.Add(this.txt_X);
             this.groupBox2.Controls.Add(this.txt_caoPlane);
             this.groupBox2.Controls.Add(this.txt_caoRevolutions);
             this.groupBox2.Controls.Add(this.txt_CutterDiameter);
-            this.groupBox2.Controls.Add(this.txt_knife);
-            this.groupBox2.Controls.Add(this.txt_ColorSetting);
             this.groupBox2.Controls.Add(this.txt_yuanSpeed);
             this.groupBox2.Controls.Add(this.txt_yuanDistance);
             this.groupBox2.Controls.Add(this.txt_yuanSingleCutting);
+            this.groupBox2.Controls.Add(this.txt_daojiao);
+            this.groupBox2.Controls.Add(this.txt_hongkou);
             this.groupBox2.Controls.Add(this.txt_yuanWidth);
             this.groupBox2.Controls.Add(this.txt_yuanCutting);
-            this.groupBox2.Controls.Add(this.txt_juSpeed);
             this.groupBox2.Controls.Add(this.txt_juDistance);
             this.groupBox2.Controls.Add(this.txt_juSingleCutting);
+            this.groupBox2.Controls.Add(this.txt_mangkong);
             this.groupBox2.Controls.Add(this.txt_juWidth);
             this.groupBox2.Controls.Add(this.txt_juCutting);
             this.groupBox2.Controls.Add(this.txt_juDepth);
             this.groupBox2.Controls.Add(this.txt_yuanDepth);
-            this.groupBox2.Controls.Add(this.txt_ModelSetting);
             this.groupBox2.Controls.Add(this.label35);
             this.groupBox2.Controls.Add(this.label34);
-            this.groupBox2.Controls.Add(this.label21);
-            this.groupBox2.Controls.Add(this.label22);
-            this.groupBox2.Controls.Add(this.label24);
             this.groupBox2.Controls.Add(this.label30);
+            this.groupBox2.Controls.Add(this.label22);
             this.groupBox2.Controls.Add(this.label29);
+            this.groupBox2.Controls.Add(this.label21);
             this.groupBox2.Controls.Add(this.label27);
             this.groupBox2.Controls.Add(this.label20);
             this.groupBox2.Controls.Add(this.label18);
@@ -2186,6 +2182,7 @@ namespace GRBL_Plotter
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.label23);
             this.groupBox2.Controls.Add(this.label28);
             this.groupBox2.Controls.Add(this.label31);
             this.groupBox2.Controls.Add(this.label11);
@@ -2198,7 +2195,6 @@ namespace GRBL_Plotter
             this.groupBox2.Controls.Add(this.label19);
             this.groupBox2.Controls.Add(this.label_wa);
             this.groupBox2.Controls.Add(this.btnHome);
-            this.groupBox2.Controls.Add(this.label23);
             this.groupBox2.Controls.Add(this.btnZeroXYZ);
             this.groupBox2.Controls.Add(this.btnZeroXY);
             this.groupBox2.Controls.Add(this.label4);
@@ -2218,6 +2214,30 @@ namespace GRBL_Plotter
             this.groupBox2.TabStop = false;
             this.toolTip1.SetToolTip(this.groupBox2, resources.GetString("groupBox2.ToolTip"));
             // 
+            // com_TappingSetting
+            // 
+            resources.ApplyResources(this.com_TappingSetting, "com_TappingSetting");
+            this.com_TappingSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.com_TappingSetting.FormattingEnabled = true;
+            this.com_TappingSetting.Name = "com_TappingSetting";
+            this.toolTip1.SetToolTip(this.com_TappingSetting, resources.GetString("com_TappingSetting.ToolTip"));
+            // 
+            // com_drillingSetting
+            // 
+            resources.ApplyResources(this.com_drillingSetting, "com_drillingSetting");
+            this.com_drillingSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.com_drillingSetting.FormattingEnabled = true;
+            this.com_drillingSetting.Name = "com_drillingSetting";
+            this.toolTip1.SetToolTip(this.com_drillingSetting, resources.GetString("com_drillingSetting.ToolTip"));
+            // 
+            // com_ModelSetting
+            // 
+            resources.ApplyResources(this.com_ModelSetting, "com_ModelSetting");
+            this.com_ModelSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.com_ModelSetting.FormattingEnabled = true;
+            this.com_ModelSetting.Name = "com_ModelSetting";
+            this.toolTip1.SetToolTip(this.com_ModelSetting, resources.GetString("com_ModelSetting.ToolTip"));
+            // 
             // button2
             // 
             resources.ApplyResources(this.button2, "button2");
@@ -2225,27 +2245,6 @@ namespace GRBL_Plotter
             this.toolTip1.SetToolTip(this.button2, resources.GetString("button2.ToolTip"));
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // txt_Z
-            // 
-            resources.ApplyResources(this.txt_Z, "txt_Z");
-            this.txt_Z.Name = "txt_Z";
-            this.toolTip1.SetToolTip(this.txt_Z, resources.GetString("txt_Z.ToolTip"));
-            this.txt_Z.Enter += new System.EventHandler(this.txt_Z_Enter);
-            // 
-            // txt_Y
-            // 
-            resources.ApplyResources(this.txt_Y, "txt_Y");
-            this.txt_Y.Name = "txt_Y";
-            this.toolTip1.SetToolTip(this.txt_Y, resources.GetString("txt_Y.ToolTip"));
-            this.txt_Y.Enter += new System.EventHandler(this.txt_Y_Enter);
-            // 
-            // txt_X
-            // 
-            resources.ApplyResources(this.txt_X, "txt_X");
-            this.txt_X.Name = "txt_X";
-            this.toolTip1.SetToolTip(this.txt_X, resources.GetString("txt_X.ToolTip"));
-            this.txt_X.Enter += new System.EventHandler(this.txt_X_Enter);
             // 
             // txt_caoPlane
             // 
@@ -2268,20 +2267,6 @@ namespace GRBL_Plotter
             this.toolTip1.SetToolTip(this.txt_CutterDiameter, resources.GetString("txt_CutterDiameter.ToolTip"));
             this.txt_CutterDiameter.Enter += new System.EventHandler(this.txt_CutterDiameter_Enter);
             // 
-            // txt_knife
-            // 
-            resources.ApplyResources(this.txt_knife, "txt_knife");
-            this.txt_knife.Name = "txt_knife";
-            this.toolTip1.SetToolTip(this.txt_knife, resources.GetString("txt_knife.ToolTip"));
-            this.txt_knife.Enter += new System.EventHandler(this.txt_knife_Enter);
-            // 
-            // txt_ColorSetting
-            // 
-            resources.ApplyResources(this.txt_ColorSetting, "txt_ColorSetting");
-            this.txt_ColorSetting.Name = "txt_ColorSetting";
-            this.toolTip1.SetToolTip(this.txt_ColorSetting, resources.GetString("txt_ColorSetting.ToolTip"));
-            this.txt_ColorSetting.Enter += new System.EventHandler(this.txt_ColorSetting_Enter);
-            // 
             // txt_yuanSpeed
             // 
             resources.ApplyResources(this.txt_yuanSpeed, "txt_yuanSpeed");
@@ -2303,6 +2288,20 @@ namespace GRBL_Plotter
             this.toolTip1.SetToolTip(this.txt_yuanSingleCutting, resources.GetString("txt_yuanSingleCutting.ToolTip"));
             this.txt_yuanSingleCutting.Enter += new System.EventHandler(this.txt_yuanSingleCutting_Enter);
             // 
+            // txt_daojiao
+            // 
+            resources.ApplyResources(this.txt_daojiao, "txt_daojiao");
+            this.txt_daojiao.Name = "txt_daojiao";
+            this.toolTip1.SetToolTip(this.txt_daojiao, resources.GetString("txt_daojiao.ToolTip"));
+            this.txt_daojiao.Enter += new System.EventHandler(this.txt_daojiao_Enter);
+            // 
+            // txt_hongkou
+            // 
+            resources.ApplyResources(this.txt_hongkou, "txt_hongkou");
+            this.txt_hongkou.Name = "txt_hongkou";
+            this.toolTip1.SetToolTip(this.txt_hongkou, resources.GetString("txt_hongkou.ToolTip"));
+            this.txt_hongkou.Enter += new System.EventHandler(this.txt_hongkou_Enter);
+            // 
             // txt_yuanWidth
             // 
             resources.ApplyResources(this.txt_yuanWidth, "txt_yuanWidth");
@@ -2317,13 +2316,6 @@ namespace GRBL_Plotter
             this.toolTip1.SetToolTip(this.txt_yuanCutting, resources.GetString("txt_yuanCutting.ToolTip"));
             this.txt_yuanCutting.Enter += new System.EventHandler(this.txt_yuanCutting_Enter);
             // 
-            // txt_juSpeed
-            // 
-            resources.ApplyResources(this.txt_juSpeed, "txt_juSpeed");
-            this.txt_juSpeed.Name = "txt_juSpeed";
-            this.toolTip1.SetToolTip(this.txt_juSpeed, resources.GetString("txt_juSpeed.ToolTip"));
-            this.txt_juSpeed.Enter += new System.EventHandler(this.txt_juSpeed_Enter);
-            // 
             // txt_juDistance
             // 
             resources.ApplyResources(this.txt_juDistance, "txt_juDistance");
@@ -2337,6 +2329,13 @@ namespace GRBL_Plotter
             this.txt_juSingleCutting.Name = "txt_juSingleCutting";
             this.toolTip1.SetToolTip(this.txt_juSingleCutting, resources.GetString("txt_juSingleCutting.ToolTip"));
             this.txt_juSingleCutting.Enter += new System.EventHandler(this.txt_juSingleCutting_Enter);
+            // 
+            // txt_mangkong
+            // 
+            resources.ApplyResources(this.txt_mangkong, "txt_mangkong");
+            this.txt_mangkong.Name = "txt_mangkong";
+            this.toolTip1.SetToolTip(this.txt_mangkong, resources.GetString("txt_mangkong.ToolTip"));
+            this.txt_mangkong.Enter += new System.EventHandler(this.txt_mangkong_Enter);
             // 
             // txt_juWidth
             // 
@@ -2366,13 +2365,6 @@ namespace GRBL_Plotter
             this.toolTip1.SetToolTip(this.txt_yuanDepth, resources.GetString("txt_yuanDepth.ToolTip"));
             this.txt_yuanDepth.Enter += new System.EventHandler(this.txt_yuanDepth_Enter);
             // 
-            // txt_ModelSetting
-            // 
-            resources.ApplyResources(this.txt_ModelSetting, "txt_ModelSetting");
-            this.txt_ModelSetting.Name = "txt_ModelSetting";
-            this.toolTip1.SetToolTip(this.txt_ModelSetting, resources.GetString("txt_ModelSetting.ToolTip"));
-            this.txt_ModelSetting.Enter += new System.EventHandler(this.txt_ModelSetting_Enter);
-            // 
             // label35
             // 
             resources.ApplyResources(this.label35, "label35");
@@ -2387,11 +2379,11 @@ namespace GRBL_Plotter
             this.label34.Name = "label34";
             this.toolTip1.SetToolTip(this.label34, resources.GetString("label34.ToolTip"));
             // 
-            // label21
+            // label30
             // 
-            resources.ApplyResources(this.label21, "label21");
-            this.label21.Name = "label21";
-            this.toolTip1.SetToolTip(this.label21, resources.GetString("label21.ToolTip"));
+            resources.ApplyResources(this.label30, "label30");
+            this.label30.Name = "label30";
+            this.toolTip1.SetToolTip(this.label30, resources.GetString("label30.ToolTip"));
             // 
             // label22
             // 
@@ -2399,23 +2391,17 @@ namespace GRBL_Plotter
             this.label22.Name = "label22";
             this.toolTip1.SetToolTip(this.label22, resources.GetString("label22.ToolTip"));
             // 
-            // label24
-            // 
-            resources.ApplyResources(this.label24, "label24");
-            this.label24.Name = "label24";
-            this.toolTip1.SetToolTip(this.label24, resources.GetString("label24.ToolTip"));
-            // 
-            // label30
-            // 
-            resources.ApplyResources(this.label30, "label30");
-            this.label30.Name = "label30";
-            this.toolTip1.SetToolTip(this.label30, resources.GetString("label30.ToolTip"));
-            // 
             // label29
             // 
             resources.ApplyResources(this.label29, "label29");
             this.label29.Name = "label29";
             this.toolTip1.SetToolTip(this.label29, resources.GetString("label29.ToolTip"));
+            // 
+            // label21
+            // 
+            resources.ApplyResources(this.label21, "label21");
+            this.label21.Name = "label21";
+            this.toolTip1.SetToolTip(this.label21, resources.GetString("label21.ToolTip"));
             // 
             // label27
             // 
@@ -2470,6 +2456,12 @@ namespace GRBL_Plotter
             resources.ApplyResources(this.label12, "label12");
             this.label12.Name = "label12";
             this.toolTip1.SetToolTip(this.label12, resources.GetString("label12.ToolTip"));
+            // 
+            // label23
+            // 
+            resources.ApplyResources(this.label23, "label23");
+            this.label23.Name = "label23";
+            this.toolTip1.SetToolTip(this.label23, resources.GetString("label23.ToolTip"));
             // 
             // label28
             // 
@@ -2530,12 +2522,6 @@ namespace GRBL_Plotter
             resources.ApplyResources(this.label_wa, "label_wa");
             this.label_wa.Name = "label_wa";
             this.toolTip1.SetToolTip(this.label_wa, resources.GetString("label_wa.ToolTip"));
-            // 
-            // label23
-            // 
-            resources.ApplyResources(this.label23, "label23");
-            this.label23.Name = "label23";
-            this.toolTip1.SetToolTip(this.label23, resources.GetString("label23.ToolTip"));
             // 
             // label4
             // 
@@ -2868,32 +2854,22 @@ namespace GRBL_Plotter
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TextBox txt_Z;
-        private System.Windows.Forms.TextBox txt_Y;
-        private System.Windows.Forms.TextBox txt_X;
         private System.Windows.Forms.TextBox txt_caoPlane;
         private System.Windows.Forms.TextBox txt_caoRevolutions;
         private System.Windows.Forms.TextBox txt_CutterDiameter;
-        private System.Windows.Forms.TextBox txt_knife;
-        private System.Windows.Forms.TextBox txt_ColorSetting;
         private System.Windows.Forms.TextBox txt_yuanSpeed;
         private System.Windows.Forms.TextBox txt_yuanDistance;
         private System.Windows.Forms.TextBox txt_yuanSingleCutting;
         private System.Windows.Forms.TextBox txt_yuanWidth;
         private System.Windows.Forms.TextBox txt_yuanCutting;
-        private System.Windows.Forms.TextBox txt_juSpeed;
         private System.Windows.Forms.TextBox txt_juDistance;
         private System.Windows.Forms.TextBox txt_juSingleCutting;
         private System.Windows.Forms.TextBox txt_juWidth;
         private System.Windows.Forms.TextBox txt_juCutting;
         private System.Windows.Forms.TextBox txt_juDepth;
         private System.Windows.Forms.TextBox txt_yuanDepth;
-        private System.Windows.Forms.TextBox txt_ModelSetting;
         private System.Windows.Forms.Label label35;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.Label label22;
-        private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.Label label27;
@@ -2917,7 +2893,6 @@ namespace GRBL_Plotter
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label_wa;
         private System.Windows.Forms.Button btnHome;
-        private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Button btnZeroXYZ;
         private System.Windows.Forms.Button btnZeroXY;
         private System.Windows.Forms.Label label4;
@@ -2933,6 +2908,15 @@ namespace GRBL_Plotter
         private System.Windows.Forms.Label label_wz;
         private System.Windows.Forms.Label label_wx;
         private System.Windows.Forms.Label label_wy;
+        private System.Windows.Forms.TextBox txt_daojiao;
+        private System.Windows.Forms.TextBox txt_hongkou;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox txt_mangkong;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.ComboBox com_ModelSetting;
+        private System.Windows.Forms.ComboBox com_TappingSetting;
+        private System.Windows.Forms.ComboBox com_drillingSetting;
     }
 }
 
