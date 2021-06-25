@@ -87,15 +87,17 @@ namespace GRBL_Plotter
         string Fcode = "";
         Point colorPoint = new Point();
         string isnull = "";
-        
+
         List<MyColor> list = new List<MyColor>();
+        List<Parameter> parameter = new List<Parameter>();
+        List<Parameter> parameterd = new List<Parameter>();
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo(ci.ToString());
             Thread.CurrentThread.CurrentCulture = ci;
             Thread.CurrentThread.CurrentUICulture = ci;
-           
+
             InitializeComponent();
             gcode.setup();
             updateDrawing();
@@ -124,7 +126,7 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             IList<string> list = new List<string>();
             IList<string> list1 = new List<string>();
-            IList<string> list2= new List<string>();
+            IList<string> list2 = new List<string>();
             if (ci.ToString() == "zh")
             {
                 list.Add("请选择");
@@ -678,7 +680,7 @@ namespace GRBL_Plotter
             //{
             //    MessageBox.Show("铣削刀号输入有误,请重新输入"); return;
             //}
-             if (txt_CutterDiameter.Text == "")
+            if (txt_CutterDiameter.Text == "")
             {
                 MessageBox.Show("刀具直径值不能为空"); return;
             }
@@ -808,7 +810,7 @@ namespace GRBL_Plotter
             fCTBCode.Text = "";
         }
 
-        private void loadFile(string fileName,bool generation=false)
+        private void loadFile(string fileName, bool generation = false)
         {
             list = new List<MyColor>();
             if (fileName.IndexOf("http") >= 0)
@@ -834,7 +836,7 @@ namespace GRBL_Plotter
             { startConvertSVG(fileName); }
             else if (ext == ".dxf")
             {
-                startConvertDXF(fileName,generation);
+                startConvertDXF(fileName, generation);
             }
             else if (ext == ".nc")
             {
@@ -924,7 +926,7 @@ namespace GRBL_Plotter
             updateControls();
         }
 
-        private void startConvertDXF(string source,bool generation=false)
+        private void startConvertDXF(string source, bool generation = false)
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
@@ -933,7 +935,7 @@ namespace GRBL_Plotter
             //{
             //    model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
             //}
-            string gcode = GCodeFromDXF.ConvertFile(source,model , txt_caoPlane.Text.Trim(), txt_yuanSpeed.Text.Trim(), txt_yuanCutting.Text.Trim(), txt_yuanWidth.Text.Trim(), txt_yuanSingleCutting.Text.Trim(), txt_yuanDistance.Text.Trim(), txt_juCutting.Text.Trim(), txt_juWidth.Text.Trim(), txt_juSingleCutting.Text.Trim(), txt_juDistance.Text.Trim(), generation);
+            string gcode = GCodeFromDXF.ConvertFile(source, model, txt_caoPlane.Text.Trim(), txt_yuanSpeed.Text.Trim(), txt_yuanCutting.Text.Trim(), txt_yuanWidth.Text.Trim(), txt_yuanSingleCutting.Text.Trim(), txt_yuanDistance.Text.Trim(), txt_juCutting.Text.Trim(), txt_juWidth.Text.Trim(), txt_juSingleCutting.Text.Trim(), txt_juDistance.Text.Trim(), generation);
             if (gcode.Length > 2)
             {
                 Fcode = gcode;
@@ -947,7 +949,7 @@ namespace GRBL_Plotter
             this.Cursor = Cursors.Default;
             updateControls();
         }
-       
+
         bool blockRTBEvents = false;
         private void loadGcode()
         {
@@ -2372,16 +2374,16 @@ namespace GRBL_Plotter
         }
         private void onPaint_drawToolPath(Graphics e)
         {
-           
+
             e.DrawPath(penHeightMap, GCodeVisuAndTransform.pathHeightMap);
             e.DrawPath(penRuler, GCodeVisuAndTransform.pathRuler);
             e.DrawPath(penDown, GCodeVisuAndTransform.pathPenDown);
             e.DrawPath(penUp, GCodeVisuAndTransform.pathPenUp);
             foreach (var item in list)
             {
-                if (item.coPo!=null)
+                if (item.coPo != null)
                 {
-                    e.DrawArc(item.pen, item.rect.X, item.rect.Y, item.rect.Width, item.rect.Height,item.coPo.X,item.coPo.Y);
+                    e.DrawArc(item.pen, item.rect.X, item.rect.Y, item.rect.Width, item.rect.Height, item.coPo.X, item.coPo.Y);
                 }
                 e.DrawLine(item.pen, item.rect.X, item.rect.Y, item.rect.Width, item.rect.Height);
             }
@@ -2810,7 +2812,7 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "进行钻孔时选择的刀号（1-12）";
+                label35.Text = "进行钻孔时选择的刀号（1-6）";
             }
             else if (ci.ToString() == "en")
             {
@@ -2918,7 +2920,7 @@ namespace GRBL_Plotter
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (ci.ToString() == "zh")
             {
-                label35.Text = "进行攻丝时选择的刀号（1-12）";
+                label35.Text = "进行攻丝时选择的刀号（1-6）";
             }
             else if (ci.ToString() == "en")
             {
@@ -3084,12 +3086,12 @@ namespace GRBL_Plotter
 
                     foreach (var item in GCodeVisuAndTransform.list)
                     {
-                        if (myshape.Name == "线条" && item.Rectangle==myshape.Rectangle)
+                        if (myshape.Name == "线条" && item.Rectangle == myshape.Rectangle)
                         {
                             Rectangle UpdateGr = new Rectangle(item.original.X, item.original.Y, item.original.Width, item.original.Height);
                             list.Add(new MyColor() { rect = UpdateGr, pen = p });
                         }
-                        else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧"&&item.point==myshape.point)
+                        else if (item.Rectangle == myshape.Rectangle && item.Name == "圆弧" && item.point == myshape.point)
                         {
                             Rectangle upd = new Rectangle(item.Rectangle.X, item.Rectangle.Y, item.Rectangle.Width, item.Rectangle.Height);
                             Point point = new Point(item.point.X, item.point.Y);
@@ -3103,23 +3105,34 @@ namespace GRBL_Plotter
         public void isNUllParameter1()
         {
             #region 判断非空
-            //if (txt_ModelSetting.Text == "")
-            //{
-            //    MessageBox.Show("模式设置为空"); return;
-            //}
-            int model = 0;
-            //try
-            //{
-            //    model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
-            //}
-            //catch (Exception)
-            //{
-            //    MessageBox.Show("模式设置有误，请重新设置"); return;
-            //}
-            //if (0<model&&model>2||model<0)
-            //{
-            //    MessageBox.Show("模式设置有误，请重新设置"); return;
-            //}
+            if (com_ModelSetting.SelectedValue.ToString() == "请选择")
+            {
+                MessageBox.Show("请选择你要的模式设置"); return;
+            }
+            int model = com_ModelSetting.SelectedIndex;
+            if (com_drillingSetting.SelectedValue.ToString() == "请选择")
+            {
+                MessageBox.Show("请选择你要的钻孔设置"); return;
+            }
+            int drilling = com_drillingSetting.SelectedIndex;
+
+            if (txt_caoRevolutions.Text == "")
+            {
+                MessageBox.Show("倒角刀号不能为空"); return;
+            }
+            int dao = 0;
+            try
+            {
+                dao = Convert.ToInt32(txt_caoRevolutions.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("倒角刀号输入有误，请重新输入"); return;
+            }
+            if (0 < dao && dao > 6 || dao < 0)
+            {
+                MessageBox.Show("倒角刀号输入有误，请重新输入"); return;
+            }
             if (txt_caoPlane.Text == "")
             {
                 MessageBox.Show("钻孔刀号不能为空"); return;
@@ -3133,34 +3146,70 @@ namespace GRBL_Plotter
             {
                 MessageBox.Show("钻孔刀号输入有误，请重新输入"); return;
             }
-            if (0 < num && num > 12||num<=0)
+            if (0 < num && num > 6 || num <= 0)
             {
                 MessageBox.Show("钻孔刀号输入有误，请重新输入"); return;
             }
-            else if (txt_yuanCutting.Text == "")
+            if (txt_CutterDiameter.Text == "")
+            {
+                MessageBox.Show("孔径设置不能为空"); return;
+            }
+            try
+            {
+                int ii = Convert.ToInt32(txt_CutterDiameter.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("孔径设置有误，请重新设置"); return;
+            }
+            if (txt_yuanDepth.Text == "")
+            {
+                MessageBox.Show("钻孔单次切削Q不能为空"); return;
+            }
+
+            if (txt_yuanCutting.Text == "")
             {
                 MessageBox.Show("钻孔平面R点不能为空"); return;
             }
-            else if (txt_yuanWidth.Text == "")
+            if (drilling == 1 || drilling == 3)
             {
-                MessageBox.Show("钻孔时设定的深度不能为空"); return;
+                if (txt_yuanWidth.Text == "")
+                {
+                    MessageBox.Show("钻白孔时设定的深度不能为空"); return;
+                }
             }
-            else if (txt_yuanSingleCutting.Text == "")
+
+            if (drilling == 2 || drilling == 3)
             {
-                MessageBox.Show("钻孔时倒角设定的深度不能为空"); return;
+                if (txt_hongkou.Text == "")
+                {
+                    MessageBox.Show("钻红孔时设定的深度不能为空"); return;
+                }
             }
-            else if (txt_yuanDistance.Text == "")
+
+            if (dao != 0)
             {
-                MessageBox.Show("钻孔时设定的转数"); return;
+                if (txt_daojiao.Text == "")
+                {
+                    MessageBox.Show("钻倒角深度不能为空"); return;
+                }
             }
-            if (model==2)
+            if (txt_yuanSingleCutting.Text == "")
+            {
+                MessageBox.Show("钻孔时设定的转数不能为空"); return;
+            }
+            if (txt_yuanDistance.Text == "")
+            {
+                MessageBox.Show("钻孔速度F不能为空"); return;
+            }
+            if (model == 2)
             {
                 #region 先钻后功
                 if (txt_yuanSpeed.Text == "")
                 {
                     MessageBox.Show("攻丝刀号不能为空"); return;
                 }
-               // Match m = Regex.Match(this.txt_juCutting.Text, @"^[0-9]*$");
+                // Match m = Regex.Match(this.txt_juCutting.Text, @"^[0-9]*$");
                 int num1 = 0;
                 try
                 {
@@ -3170,12 +3219,12 @@ namespace GRBL_Plotter
                 {
                     MessageBox.Show("攻丝刀号输入有误，请重新输入"); return;
                 }
-                if (0 < num1 && num1 > 12 || num1 <= 0)
+                if (0 < num1 && num1 > 6 || num1 <= 0)
                 {
                     MessageBox.Show("攻丝刀号输入有误，请重新输入"); return;
                 }
-               
-                else if (txt_juCutting.Text=="")
+
+                else if (txt_juCutting.Text == "")
                 {
                     MessageBox.Show("攻丝平面R点不能为空"); return;
                 }
@@ -3214,7 +3263,947 @@ namespace GRBL_Plotter
                 MessageBox.Show("请选择要生成G代码的文件");
             }
         }
+        public class Parameter
+        {
+            public int Id { get; set; }
+            public double Aperture { get; set; }//钻孔孔径设置
+            public double CuttingQ { get; set; }//钻孔单次切削Q
+            public double PlaneR { get; set; }//钻孔平面R
+            public double WhiteZ { get; set; }//钻白孔深度Z
+            public double RedZ { get; set; }//钻红孔深度Z
+            public double ChamferingZ { get; set; }//钻倒角深度Z
+            public double RevolutionsS { get; set; }//钻孔转数S
+            public double SpeedF { get; set; }//钻孔速度F
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (txt_caoPlane.Text != ""&& txt_caoRevolutions.Text!="")
+            {
+                int knife = 0;
+                try
+                {
+                    knife = Convert.ToInt32(txt_caoPlane.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("钻孔刀号输入有误，请重新输入");
+                }
+                int Kdao = 0;
+                try
+                {
+                    Kdao = Convert.ToInt32(txt_caoRevolutions.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("倒角刀号输入有误，请重新输入");
+                }
+                var model = parameter.FirstOrDefault();
+                var dao = parameterd.FirstOrDefault();
+                try
+                {
+                    switch (knife)
+                    {
+                        case 1:
+                            #region 刀号输入1
+                            model = parameter.Where(c => c.Id == 1).FirstOrDefault();
+                            if (model == null)
+                            {
+                                #region 判断输入1的时候
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
 
-       
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 1,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 1,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_hongkou.Text != "" && txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 1,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+                                    model.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    model.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                    model.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                    model.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                    model.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_yuanWidth.Text != "" && txt_hongkou.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 2:
+                            #region 刀号输入2
+                            model = parameter.Where(c => c.Id == 2).FirstOrDefault();
+                            if (model == null)
+                            {
+                                #region 判断输入2的时候
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 2,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 2,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_hongkou.Text != "" && txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 2,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+                                    model.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    model.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                    model.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                    model.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                    model.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_yuanWidth.Text != "" && txt_hongkou.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 3:
+                            #region 刀号输入3
+                            model = parameter.Where(c => c.Id == 3).FirstOrDefault();
+                            if (model == null)
+                            {
+                                #region 判断输入3的时候
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 3,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 3,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_hongkou.Text != "" && txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 3,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+                                    model.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    model.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                    model.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                    model.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                    model.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_yuanWidth.Text != "" && txt_hongkou.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 4:
+                            #region 刀号输入4
+                            model = parameter.Where(c => c.Id == 4).FirstOrDefault();
+                            if (model == null)
+                            {
+                                #region 判断输入4的时候
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 4,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 4,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_hongkou.Text != "" && txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 4,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+                                    model.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    model.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                    model.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                    model.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                    model.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_yuanWidth.Text != "" && txt_hongkou.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 5:
+                            #region 刀号输入5
+                            model = parameter.Where(c => c.Id == 5).FirstOrDefault();
+                            if (model == null)
+                            {
+                                #region 判断输入5的时候
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 5,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 5,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_hongkou.Text != "" && txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 5,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+                                    model.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    model.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                    model.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                    model.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                    model.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_yuanWidth.Text != "" && txt_hongkou.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 6:
+                            #region 刀号输入6
+                            model = parameter.Where(c => c.Id == 6).FirstOrDefault();
+                            if (model == null)
+                            {
+                                #region 判断输入6的时候
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 6,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 6,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_hongkou.Text != "" && txt_yuanWidth.Text != "")
+                                        {
+                                            parameter.Add(new Parameter()
+                                            {
+                                                Id = 6,
+                                                Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                                PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                                WhiteZ = Convert.ToDouble(txt_yuanWidth.Text),
+                                                RedZ = Convert.ToDouble(txt_hongkou.Text),
+                                                RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                                SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "")
+                                {
+                                    model.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    model.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                    model.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                    model.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                    model.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                    if (com_drillingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_yuanWidth.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_hongkou.Text != "")
+                                        {
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_yuanWidth.Text != "" && txt_hongkou.Text != "")
+                                        {
+                                            model.WhiteZ = Convert.ToDouble(txt_yuanWidth.Text);
+                                            model.RedZ = Convert.ToDouble(txt_hongkou.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                            #endregion
+                    }
+                    if (Kdao!=0)
+                    {
+                        switch (Kdao)
+                        {
+                            case 1:
+                                #region 刀号输入1
+                                dao = parameterd.Where(c => c.Id == 1).FirstOrDefault();
+                                if (dao == null)
+                                {
+                                    #region 判断输入1的时候
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != ""&& txt_daojiao.Text!="")
+                                    {
+                                        parameterd.Add(new Parameter()
+                                        {
+                                            Id = 1,
+                                            Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                            CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                            PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                            ChamferingZ = Convert.ToDouble(txt_daojiao.Text),
+                                            RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                            SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                        });
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region 修改数据
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        dao.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                        dao.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                        dao.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                        dao.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                        dao.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                        dao.ChamferingZ = Convert.ToDouble(txt_daojiao.Text);
+                                    }
+                                    #endregion
+                                }
+                                break;
+                            #endregion
+                            case 2:
+                                #region 刀号输入2
+                                dao = parameterd.Where(c => c.Id == 2).FirstOrDefault();
+                                if (dao == null)
+                                {
+                                    #region 判断输入2的时候
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        parameterd.Add(new Parameter()
+                                        {
+                                            Id = 2,
+                                            Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                            CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                            PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                            ChamferingZ = Convert.ToDouble(txt_daojiao.Text),
+                                            RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                            SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                        });
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region 修改数据
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        dao.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                        dao.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                        dao.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                        dao.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                        dao.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                        dao.ChamferingZ = Convert.ToDouble(txt_daojiao.Text);
+                                    }
+                                    #endregion
+                                }
+                                break;
+                            #endregion
+                            case 3:
+                                #region 刀号输入3
+                                dao = parameterd.Where(c => c.Id == 3).FirstOrDefault();
+                                if (dao == null)
+                                {
+                                    #region 判断输入3的时候
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        parameterd.Add(new Parameter()
+                                        {
+                                            Id = 3,
+                                            Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                            CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                            PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                            ChamferingZ = Convert.ToDouble(txt_daojiao.Text),
+                                            RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                            SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                        });
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region 修改数据
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        dao.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                        dao.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                        dao.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                        dao.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                        dao.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                        dao.ChamferingZ = Convert.ToDouble(txt_daojiao.Text);
+                                    }
+                                    #endregion
+                                }
+                                break;
+                            #endregion
+                            case 4:
+                                #region 刀号输入4
+                                dao = parameterd.Where(c => c.Id == 4).FirstOrDefault();
+                                if (dao == null)
+                                {
+                                    #region 判断输入4的时候
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        parameterd.Add(new Parameter()
+                                        {
+                                            Id = 4,
+                                            Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                            CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                            PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                            ChamferingZ = Convert.ToDouble(txt_daojiao.Text),
+                                            RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                            SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                        });
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region 修改数据
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        dao.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                        dao.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                        dao.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                        dao.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                        dao.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                        dao.ChamferingZ = Convert.ToDouble(txt_daojiao.Text);
+                                    }
+                                    #endregion
+                                }
+                                break;
+                            #endregion
+                            case 5:
+                                #region 刀号输入5
+                                dao = parameterd.Where(c => c.Id == 5).FirstOrDefault();
+                                if (dao == null)
+                                {
+                                    #region 判断输入5的时候
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        parameterd.Add(new Parameter()
+                                        {
+                                            Id = 5,
+                                            Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                            CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                            PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                            ChamferingZ = Convert.ToDouble(txt_daojiao.Text),
+                                            RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                            SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                        });
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region 修改数据
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        dao.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                        dao.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                        dao.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                        dao.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                        dao.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                        dao.ChamferingZ = Convert.ToDouble(txt_daojiao.Text);
+                                    }
+                                    #endregion
+                                }
+                                break;
+                            #endregion
+                            case 6:
+                                #region 刀号输入6
+                                dao = parameterd.Where(c => c.Id == 6).FirstOrDefault();
+                                if (dao == null)
+                                {
+                                    #region 判断输入6的时候
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        parameterd.Add(new Parameter()
+                                        {
+                                            Id = 6,
+                                            Aperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                            CuttingQ = Convert.ToDouble(txt_yuanDepth.Text),
+                                            PlaneR = Convert.ToDouble(txt_yuanCutting.Text),
+                                            ChamferingZ = Convert.ToDouble(txt_daojiao.Text),
+                                            RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text),
+                                            SpeedF = Convert.ToDouble(txt_yuanDistance.Text)
+                                        });
+                                    }
+                                    #endregion
+                                }
+                                else
+                                {
+                                    #region 修改数据
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
+                                    {
+                                        dao.Aperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                        dao.CuttingQ = Convert.ToDouble(txt_yuanDepth.Text);
+                                        dao.PlaneR = Convert.ToDouble(txt_yuanCutting.Text);
+                                        dao.RevolutionsS = Convert.ToDouble(txt_yuanSingleCutting.Text);
+                                        dao.SpeedF = Convert.ToDouble(txt_yuanDistance.Text);
+                                        dao.ChamferingZ = Convert.ToDouble(txt_daojiao.Text);
+                                    }
+                                    #endregion
+                                }
+                                break;
+                                #endregion
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    //MessageBox.Show("您设置的参数有误，请重新设置");return;
+                }
+               
+            }
+        }
+
+        private void txt_caoPlane_TextChanged(object sender, EventArgs e)
+        {
+            int knife = 0;
+            try
+            {
+                knife = Convert.ToInt32(txt_caoPlane.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("钻孔刀号输入有误，请重新输入");
+            }
+            var model = parameter.Where(c => c.Id == knife).FirstOrDefault();
+            if (model != null)
+            {
+                txt_CutterDiameter.Text = model.Aperture.ToString();
+                txt_yuanDepth.Text = model.CuttingQ.ToString();
+                txt_yuanCutting.Text = model.PlaneR.ToString();
+                txt_yuanSingleCutting.Text = model.RevolutionsS.ToString();
+                txt_yuanDistance.Text = model.SpeedF.ToString();
+                txt_yuanWidth.Text = model.WhiteZ.ToString();
+                txt_hongkou.Text = model.RedZ.ToString();
+            }
+            else
+            {
+                txt_CutterDiameter.Text = "";
+                txt_yuanDepth.Text = "";
+                txt_yuanCutting.Text = "";
+                txt_yuanSingleCutting.Text = "";
+                txt_yuanDistance.Text = "";
+                txt_yuanWidth.Text = "";
+                txt_hongkou.Text = "";
+            }
+        }
+
+        private void txt_caoRevolutions_TextChanged(object sender, EventArgs e)
+        {
+            int knife = 0;
+            try
+            {
+                knife = Convert.ToInt32(txt_caoRevolutions.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("倒角刀号输入有误，请重新输入");
+            }
+            var model = parameterd.Where(c => c.Id == knife).FirstOrDefault();
+            if (model != null)
+            {
+                txt_CutterDiameter.Text = model.Aperture.ToString();
+                txt_yuanDepth.Text = model.CuttingQ.ToString();
+                txt_yuanCutting.Text = model.PlaneR.ToString();
+                txt_yuanSingleCutting.Text = model.RevolutionsS.ToString();
+                txt_yuanDistance.Text = model.SpeedF.ToString();
+                txt_daojiao.Text = model.ChamferingZ.ToString();
+            }
+            else
+            {
+                txt_CutterDiameter.Text = "";
+                txt_yuanDepth.Text = "";
+                txt_yuanCutting.Text = "";
+                txt_yuanSingleCutting.Text = "";
+                txt_yuanDistance.Text = "";
+                txt_daojiao.Text = "";
+            }
+        }
     }
 }

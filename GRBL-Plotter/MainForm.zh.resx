@@ -895,19 +895,19 @@
     <value>生成G代码</value>
   </data>
   <data name="txt_caoPlane.Location" type="System.Drawing.Point, System.Drawing">
-    <value>117, 188</value>
+    <value>117, 154</value>
   </data>
   <data name="txt_caoPlane.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_caoRevolutions.Location" type="System.Drawing.Point, System.Drawing">
-    <value>117, 154</value>
+    <value>117, 120</value>
   </data>
   <data name="txt_caoRevolutions.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
   </data>
   <data name="txt_CutterDiameter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>117, 120</value>
+    <value>117, 190</value>
   </data>
   <data name="txt_CutterDiameter.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 25</value>
@@ -1108,7 +1108,7 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label16.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 161</value>
+    <value>9, 127</value>
   </data>
   <data name="label16.Size" type="System.Drawing.Size, System.Drawing">
     <value>98, 14</value>
@@ -1120,7 +1120,7 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label15.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 196</value>
+    <value>9, 162</value>
   </data>
   <data name="label15.Size" type="System.Drawing.Size, System.Drawing">
     <value>98, 14</value>
@@ -1144,7 +1144,7 @@
     <value>宋体, 10.5pt</value>
   </data>
   <data name="label13.Location" type="System.Drawing.Point, System.Drawing">
-    <value>37, 126</value>
+    <value>37, 196</value>
   </data>
   <data name="label13.Size" type="System.Drawing.Size, System.Drawing">
     <value>70, 14</value>
