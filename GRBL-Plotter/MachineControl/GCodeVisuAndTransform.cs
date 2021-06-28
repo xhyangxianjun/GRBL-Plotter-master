@@ -44,6 +44,7 @@ namespace GRBL_Plotter
         public static GraphicsPath pathTool = new GraphicsPath();
         public static GraphicsPath pathMarker = new GraphicsPath();
         public static GraphicsPath pathHeightMap = new GraphicsPath();
+        public static GraphicsPath pathWhite = new GraphicsPath();
         public static GraphicsPath path = pathPenUp;
 
         private double toolPosX = 0;
@@ -207,7 +208,8 @@ namespace GRBL_Plotter
                 {   //if ((newLine.motionMode > 0))// || (newLine.z != null))
                     //    xyzSize.setDimensionXYZ(newLine.actualPos.X, newLine.actualPos.Y, newLine.actualPos.Z);             // calculate max dimensions
                     // add data to drawing path
-                    createDarwingPathFromGCode(newLine.motionMode, oldLine.actualPos.X, oldLine.actualPos.Y, oldLine.actualPos.Z, newLine.actualPos.X, newLine.actualPos.Y, newLine.actualPos.Z, newLine.i, newLine.j);
+                    bool white= GCode[index].Contains("ssss");
+                    createDarwingPathFromGCode(newLine.motionMode, oldLine.actualPos.X, oldLine.actualPos.Y, oldLine.actualPos.Z, newLine.actualPos.X, newLine.actualPos.Y, newLine.actualPos.Z, newLine.i, newLine.j, white);
                     oldLine = new gcodeLine(newLine);   // get copy of newLine      
                 }
                 if ((actualM == 30)|| (actualM == 2)) { programEnd = true; }
@@ -796,6 +798,7 @@ namespace GRBL_Plotter
         {   xyzSize.resetDimension();
             pathPenUp.Reset();
             pathPenDown.Reset();
+            pathWhite.Reset();
             pathRuler.Reset();
             pathTool.Reset();
             pathMarker.Reset();
@@ -803,7 +806,7 @@ namespace GRBL_Plotter
 
         // add given coordinates to drawing path
         private int onlyZ = 0;
-        public void createDarwingPathFromGCode(int motionMode, double ox, double oy, double oz, double nx, double ny, double nz, double? ii, double? jj)
+        public void createDarwingPathFromGCode(int motionMode, double ox, double oy, double oz, double nx, double ny, double nz, double? ii, double? jj,bool white=false)
         {
             //MessageBox.Show(String.Format("G{0} ox{1} oy{2} nx{3} ny{4} i{5} j{6}", motionMode, ox, oy, nx, ny, ii, jj));
             bool passLimit = false;
@@ -915,6 +918,11 @@ namespace GRBL_Plotter
                     //Point.X = (int)a1;
                     //Point.Y = (int)da;
                     //list.Add(new MyShape() { Name = "圆弧", Rectangle = ret,point=Point }); 
+                    
+                    if (white)
+                    {
+                        pathWhite.AddArc(x1, y1, 2 * radius, 2 * radius, a1, da);
+                    }
                     path.AddArc(x1, y1, 2 * radius, 2 * radius, a1, da);
                     xyzSize.setDimensionCircle(x1 + radius, y1 + radius, radius, a1, da);        // calculate new dimensions
                 }

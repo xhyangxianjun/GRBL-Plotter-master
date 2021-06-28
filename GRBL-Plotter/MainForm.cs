@@ -755,6 +755,7 @@ namespace GRBL_Plotter
                 //fCTBCode.ForeColor = Color.White;
                 generateGCode = openFileDialog1.FileName;
                 Fcode = fCTBCode.Text;
+                pictureBox1.BackColor = Color.Black;
                 fCTBCode.Text = "";
                 isHeightMapApplied = false;
             }
@@ -807,6 +808,7 @@ namespace GRBL_Plotter
             loadFile(sender.ToString());
             generateGCode = sender.ToString();
             Fcode = fCTBCode.Text;
+            pictureBox1.BackColor = Color.Black;
             fCTBCode.Text = "";
         }
 
@@ -930,12 +932,7 @@ namespace GRBL_Plotter
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
-            int model = 0;
-            //if (txt_ModelSetting.Text.Trim() != "")
-            //{
-            //    model = Convert.ToInt32(txt_ModelSetting.Text.Trim());
-            //}
-            string gcode = GCodeFromDXF.ConvertFile(source, model, txt_caoPlane.Text.Trim(), txt_yuanSpeed.Text.Trim(), txt_yuanCutting.Text.Trim(), txt_yuanWidth.Text.Trim(), txt_yuanSingleCutting.Text.Trim(), txt_yuanDistance.Text.Trim(), txt_juCutting.Text.Trim(), txt_juWidth.Text.Trim(), txt_juSingleCutting.Text.Trim(), txt_juDistance.Text.Trim(), generation);
+            string gcode = GCodeFromDXF.ConvertFile(source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex, parameter, parameterd, generation);
             if (gcode.Length > 2)
             {
                 Fcode = gcode;
@@ -2308,6 +2305,7 @@ namespace GRBL_Plotter
         // onPaint drawing
         private Pen penUp = new Pen(Color.Green, 0.1F);
         private Pen penDown = new Pen(Color.Red, 0.4F);
+        private Pen penwhite = new Pen(Color.White, 0.4f);
         private Pen penHeightMap = new Pen(Color.Yellow, 1F);
         private Pen penRuler = new Pen(Color.Blue, 0.1F);
         private Pen penTool = new Pen(Color.Black, 0.5F);
@@ -2374,10 +2372,10 @@ namespace GRBL_Plotter
         }
         private void onPaint_drawToolPath(Graphics e)
         {
-
             e.DrawPath(penHeightMap, GCodeVisuAndTransform.pathHeightMap);
             e.DrawPath(penRuler, GCodeVisuAndTransform.pathRuler);
             e.DrawPath(penDown, GCodeVisuAndTransform.pathPenDown);
+            e.DrawPath(penwhite, GCodeVisuAndTransform.pathWhite);
             e.DrawPath(penUp, GCodeVisuAndTransform.pathPenUp);
             foreach (var item in list)
             {
@@ -3256,6 +3254,7 @@ namespace GRBL_Plotter
                 {
                     loadFile(generateGCode, MyGeneration);
                     fCTBCode.Text = Fcode;
+                    
                 }
             }
             else
@@ -4186,23 +4185,26 @@ namespace GRBL_Plotter
                 MessageBox.Show("倒角刀号输入有误，请重新输入");
             }
             var model = parameterd.Where(c => c.Id == knife).FirstOrDefault();
-            if (model != null)
+            if (knife!=0)
             {
-                txt_CutterDiameter.Text = model.Aperture.ToString();
-                txt_yuanDepth.Text = model.CuttingQ.ToString();
-                txt_yuanCutting.Text = model.PlaneR.ToString();
-                txt_yuanSingleCutting.Text = model.RevolutionsS.ToString();
-                txt_yuanDistance.Text = model.SpeedF.ToString();
-                txt_daojiao.Text = model.ChamferingZ.ToString();
-            }
-            else
-            {
-                txt_CutterDiameter.Text = "";
-                txt_yuanDepth.Text = "";
-                txt_yuanCutting.Text = "";
-                txt_yuanSingleCutting.Text = "";
-                txt_yuanDistance.Text = "";
-                txt_daojiao.Text = "";
+                if (model != null)
+                {
+                    txt_CutterDiameter.Text = model.Aperture.ToString();
+                    txt_yuanDepth.Text = model.CuttingQ.ToString();
+                    txt_yuanCutting.Text = model.PlaneR.ToString();
+                    txt_yuanSingleCutting.Text = model.RevolutionsS.ToString();
+                    txt_yuanDistance.Text = model.SpeedF.ToString();
+                    txt_daojiao.Text = model.ChamferingZ.ToString();
+                }
+                else
+                {
+                    txt_CutterDiameter.Text = "";
+                    txt_yuanDepth.Text = "";
+                    txt_yuanCutting.Text = "";
+                    txt_yuanSingleCutting.Text = "";
+                    txt_yuanDistance.Text = "";
+                    txt_daojiao.Text = "";
+                }
             }
         }
     }
