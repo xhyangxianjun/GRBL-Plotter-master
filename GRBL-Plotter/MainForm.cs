@@ -91,6 +91,7 @@ namespace GRBL_Plotter
         List<MyColor> list = new List<MyColor>();
         List<Parameter> parameter = new List<Parameter>();
         List<Parameter> parameterd = new List<Parameter>();
+        List<Tapping> tappingT = new List<Tapping>();
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -752,7 +753,7 @@ namespace GRBL_Plotter
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 loadFile(openFileDialog1.FileName);
-                //fCTBCode.ForeColor = Color.White;
+                fCTBCode.ForeColor = Color.White;
                 generateGCode = openFileDialog1.FileName;
                 Fcode = fCTBCode.Text;
                 pictureBox1.BackColor = Color.Black;
@@ -932,7 +933,7 @@ namespace GRBL_Plotter
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
-            string gcode = GCodeFromDXF.ConvertFile(source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex, parameter, parameterd, generation);
+            string gcode = GCodeFromDXF.ConvertFile(source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex,com_TappingSetting.SelectedIndex, parameter, parameterd,tappingT, generation);
             if (gcode.Length > 2)
             {
                 Fcode = gcode;
@@ -2344,8 +2345,8 @@ namespace GRBL_Plotter
                 { offX = -75; }
 
                 Point stringpos = new Point(pictureBox1.PointToClient(MousePosition).X + offX, pictureBox1.PointToClient(MousePosition).Y - 10);
-                e.Graphics.DrawString(String.Format("Worl-Pos:\r\nX:{0,7:0.00}\r\nY:{1,7:0.00}", picAbsPosX, picAbsPosY), new Font("Lucida Console", 8), Brushes.Black, stringpos);
-                e.Graphics.DrawString(String.Format("Zooming: {0,2:0.00}%", 100 / zoomRange), new Font("Lucida Console", 8), Brushes.Black, new Point(5, 5));
+                e.Graphics.DrawString(String.Format("Worl-Pos:\r\nX:{0,7:0.00}\r\nY:{1,7:0.00}", picAbsPosX, picAbsPosY), new Font("Lucida Console", 8), Brushes.White, stringpos);
+                e.Graphics.DrawString(String.Format("Zooming: {0,2:0.00}%", 100 / zoomRange), new Font("Lucida Console", 8), Brushes.White, new Point(5, 5));
 
                 e.Graphics.Transform = pBoxTransform;
                 e.Graphics.ScaleTransform((float)picScaling, (float)-picScaling);        // apply scaling (flip Y)/应用扩展
@@ -3203,6 +3204,11 @@ namespace GRBL_Plotter
             if (model == 2)
             {
                 #region 先钻后功
+                int tapping = com_TappingSetting.SelectedIndex;
+                if (tapping == 0)
+                {
+                    MessageBox.Show("请选择你要的功丝设置"); return;
+                }
                 if (txt_yuanSpeed.Text == "")
                 {
                     MessageBox.Show("攻丝刀号不能为空"); return;
@@ -3221,22 +3227,35 @@ namespace GRBL_Plotter
                 {
                     MessageBox.Show("攻丝刀号输入有误，请重新输入"); return;
                 }
-
+                else if (txt_juDepth.Text == "")
+                {
+                    MessageBox.Show("功丝单次切削Q不能为空");
+                }
                 else if (txt_juCutting.Text == "")
                 {
                     MessageBox.Show("攻丝平面R点不能为空"); return;
                 }
-                else if (txt_juWidth.Text == "")
+                if (tapping == 1 || tapping == 3)
                 {
-                    MessageBox.Show("攻丝深度Z不能为空"); return;
+                    if (txt_juWidth.Text == "")
+                    {
+                        MessageBox.Show("攻丝白孔深度Z不能为空"); return;
+                    }
                 }
-                else if (txt_juSingleCutting.Text == "")
+                if (tapping == 2 || tapping == 3)
+                {
+                    if (txt_juWidth.Text == "")
+                    {
+                        MessageBox.Show("攻丝红孔深度Z不能为空"); return;
+                    }
+                }
+                if (txt_juSingleCutting.Text == "")
                 {
                     MessageBox.Show("攻丝转数S不能为空"); return;
                 }
-                else if (txt_juDistance.Text == "")
+                if (txt_juDistance.Text == "")
                 {
-                    MessageBox.Show("攻丝速度F不能为空"); return;
+                    MessageBox.Show("牙距F不能为空"); return;
                 }
                 #endregion
             }
@@ -3254,12 +3273,11 @@ namespace GRBL_Plotter
                 {
                     loadFile(generateGCode, MyGeneration);
                     fCTBCode.Text = Fcode;
-                    
                 }
             }
             else
             {
-                MessageBox.Show("请选择要生成G代码的文件");
+                MessageBox.Show("请选择要生成G代码的DXF文件");
             }
         }
         public class Parameter
@@ -3274,14 +3292,22 @@ namespace GRBL_Plotter
             public double RevolutionsS { get; set; }//钻孔转数S
             public double SpeedF { get; set; }//钻孔速度F
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        public class Tapping
+        {
+            public int Tid { get; set; }
+            public double Taperture { get; set; }
+            public double Tcutting { get; set; }//切削Q
+            public double TPlaneR { get; set; }//平面R
+            public double TWhiteZ { get; set; }//攻丝白孔深度Z
+            public double TRedZ { get; set; }//攻丝红孔深度Z
+            public double TrevolutionsS { get; set; }//攻丝转数
+            public double TpitchF { get; set;}//牙距F
+        }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (txt_caoPlane.Text != ""&& txt_caoRevolutions.Text!="")
+            
+            #region 钻孔and倒角
+            if (txt_caoPlane.Text != "" && txt_caoRevolutions.Text != "")
             {
                 int knife = 0;
                 try
@@ -3301,6 +3327,11 @@ namespace GRBL_Plotter
                 {
                     MessageBox.Show("倒角刀号输入有误，请重新输入");
                 }
+
+                //if (txt_caoRevolutions.Text== txt_caoPlane.Text)
+                //{
+                //    MessageBox.Show("钻孔刀号不能和倒角刀号一致，请重新输入");
+                //}
                 var model = parameter.FirstOrDefault();
                 var dao = parameterd.FirstOrDefault();
                 try
@@ -3902,7 +3933,7 @@ namespace GRBL_Plotter
                             break;
                             #endregion
                     }
-                    if (Kdao!=0)
+                    if (Kdao != 0)
                     {
                         switch (Kdao)
                         {
@@ -3912,7 +3943,7 @@ namespace GRBL_Plotter
                                 if (dao == null)
                                 {
                                     #region 判断输入1的时候
-                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != ""&& txt_daojiao.Text!="")
+                                    if (txt_CutterDiameter.Text != "" && txt_yuanDepth.Text != "" && txt_yuanCutting.Text != "" && txt_yuanSingleCutting.Text != "" && txt_yuanDistance.Text != "" && txt_daojiao.Text != "")
                                     {
                                         parameterd.Add(new Parameter()
                                         {
@@ -4135,8 +4166,617 @@ namespace GRBL_Plotter
                 {
                     //MessageBox.Show("您设置的参数有误，请重新设置");return;
                 }
-               
+
             }
+            #endregion
+            #region 功丝
+            if (txt_yuanSpeed.Text!=""&& com_ModelSetting.SelectedIndex==2)
+            {
+                int tapping = 0;
+                try
+                {
+                    tapping = Convert.ToInt32(txt_yuanSpeed.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("攻丝刀号输入有误，请重新输入");
+                }
+                var tap = tappingT.Where(c => c.Tid == tapping).FirstOrDefault();
+                try
+                {
+                    switch (tapping)
+                    {
+                        case 1:
+                            #region 刀号输入1
+                            if (tap == null)
+                            {
+                                #region 判断输入1的时候
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != ""&& txt_CutterDiameter.Text!="")
+                                {
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture=Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    tap.Taperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    tap.Tcutting = Convert.ToDouble(txt_juDepth.Text);
+                                    tap.TPlaneR = Convert.ToDouble(txt_juCutting.Text);
+                                    tap.TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text);
+                                    tap.TpitchF = Convert.ToDouble(txt_juDistance.Text);
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 2:
+                            #region 刀号输入2
+                            if (tap == null)
+                            {
+                                #region 判断输入2的时候
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    tap.Taperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    tap.Tcutting = Convert.ToDouble(txt_juDepth.Text);
+                                    tap.TPlaneR = Convert.ToDouble(txt_juCutting.Text);
+                                    tap.TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text);
+                                    tap.TpitchF = Convert.ToDouble(txt_juDistance.Text);
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 3:
+                            #region 刀号输入3
+                            if (tap == null)
+                            {
+                                #region 判断输入3的时候
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    tap.Taperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    tap.Tcutting = Convert.ToDouble(txt_juDepth.Text);
+                                    tap.TPlaneR = Convert.ToDouble(txt_juCutting.Text);
+                                    tap.TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text);
+                                    tap.TpitchF = Convert.ToDouble(txt_juDistance.Text);
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 4:
+                            #region 刀号输入4
+                            if (tap == null)
+                            {
+                                #region 判断输入4的时候
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    tap.Taperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    tap.Tcutting = Convert.ToDouble(txt_juDepth.Text);
+                                    tap.TPlaneR = Convert.ToDouble(txt_juCutting.Text);
+                                    tap.TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text);
+                                    tap.TpitchF = Convert.ToDouble(txt_juDistance.Text);
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 5:
+                            #region 刀号输入5
+                            if (tap == null)
+                            {
+                                #region 判断输入5的时候
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    tap.Taperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    tap.Tcutting = Convert.ToDouble(txt_juDepth.Text);
+                                    tap.TPlaneR = Convert.ToDouble(txt_juCutting.Text);
+                                    tap.TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text);
+                                    tap.TpitchF = Convert.ToDouble(txt_juDistance.Text);
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                        #endregion
+                        case 6:
+                            #region 刀号输入6
+                            if (tap == null)
+                            {
+                                #region 判断输入6的时候
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                    else if (com_TappingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tappingT.Add(new Tapping()
+                                            {
+                                                Tid = tapping,
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Tcutting = Convert.ToDouble(txt_juDepth.Text),
+                                                TPlaneR = Convert.ToDouble(txt_juCutting.Text),
+                                                TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
+                                                TRedZ = Convert.ToDouble(txt_mangkong.Text),
+                                                TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text),
+                                                TpitchF = Convert.ToDouble(txt_juDistance.Text)
+                                            });
+                                        }
+                                    }
+                                }
+                                #endregion
+                            }
+                            else
+                            {
+                                #region 修改数据
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
+                                {
+                                    tap.Taperture = Convert.ToDouble(txt_CutterDiameter.Text);
+                                    tap.Tcutting = Convert.ToDouble(txt_juDepth.Text);
+                                    tap.TPlaneR = Convert.ToDouble(txt_juCutting.Text);
+                                    tap.TrevolutionsS = Convert.ToDouble(txt_juSingleCutting.Text);
+                                    tap.TpitchF = Convert.ToDouble(txt_juDistance.Text);
+                                    if (com_TappingSetting.SelectedIndex == 1)
+                                    {
+                                        if (txt_juWidth.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 2)
+                                    {
+                                        if (txt_mangkong.Text != "")
+                                        {
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+                                    }
+                                    if (com_drillingSetting.SelectedIndex == 3)
+                                    {
+                                        if (txt_juWidth.Text != "" && txt_mangkong.Text != "")
+                                        {
+                                            tap.TWhiteZ = Convert.ToDouble(txt_juWidth.Text);
+                                            tap.TRedZ = Convert.ToDouble(txt_mangkong.Text);
+                                        }
+
+                                    }
+                                }
+                                #endregion
+                            }
+                            break;
+                            #endregion
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+          
+            #endregion
         }
 
         private void txt_caoPlane_TextChanged(object sender, EventArgs e)
@@ -4204,6 +4844,42 @@ namespace GRBL_Plotter
                     txt_yuanSingleCutting.Text = "";
                     txt_yuanDistance.Text = "";
                     txt_daojiao.Text = "";
+                }
+            }
+        }
+
+        private void txt_yuanSpeed_TextChanged(object sender, EventArgs e)
+        {
+            int knife = 0;
+            try
+            {
+                knife = Convert.ToInt32(txt_yuanSpeed.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("攻丝刀号输入有误，请重新输入");
+            }
+            var model = tappingT.Where(c => c.Tid == knife).FirstOrDefault();
+            if (knife != 0)
+            {
+                if (model != null)
+                {
+                    txt_CutterDiameter.Text = model.Taperture.ToString();
+                    txt_juDepth.Text = model.Tcutting.ToString();
+                    txt_juCutting.Text = model.TPlaneR.ToString();
+                    txt_juWidth.Text = model.TWhiteZ.ToString();
+                    txt_mangkong.Text = model.TRedZ.ToString();
+                    txt_juSingleCutting.Text = model.TrevolutionsS.ToString();
+                    txt_juDistance.Text = model.TpitchF.ToString();
+                }
+                else
+                {
+                    txt_juDepth.Text = "";
+                    txt_juCutting.Text = "";
+                    txt_juWidth.Text = "";
+                    txt_mangkong.Text = "";
+                    txt_juSingleCutting.Text = "";
+                    txt_juDistance.Text = "";
                 }
             }
         }

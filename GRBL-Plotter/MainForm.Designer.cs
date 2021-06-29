@@ -2142,6 +2142,7 @@ namespace GRBL_Plotter
             // 
             resources.ApplyResources(this.txt_yuanSpeed, "txt_yuanSpeed");
             this.txt_yuanSpeed.Name = "txt_yuanSpeed";
+            this.txt_yuanSpeed.TextChanged += new System.EventHandler(this.txt_yuanSpeed_TextChanged);
             this.txt_yuanSpeed.Enter += new System.EventHandler(this.txt_yuanSpeed_Enter);
             // 
             // txt_yuanDistance
