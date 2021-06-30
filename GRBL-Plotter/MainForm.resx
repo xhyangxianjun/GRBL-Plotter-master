@@ -2765,25 +2765,25 @@ will override the locks and allow G-code functions to work again.
     <value>563, 24</value>
   </metadata>
   <data name="pasteFromClipboardToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 22</value>
+    <value>282, 22</value>
   </data>
   <data name="pasteFromClipboardToolStripMenuItem.Text" xml:space="preserve">
     <value>Paste from Clipboard</value>
   </data>
   <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 6</value>
+    <value>279, 6</value>
   </data>
   <data name="resetZoomingToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 22</value>
+    <value>282, 22</value>
   </data>
   <data name="resetZoomingToolStripMenuItem.Text" xml:space="preserve">
     <value>Reset Zooming</value>
   </data>
   <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 6</value>
+    <value>279, 6</value>
   </data>
   <data name="deletenotMarkToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 22</value>
+    <value>282, 22</value>
   </data>
   <data name="deletenotMarkToolStripMenuItem.Text" xml:space="preserve">
     <value>Mark code (no delete)</value>
@@ -2792,10 +2792,10 @@ will override the locks and allow G-code functions to work again.
     <value>Click to toggle</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 6</value>
+    <value>279, 6</value>
   </data>
   <data name="deleteThisCodeLineToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 22</value>
+    <value>282, 22</value>
   </data>
   <data name="deleteThisCodeLineToolStripMenuItem.Text" xml:space="preserve">
     <value>Delete this code line</value>
@@ -2804,7 +2804,7 @@ will override the locks and allow G-code functions to work again.
     <value>Delete/Mark code line</value>
   </data>
   <data name="moveToFirstPosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 22</value>
+    <value>282, 22</value>
   </data>
   <data name="moveToFirstPosToolStripMenuItem.Text" xml:space="preserve">
     <value>Move to first pos.</value>
@@ -2813,7 +2813,7 @@ will override the locks and allow G-code functions to work again.
     <value>Mark path from marked pos. to end (and move to beginning of path)</value>
   </data>
   <data name="deletePathToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 22</value>
+    <value>282, 22</value>
   </data>
   <data name="deletePathToolStripMenuItem.Text" xml:space="preserve">
     <value>Delete corresponding path</value>
@@ -2822,13 +2822,22 @@ will override the locks and allow G-code functions to work again.
     <value>Delete/Mark complete path of marked pos.</value>
   </data>
   <data name="switchTheColorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 22</value>
+    <value>282, 22</value>
   </data>
   <data name="switchTheColorToolStripMenuItem.Text" xml:space="preserve">
     <value>switch the color</value>
   </data>
+  <data name="switchTheColorToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="setTheStartingCoordinatePositionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>282, 22</value>
+  </data>
+  <data name="setTheStartingCoordinatePositionToolStripMenuItem.Text" xml:space="preserve">
+    <value>Set the starting coordinate position</value>
+  </data>
   <data name="cmsPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>234, 176</value>
+    <value>283, 220</value>
   </data>
   <data name="&gt;&gt;cmsPictureBox.Name" xml:space="preserve">
     <value>cmsPictureBox</value>
@@ -10094,6 +10103,12 @@ will override the locks and allow G-code functions to work again.
     <value>switchTheColorToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;switchTheColorToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;setTheStartingCoordinatePositionToolStripMenuItem.Name" xml:space="preserve">
+    <value>setTheStartingCoordinatePositionToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;setTheStartingCoordinatePositionToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;timer1.Name" xml:space="preserve">

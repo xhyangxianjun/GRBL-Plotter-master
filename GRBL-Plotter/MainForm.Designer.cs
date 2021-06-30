@@ -218,6 +218,7 @@ namespace GRBL_Plotter
             this.moveToFirstPosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deletePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.switchTheColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setTheStartingCoordinatePositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tLPAussen = new System.Windows.Forms.TableLayoutPanel();
             this.tLPLinks = new System.Windows.Forms.TableLayoutPanel();
             this.tLPRechts = new System.Windows.Forms.TableLayoutPanel();
@@ -1469,7 +1470,8 @@ namespace GRBL_Plotter
             this.deleteThisCodeLineToolStripMenuItem,
             this.moveToFirstPosToolStripMenuItem,
             this.deletePathToolStripMenuItem,
-            this.switchTheColorToolStripMenuItem});
+            this.switchTheColorToolStripMenuItem,
+            this.setTheStartingCoordinatePositionToolStripMenuItem});
             this.cmsPictureBox.Name = "cmsPictureBox";
             resources.ApplyResources(this.cmsPictureBox, "cmsPictureBox");
             // 
@@ -1529,6 +1531,12 @@ namespace GRBL_Plotter
             this.switchTheColorToolStripMenuItem.Name = "switchTheColorToolStripMenuItem";
             resources.ApplyResources(this.switchTheColorToolStripMenuItem, "switchTheColorToolStripMenuItem");
             this.switchTheColorToolStripMenuItem.Click += new System.EventHandler(this.switchTheColorToolStripMenuItem_Click);
+            // 
+            // setTheStartingCoordinatePositionToolStripMenuItem
+            // 
+            this.setTheStartingCoordinatePositionToolStripMenuItem.Name = "setTheStartingCoordinatePositionToolStripMenuItem";
+            resources.ApplyResources(this.setTheStartingCoordinatePositionToolStripMenuItem, "setTheStartingCoordinatePositionToolStripMenuItem");
+            this.setTheStartingCoordinatePositionToolStripMenuItem.Click += new System.EventHandler(this.setTheStartingCoordinatePositionToolStripMenuItem_Click);
             // 
             // tLPAussen
             // 
@@ -2745,6 +2753,7 @@ namespace GRBL_Plotter
         private System.Windows.Forms.ComboBox com_TappingSetting;
         private System.Windows.Forms.ComboBox com_drillingSetting;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ToolStripMenuItem setTheStartingCoordinatePositionToolStripMenuItem;
     }
 }
 

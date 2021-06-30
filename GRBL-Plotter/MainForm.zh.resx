@@ -657,59 +657,65 @@
         CgAAAAAAAAAAjQABAAH4/////P///woAAAAAAAAAAKQAAQAB9/////z///8KAAAAAAAAAACWAAEACw==
 </value>
   </data>
-  <data name="cmsPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 176</value>
-  </data>
   <data name="pasteFromClipboardToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>172, 22</value>
   </data>
   <data name="pasteFromClipboardToolStripMenuItem.Text" xml:space="preserve">
     <value>从剪贴板粘贴</value>
   </data>
   <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 6</value>
+    <value>169, 6</value>
   </data>
   <data name="resetZoomingToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>172, 22</value>
   </data>
   <data name="resetZoomingToolStripMenuItem.Text" xml:space="preserve">
     <value>重置缩放</value>
   </data>
   <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 6</value>
+    <value>169, 6</value>
   </data>
   <data name="deletenotMarkToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>172, 22</value>
   </data>
   <data name="deletenotMarkToolStripMenuItem.Text" xml:space="preserve">
     <value>标记代码(不删除)</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 6</value>
+    <value>169, 6</value>
   </data>
   <data name="deleteThisCodeLineToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>172, 22</value>
   </data>
   <data name="deleteThisCodeLineToolStripMenuItem.Text" xml:space="preserve">
     <value>删除此代码行</value>
   </data>
   <data name="moveToFirstPosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>172, 22</value>
   </data>
   <data name="moveToFirstPosToolStripMenuItem.Text" xml:space="preserve">
     <value>移到第一个pos。</value>
   </data>
   <data name="deletePathToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>172, 22</value>
   </data>
   <data name="deletePathToolStripMenuItem.Text" xml:space="preserve">
     <value>删除对应的路径</value>
   </data>
   <data name="switchTheColorToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 22</value>
+    <value>172, 22</value>
   </data>
   <data name="switchTheColorToolStripMenuItem.Text" xml:space="preserve">
     <value>切换颜色</value>
+  </data>
+  <data name="setTheStartingCoordinatePositionToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 22</value>
+  </data>
+  <data name="setTheStartingCoordinatePositionToolStripMenuItem.Text" xml:space="preserve">
+    <value>设定起始坐标位置</value>
+  </data>
+  <data name="cmsPictureBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>173, 198</value>
   </data>
   <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
     <value>76, 353</value>

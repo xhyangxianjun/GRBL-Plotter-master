@@ -627,7 +627,7 @@ namespace GRBL_Plotter
             }
             return createGCodeProg(false, false);
         }
-        public string transformGCodeOffset(double x, double y, translate shiftToZero)
+        public string transformGCodeOffset(double x, double y, translate shiftToZero, double? X = 0, double? Y = 0)
         {
             double offsetX = 0;
             double offsetY = 0;
@@ -637,6 +637,8 @@ namespace GRBL_Plotter
             oldLine.actualPos.X = toolPosX;
             oldLine.actualPos.Y = toolPosY;
             oldLine.actualPos.Z = toolPosZ;
+           
+
             if (shiftToZero == translate.Offset1) { offsetX = x + xyzSize.minx; offsetY = y + xyzSize.miny + xyzSize.dimy; }
             if (shiftToZero == translate.Offset2) { offsetX = x + xyzSize.minx + xyzSize.dimx / 2; offsetY = y + xyzSize.miny + xyzSize.dimy; }
             if (shiftToZero == translate.Offset3) { offsetX = x + xyzSize.minx + xyzSize.dimx; offsetY = y + xyzSize.miny + xyzSize.dimy; }
@@ -646,23 +648,32 @@ namespace GRBL_Plotter
             if (shiftToZero == translate.Offset7) { offsetX = x + xyzSize.minx; offsetY = y + xyzSize.miny; }
             if (shiftToZero == translate.Offset8) { offsetX = x + xyzSize.minx + xyzSize.dimx / 2; offsetY = y + xyzSize.miny; }
             if (shiftToZero == translate.Offset9) { offsetX = x + xyzSize.minx + xyzSize.dimx; offsetY = y + xyzSize.miny; }
+
+            if (X != 0 && Y != 0)
+            {
+                offsetX = Convert.ToDouble(X); offsetY = Convert.ToDouble(Y);
+            }
+
             clearDrawingnPath();                    // reset path, dimensions
             if (containsG91)    // insert rapid movement before pen down, to be able applying offset
             {
                 newLine.resetAll();
-                int i,k;
+                int i, k;
                 for (i = 0; i < gcodeList.Count; i++)       // find first relative move
-                {   if ((!gcodeList[i].isdistanceModeG90) && (gcodeList[i].motionMode == 0) && (gcodeList[i].z != null))       
+                {
+                    if ((!gcodeList[i].isdistanceModeG90) && (gcodeList[i].motionMode == 0) && (gcodeList[i].z != null))
                     { break; }
                 }
                 for (k = i + 1; k < gcodeList.Count; k++)   // find G0 x y
-                {   if ((gcodeList[k].motionMode == 0) && (gcodeList[k].x != null) && (gcodeList[k].y != null))
+                {
+                    if ((gcodeList[k].motionMode == 0) && (gcodeList[k].x != null) && (gcodeList[k].y != null))
                     { noInsertNeeded = true; break; }
                     if (gcodeList[k].motionMode > 0)
                         break;
                 }
-                if ((gcodeList[i + 1].motionMode != 0) || ((gcodeList[i + 1].motionMode == 0)  && ((gcodeList[i + 1].x == null) || (gcodeList[i + 1].y == null))))
-                {   if (!noInsertNeeded)
+                if ((gcodeList[i + 1].motionMode != 0) || ((gcodeList[i + 1].motionMode == 0) && ((gcodeList[i + 1].x == null) || (gcodeList[i + 1].y == null))))
+                {
+                    if (!noInsertNeeded)
                     {//MessageBox.Show(gcodeList[i + 1].motionMode.ToString()+" "+ gcodeList[i + 1].x.ToString()+" "+ gcodeList[i + 1].y.ToString());
                         getGCodeLine("G0 X0 Y0 (Insert offset movement)");                   // parse line, fill up newLine.xyz and actualM,P,O
                         gcodeList.Insert(i + 1, newLine);
@@ -681,13 +692,15 @@ namespace GRBL_Plotter
                             gcline.y = gcline.y - offsetY;      // apply offset
                     }
                     else
-                    {   if (!offsetApplied)
-                        {   if (gcline.motionMode == 0)
+                    {
+                        if (!offsetApplied)
+                        {
+                            if (gcline.motionMode == 0)
                             {
-                                    gcline.x = gcline.x - offsetX;
-                                    gcline.y = gcline.y - offsetY;
-                                    if ((gcline.x != null) && (gcline.y != null))
-                                        offsetApplied = true;
+                                gcline.x = gcline.x - offsetX;
+                                gcline.y = gcline.y - offsetY;
+                                if ((gcline.x != null) && (gcline.y != null))
+                                    offsetApplied = true;
                             }
                         }
                     }
@@ -777,7 +790,16 @@ namespace GRBL_Plotter
                         if (gcline.codeLine.IndexOf("(Setup - GCode") > 1)
                             newCode.AppendLine(gcline.codeLine);
                         else
-                            newCode.AppendLine("G" + gcode.frmtCode(gcline.motionMode) + tmpCode.ToString());
+                        {
+                            if (gcline.codeLine.Contains("ssss"))
+                            {
+                                newCode.AppendLine("G" + gcode.frmtCode(gcline.motionMode) + tmpCode.ToString()+"   ssss");
+                            }
+                            else
+                            {
+                                newCode.AppendLine("G" + gcode.frmtCode(gcline.motionMode) + tmpCode.ToString());
+                            }
+                        }
                     }
                     else
                     {   newCode.AppendLine(gcline.codeLine.Trim('\r','\n'));
@@ -796,12 +818,12 @@ namespace GRBL_Plotter
         }
         private void clearDrawingnPath()
         {   xyzSize.resetDimension();
-            pathPenUp.Reset();
             pathPenDown.Reset();
             pathWhite.Reset();
             pathRuler.Reset();
             pathTool.Reset();
             pathMarker.Reset();
+            pathPenUp.Reset();
         }
 
         // add given coordinates to drawing path

@@ -745,9 +745,10 @@ namespace GRBL_Plotter
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
             //判断所有参数是否为空
-            //isNUllParameter();
+            //isNUllParameterz
             //if (dxcb!="")
             //{
+            Fcode = "";
             openFileDialog1.FileName = "";
             openFileDialog1.Filter = "DXF files (*.dxf)|*.dxf|SVG files (*.svg)|*.svg|gcode files (*.nc)|*.nc|All files (*.*)|*.*";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -806,6 +807,7 @@ namespace GRBL_Plotter
         }
         private void RecentFile_click(object sender, EventArgs e)
         {
+            Fcode = "";
             loadFile(sender.ToString());
             generateGCode = sender.ToString();
             Fcode = fCTBCode.Text;
@@ -933,7 +935,7 @@ namespace GRBL_Plotter
         {
             lastSource = source;
             this.Cursor = Cursors.WaitCursor;
-            string gcode = GCodeFromDXF.ConvertFile(source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex,com_TappingSetting.SelectedIndex, parameter, parameterd,tappingT, generation);
+            string gcode = GCodeFromDXF.ConvertFile(source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex, com_TappingSetting.SelectedIndex, parameter, parameterd, tappingT, generation);
             if (gcode.Length > 2)
             {
                 Fcode = gcode;
@@ -1936,43 +1938,7 @@ namespace GRBL_Plotter
 
         #region GUI Objects
 
-        private void btnOffsetApply_Click(object sender, EventArgs e)
-        {
-            //groupBox6.Width += 20 ;
-            Cursor.Current = Cursors.WaitCursor;
-            pBoxTransform.Reset();
-            double offsetx = 0, offsety = 0;
-            if (!Double.TryParse(tbOffsetX.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out offsetx))
-            {
-                MessageBox.Show("Not a valid number", "Attention");
-                tbOffsetX.Text = string.Format("{0:0.00}", offsetx);
-            }
-            if (!Double.TryParse(tbOffsetY.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out offsety))
-            {
-                MessageBox.Show("Not a valid number", "Attention");
-                tbOffsetY.Text = string.Format("{0:0.00}", offsety);
-            }
-            if (fCTBCode.Lines.Count > 1)
-            {
-                fCTBCode.Cursor = Cursors.WaitCursor;
-                if (rBOrigin1.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset1); }
-                if (rBOrigin2.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset2); }
-                if (rBOrigin3.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset3); }
-                if (rBOrigin4.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset4); }
-                if (rBOrigin5.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset5); }
-                if (rBOrigin6.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset6); }
-                if (rBOrigin7.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset7); }
-                if (rBOrigin8.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset8); }
-                if (rBOrigin9.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset9); }
-                updateDrawing();
-                fCTBCodeClickedLineNow = fCTBCodeClickedLineLast;
-                fCTBCodeClickedLineLast = 0;
-                fCTBCodeMarkLine();
-                fCTBCode.Cursor = Cursors.IBeam;
-                showChangedMessage = true;
-            }
-            Cursor.Current = Cursors.Default;
-        }
+
         // Setup Custom Buttons during loadSettings()
         string[] btnCustomCommand = new string[9];
         private void setCustomButton(Button btn, string text)
@@ -2357,7 +2323,6 @@ namespace GRBL_Plotter
                 e.Graphics.DrawPath(penTool, GCodeVisuAndTransform.pathTool);
 
             }
-
         }
         private void onPaint_scaling(Graphics e)
         {
@@ -3301,11 +3266,11 @@ namespace GRBL_Plotter
             public double TWhiteZ { get; set; }//攻丝白孔深度Z
             public double TRedZ { get; set; }//攻丝红孔深度Z
             public double TrevolutionsS { get; set; }//攻丝转数
-            public double TpitchF { get; set;}//牙距F
+            public double TpitchF { get; set; }//牙距F
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-            
+
             #region 钻孔and倒角
             if (txt_caoPlane.Text != "" && txt_caoRevolutions.Text != "")
             {
@@ -4170,7 +4135,7 @@ namespace GRBL_Plotter
             }
             #endregion
             #region 功丝
-            if (txt_yuanSpeed.Text!=""&& com_ModelSetting.SelectedIndex==2)
+            if (txt_yuanSpeed.Text != "" && com_ModelSetting.SelectedIndex == 2)
             {
                 int tapping = 0;
                 try
@@ -4191,7 +4156,7 @@ namespace GRBL_Plotter
                             if (tap == null)
                             {
                                 #region 判断输入1的时候
-                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != ""&& txt_CutterDiameter.Text!="")
+                                if (txt_juDepth.Text != "" && txt_juCutting.Text != "" && txt_juSingleCutting.Text != "" && txt_juDistance.Text != "" && txt_CutterDiameter.Text != "")
                                 {
                                     if (com_TappingSetting.SelectedIndex == 1)
                                     {
@@ -4200,7 +4165,7 @@ namespace GRBL_Plotter
                                             tappingT.Add(new Tapping()
                                             {
                                                 Tid = tapping,
-                                                Taperture=Convert.ToDouble(txt_CutterDiameter.Text),
+                                                Taperture = Convert.ToDouble(txt_CutterDiameter.Text),
                                                 Tcutting = Convert.ToDouble(txt_juDepth.Text),
                                                 TPlaneR = Convert.ToDouble(txt_juCutting.Text),
                                                 TWhiteZ = Convert.ToDouble(txt_juWidth.Text),
@@ -4775,7 +4740,7 @@ namespace GRBL_Plotter
 
                 }
             }
-          
+
             #endregion
         }
 
@@ -4825,7 +4790,7 @@ namespace GRBL_Plotter
                 MessageBox.Show("倒角刀号输入有误，请重新输入");
             }
             var model = parameterd.Where(c => c.Id == knife).FirstOrDefault();
-            if (knife!=0)
+            if (knife != 0)
             {
                 if (model != null)
                 {
@@ -4882,6 +4847,77 @@ namespace GRBL_Plotter
                     txt_juDistance.Text = "";
                 }
             }
+        }
+        private void btnOffsetApply_Click(object sender, EventArgs e)
+        {
+            //groupBox6.Width += 20 ;
+            Cursor.Current = Cursors.WaitCursor;
+            pBoxTransform.Reset();
+            double offsetx = 0, offsety = 0;
+            if (!Double.TryParse(tbOffsetX.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out offsetx))
+            {
+                MessageBox.Show("Not a valid number", "Attention");
+                tbOffsetX.Text = string.Format("{0:0.00}", offsetx);
+            }
+            if (!Double.TryParse(tbOffsetY.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out offsety))
+            {
+                MessageBox.Show("Not a valid number", "Attention");
+                tbOffsetY.Text = string.Format("{0:0.00}", offsety);
+            }
+            if (fCTBCode.Lines.Count > 1)
+            {
+                //picAbsPosX, picAbsPosY
+                fCTBCode.Cursor = Cursors.WaitCursor;
+                if (rBOrigin1.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset1); }
+                if (rBOrigin2.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset2); }
+                if (rBOrigin3.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset3); }
+                if (rBOrigin4.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset4); }
+                if (rBOrigin5.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset5); }
+                if (rBOrigin6.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset6); }
+                if (rBOrigin7.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset7); }
+                if (rBOrigin8.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset8); }
+                if (rBOrigin9.Checked) { fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset9); }
+                updateDrawing();
+                fCTBCodeClickedLineNow = fCTBCodeClickedLineLast;
+                fCTBCodeClickedLineLast = 0;
+                fCTBCodeMarkLine();
+                fCTBCode.Cursor = Cursors.IBeam;
+                showChangedMessage = true;
+            }
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void setTheStartingCoordinatePositionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            pBoxTransform.Reset();
+            double offsetx = 0, offsety = 0;
+            if (!Double.TryParse(tbOffsetX.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out offsetx))
+            {
+                MessageBox.Show("Not a valid number", "Attention");
+                tbOffsetX.Text = string.Format("{0:0.00}", offsetx);
+            }
+            if (!Double.TryParse(tbOffsetY.Text.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out offsety))
+            {
+                MessageBox.Show("Not a valid number", "Attention");
+                tbOffsetY.Text = string.Format("{0:0.00}", offsety);
+            }
+            fCTBCode.Text = Fcode;
+            if (fCTBCode.Lines.Count > 1)
+            {
+                fCTBCode.Cursor = Cursors.WaitCursor;
+                fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset1,picAbsPosX,picAbsPosY);
+                updateDrawing();
+                fCTBCodeClickedLineNow = fCTBCodeClickedLineLast;
+                fCTBCodeClickedLineLast = 0;
+                fCTBCodeMarkLine();
+                fCTBCode.Cursor = Cursors.IBeam;
+                showChangedMessage = true;
+            }
+            Cursor.Current = Cursors.Default;
+            Fcode = fCTBCode.Text;
+            redrawGCodePath();//画图的函数
+            fCTBCode.Text = "";
         }
     }
 }
