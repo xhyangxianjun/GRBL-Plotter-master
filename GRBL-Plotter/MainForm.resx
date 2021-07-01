@@ -1342,7 +1342,7 @@
     <value>12</value>
   </data>
   <data name="btnOpenFile.Location" type="System.Drawing.Point, System.Drawing">
-    <value>156, 15</value>
+    <value>162, 16</value>
   </data>
   <data name="btnOpenFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>27, 21</value>
@@ -2837,7 +2837,7 @@ will override the locks and allow G-code functions to work again.
     <value>Set the starting coordinate position</value>
   </data>
   <data name="cmsPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>283, 220</value>
+    <value>283, 198</value>
   </data>
   <data name="&gt;&gt;cmsPictureBox.Name" xml:space="preserve">
     <value>cmsPictureBox</value>

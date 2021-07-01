@@ -44,6 +44,8 @@ using System.Resources;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
+using static GRBL_Plotter.GCodeVisuAndTransform;
+using static GRBL_Plotter.GCodeFromDXF;
 
 namespace GRBL_Plotter
 {
@@ -92,6 +94,8 @@ namespace GRBL_Plotter
         List<Parameter> parameter = new List<Parameter>();
         List<Parameter> parameterd = new List<Parameter>();
         List<Tapping> tappingT = new List<Tapping>();
+        string moveXY = "";
+        int num = 0;
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -748,6 +752,7 @@ namespace GRBL_Plotter
             //isNUllParameterz
             //if (dxcb!="")
             //{
+           
             Fcode = "";
             openFileDialog1.FileName = "";
             openFileDialog1.Filter = "DXF files (*.dxf)|*.dxf|SVG files (*.svg)|*.svg|gcode files (*.nc)|*.nc|All files (*.*)|*.*";
@@ -761,7 +766,7 @@ namespace GRBL_Plotter
                 fCTBCode.Text = "";
                 isHeightMapApplied = false;
             }
-            //    }
+          
         }
         // handle MRU List
         private int MRUnumber = 20;
@@ -831,7 +836,7 @@ namespace GRBL_Plotter
                     return;
                 }
             }
-            Cursor.Current = Cursors.WaitCursor;
+            //Cursor.Current = Cursors.WaitCursor;
 
             pictureBox1.BackgroundImage = null;
             visuGCode.setPosMarker(0, 0);
@@ -930,12 +935,31 @@ namespace GRBL_Plotter
             this.Cursor = Cursors.Default;
             updateControls();
         }
-
+        List<MoveXY> xy = new List<MoveXY>();
         private void startConvertDXF(string source, bool generation = false)
         {
             lastSource = source;
-            this.Cursor = Cursors.WaitCursor;
-            string gcode = GCodeFromDXF.ConvertFile(source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex, com_TappingSetting.SelectedIndex, parameter, parameterd, tappingT, generation);
+           // this.Cursor = Cursors.WaitCursor;
+            // MessageBox.Show(Fcode);
+            List<gcodeLine> listgcode =visuGCode.getines();
+            if (num ==1)
+            {
+                xy = new List<MoveXY>();
+            }
+
+            int id = 0;
+            if (listgcode != null)
+            {
+                    for (int i = 0; i < listgcode.Count; i++)
+                    {
+                        if (listgcode[i].codeLine.Contains("G02"))
+                        {
+                            xy.Add(new MoveXY() { Id = id, X = listgcode[i].x, Y = listgcode[i].y });
+                            id++;
+                        }
+                    }
+            }
+            string gcode = GCodeFromDXF.ConvertFile(xy, moveXY, source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex, com_TappingSetting.SelectedIndex, parameter, parameterd, tappingT, generation);
             if (gcode.Length > 2)
             {
                 Fcode = gcode;
@@ -946,10 +970,11 @@ namespace GRBL_Plotter
                 //isFileLoaded = true;
                 this.Text = appName + " | Source: " + source;
             }
-            this.Cursor = Cursors.Default;
+            Cursor.Current = Cursors.Default;
             updateControls();
+            //moveXY = "";
         }
-
+       
         bool blockRTBEvents = false;
         private void loadGcode()
         {
@@ -2157,6 +2182,7 @@ namespace GRBL_Plotter
             toolStrip_tb_X_X_scale.Text = string.Format("{0:0.000}", visuGCode.xyzSize.dimx);
             toolStrip_tb_XY_Y_scale.Text = string.Format("{0:0.000}", visuGCode.xyzSize.dimy);
             toolStrip_tb_Y_Y_scale.Text = string.Format("{0:0.000}", visuGCode.xyzSize.dimy);
+
         }
 
         #region fCTB FastColoredTextBox related
@@ -4753,7 +4779,7 @@ namespace GRBL_Plotter
             }
             catch (Exception)
             {
-                MessageBox.Show("钻孔刀号输入有误，请重新输入");
+                //MessageBox.Show("钻孔刀号输入有误，请重新输入");
             }
             var model = parameter.Where(c => c.Id == knife).FirstOrDefault();
             if (model != null)
@@ -4787,7 +4813,7 @@ namespace GRBL_Plotter
             }
             catch (Exception)
             {
-                MessageBox.Show("倒角刀号输入有误，请重新输入");
+                //MessageBox.Show("倒角刀号输入有误，请重新输入");
             }
             var model = parameterd.Where(c => c.Id == knife).FirstOrDefault();
             if (knife != 0)
@@ -4822,7 +4848,7 @@ namespace GRBL_Plotter
             }
             catch (Exception)
             {
-                MessageBox.Show("攻丝刀号输入有误，请重新输入");
+               // MessageBox.Show("攻丝刀号输入有误，请重新输入");
             }
             var model = tappingT.Where(c => c.Tid == knife).FirstOrDefault();
             if (knife != 0)
@@ -4889,6 +4915,8 @@ namespace GRBL_Plotter
 
         private void setTheStartingCoordinatePositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            num++;
+            moveXY = "llll";
             Cursor.Current = Cursors.WaitCursor;
             pBoxTransform.Reset();
             double offsetx = 0, offsety = 0;
@@ -4917,7 +4945,7 @@ namespace GRBL_Plotter
             Cursor.Current = Cursors.Default;
             Fcode = fCTBCode.Text;
             redrawGCodePath();//画图的函数
-            fCTBCode.Text = "";
+            fCTBCode.Text="";
         }
     }
 }

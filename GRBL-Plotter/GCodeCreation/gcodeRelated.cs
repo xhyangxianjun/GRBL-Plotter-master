@@ -471,11 +471,11 @@ namespace GRBL_Plotter
                 if (gcodeRelative)
                     if (Q != 0)
                     {
-                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} Q{6} {7} M3 S{8}\r\n", knife, frmtCode(gnr), frmtNum(x + (i*2)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), Q.ToString("0.000"), feed, S);
+                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} Q{6} {7} M3 S{8}\r\n", knife, frmtCode(gnr), frmtNum(x + (i)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), Q.ToString("0.000"), feed, S);
                     }
                     else
                     {
-                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} {6} M3 S{7}\r\n", knife, frmtCode(gnr), frmtNum(x + (i * 2)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), feed, S);
+                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} {6} M3 S{7}\r\n", knife, frmtCode(gnr), frmtNum(x + (i)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), feed, S);
                     }
                 else
                 {
@@ -483,11 +483,11 @@ namespace GRBL_Plotter
                     //81 X0.000 Y0.000 Z-25.000 R2.000 F30 M3 S800
                     if (Q != 0)
                     {
-                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} Q{6} {7} M3 S{8}\r\n", knife, frmtCode(gnr), frmtNum(x + (i * 2)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), Q.ToString("0.000"), feed, S);
+                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} Q{6} {7} M3 S{8}\r\n", knife, frmtCode(gnr), frmtNum(x + (i)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), Q.ToString("0.000"), feed, S);
                     }
                     else
                     {
-                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} {6} M3 S{7}\r\n", knife, frmtCode(gnr), frmtNum(x + (i * 2)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), feed, S);
+                        gcodeString.AppendFormat("G99 G43 H{0} G{1} X{2} Y{3} Z{4} R{5} {6} M3 S{7}\r\n", knife, frmtCode(gnr), frmtNum(x + (i)), frmtNum(y), frmtNum(Z), R.ToString("0.000"), feed, S);
                     }
                 }
                 string zuihou = "G80\r\n";

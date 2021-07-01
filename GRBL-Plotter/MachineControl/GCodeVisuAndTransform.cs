@@ -127,7 +127,7 @@ namespace GRBL_Plotter
             { lineNumber = line; actualPos = p; distance = -1; }
         }
         // gcode line structure
-        private class gcodeLine
+        public class gcodeLine
         {
             public int lineNumber;          // line number in fCTBCode
             public string codeLine;         // copy of original gcode line//原始的gcode行拷贝
@@ -171,6 +171,10 @@ namespace GRBL_Plotter
         private int actualO;
         private int actualL;
 
+        public List<gcodeLine> getines()
+        {
+            return gcodeList;
+        }
         /// <summary>
         /// Entrypoint for generating drawing path from given gcode
         /// </summary>

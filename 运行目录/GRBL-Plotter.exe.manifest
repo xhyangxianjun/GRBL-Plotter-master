@@ -91,14 +91,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GRBL-Plotter.exe" size="4350976">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GRBL-Plotter.exe" size="4353536">
       <assemblyIdentity name="GRBL-Plotter" version="1.1.3.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>gRtwjWI6WJJv76pXBKmTtYUqoSg=</dsig:DigestValue>
+        <dsig:DigestValue>Zd9M6dC9KGIObrxxEXbjAAoWg3M=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -110,7 +110,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ehDHjzDg4QqxmGCdcr62axDrrwk=</dsig:DigestValue>
+        <dsig:DigestValue>pZB6t/YH7zJWkn8X/WBRGjh25hE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
