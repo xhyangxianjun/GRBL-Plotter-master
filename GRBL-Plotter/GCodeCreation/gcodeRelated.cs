@@ -505,11 +505,11 @@ namespace GRBL_Plotter
             float x_relative = x - lastx;
             float y_relative = y - lasty;
 
-            if (applyFeed)
-            {
+           
+            
                 feed = string.Format("F{0}", F);
                 applyXYFeedRate = false;                        // don't set feed next time
-            }
+            
             if (cmt.Length > 0) cmt = string.Format("({0})", cmt);
             if (gcodeNoArcs || avoidG23)
             {

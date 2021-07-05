@@ -346,6 +346,7 @@
     <None Include="Resources\modell1.png" />
     <None Include="Resources\modell2.png" />
     <None Include="Resources\modell3.png" />
+    <None Include="Resources\modell21.png" />
     <Content Include="_misc\script_pen_pickup.nc" />
     <Content Include="_misc\script_pen_remove.nc" />
     <Content Include="_misc\script_pen_select.nc" />

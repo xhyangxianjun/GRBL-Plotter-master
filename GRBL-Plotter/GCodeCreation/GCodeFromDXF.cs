@@ -90,10 +90,10 @@ namespace GRBL_Plotter //DXFImporter
                 {
                     try
                     {
-                       GetVectorDXF(xy,move,file,model,drill,tapping,parameter,parameterd,tappingT,generation);
+                        GetVectorDXF(xy, move, file, model, drill, tapping, parameter, parameterd, tappingT, generation);
                     }
                     catch (Exception e)
-                    {   MessageBox.Show("Error '" + e.ToString() + "' in DXF file " + file ); return ""; }
+                    { MessageBox.Show("Error '" + e.ToString() + "' in DXF file " + file); return ""; }
                 }
                 else { MessageBox.Show("File does not exist: " + file); return ""; }
             }
@@ -152,98 +152,12 @@ namespace GRBL_Plotter //DXFImporter
             if (generation)
             {
                 #region 钻孔
-                if (drill == 1 || drill == 2)
+                if (model == 1 || model == 3)
                 {
-                    #region 白孔红孔
-                    for (int i = 0; i < doc.Entities.Count; i++)
+                    if (drill == 1 || drill == 2)
                     {
-
-                        dxfBezierAccuracy = (int)Properties.Settings.Default.importSVGBezier;
-                        gcodeReduce = Properties.Settings.Default.importSVGReduce;
-                        gcodeReduceVal = (double)Properties.Settings.Default.importSVGReduceLimit;
-
-                        gcodeZIncEnable = Properties.Settings.Default.importGCZIncEnable;
-                        gcodeZIncrement = (double)Properties.Settings.Default.importGCZIncrement;
-
-                        dxfPauseElement = Properties.Settings.Default.importSVGPauseElement;
-                        dxfPausePenDown = Properties.Settings.Default.importSVGPausePenDown;
-                        dxfComments = Properties.Settings.Default.importSVGAddComments;
-
-                        if (doc.Entities[i].GetType() == typeof(DXFInsert))
-                        {
-                            DXFInsert ins = (DXFInsert)doc.Entities[i];
-                            double ins_x = (double)ins.InsertionPoint.X;
-                            double ins_y = (double)ins.InsertionPoint.Y;
-
-                            foreach (DXFBlock block in doc.Blocks)
-                            {
-                                if (block.BlockName.ToString() == ins.BlockName)
-                                {
-                                    if (dxfComments)
-                                    {
-                                        gcode.Comment(gcodeString[gcodeStringIndex], "Color: " + block.ColorNumber.ToString());
-                                        gcode.Comment(gcodeString[gcodeStringIndex], "Block: " + block.BlockName.ToString() + " at " + ins_x.ToString() + " " + ins_y.ToString());
-                                    }
-                                    foreach (DXFEntity blockEntity in block.Children)
-                                    {
-                                        processEntities(blockEntity, ins_x, ins_y);
-                                    }
-                                    if (dxfComments)
-                                        gcode.Comment(gcodeString[gcodeStringIndex], "Block: " + block.BlockName.ToString() + " end");
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (generation)
-                            {
-                                DXFCircle circle = (DXFCircle)doc.Entities[i];
-                                #region 白孔和红孔
-                                foreach (var item in parameter)
-                                {
-                                    if (item.Aperture == Math.Truncate(circle.Radius * 2))
-                                    {
-                                        if (drill == 1)
-                                        {
-                                            if (circle.ColorNumber == 0)
-                                            {
-                                                if (move != "" && xy.Count != 0 && xy[i].Id == i)
-                                                {
-                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
-                                                }
-                                                else
-                                                {
-                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
-                                                }
-                                            }
-                                        }
-                                        else if (drill == 2)
-                                        {
-                                            if (circle.ColorNumber != 0)
-                                            {
-                                                if (move != "" && xy.Count != 0 && xy[i].Id == i)
-                                                {
-                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
-                                                }
-                                                else
-                                                {
-                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                #endregion
-                            }
-                        }
-                    }
-                    #endregion
-                }
-                if (drill == 3)
-                {
-                    #region 全钻
-                    for (int j = 0; j < 2; j++)
-                    {
+                        #region 白孔红孔
+                        int q = 0;
                         for (int i = 0; i < doc.Entities.Count; i++)
                         {
                             dxfBezierAccuracy = (int)Properties.Settings.Default.importSVGBezier;
@@ -285,21 +199,22 @@ namespace GRBL_Plotter //DXFImporter
                             {
                                 if (generation)
                                 {
-                                    DXFCircle circle = (DXFCircle)doc.Entities[i];
-                                    #region 全钻
-                                    if (drill == 3)
+                                    if (doc.Entities[i].GetType() == typeof(DXFCircle))
                                     {
+                                        DXFCircle circle = (DXFCircle)doc.Entities[i];
+                                        #region 白孔和红孔
                                         foreach (var item in parameter)
                                         {
-                                            if (item.Aperture == Math.Truncate(circle.Radius * 2))
+                                            double num = circle.Radius * 2;
+                                            if (item.Aperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
                                             {
-                                                if (j == 0)
+                                                if (drill == 1)
                                                 {
                                                     if (circle.ColorNumber == 0)
                                                     {
-                                                        if (move != "" && xy.Count != 0 && xy[i].Id == i)
+                                                        if (move != "" && xy.Count != 0 && xy[q].Id == q)
                                                         {
-                                                            processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
+                                                            processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
                                                         }
                                                         else
                                                         {
@@ -307,13 +222,16 @@ namespace GRBL_Plotter //DXFImporter
                                                         }
                                                     }
                                                 }
-                                                else if (j == 1)
+                                            }
+                                            if (item.Aperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
+                                            {
+                                                if (drill == 2)
                                                 {
                                                     if (circle.ColorNumber != 0)
                                                     {
-                                                        if (move != "" && xy.Count != 0 && xy[i].Id == i)
+                                                        if (move != "" && xy.Count != 0 && xy[q].Id == q)
                                                         {
-                                                            processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
+                                                            processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
                                                         }
                                                         else
                                                         {
@@ -324,23 +242,127 @@ namespace GRBL_Plotter //DXFImporter
                                             }
                                         }
 
+                                        #endregion
+                                        q++;
                                     }
-                                    #endregion
-                                    //processEntities(dxfEntity, model, drill,parameter,parameterd);
                                 }
                             }
                         }
+                        #endregion
                     }
-                    #endregion
+                    if (drill == 3)
+                    {
+                        #region 全钻
+                        for (int j = 0; j < 2; j++)
+                        {
+                            int q = 0;
+                            for (int i = 0; i < doc.Entities.Count; i++)
+                            {
+
+                                dxfBezierAccuracy = (int)Properties.Settings.Default.importSVGBezier;
+                                gcodeReduce = Properties.Settings.Default.importSVGReduce;
+                                gcodeReduceVal = (double)Properties.Settings.Default.importSVGReduceLimit;
+
+                                gcodeZIncEnable = Properties.Settings.Default.importGCZIncEnable;
+                                gcodeZIncrement = (double)Properties.Settings.Default.importGCZIncrement;
+
+                                dxfPauseElement = Properties.Settings.Default.importSVGPauseElement;
+                                dxfPausePenDown = Properties.Settings.Default.importSVGPausePenDown;
+                                dxfComments = Properties.Settings.Default.importSVGAddComments;
+
+                                if (doc.Entities[i].GetType() == typeof(DXFInsert))
+                                {
+                                    DXFInsert ins = (DXFInsert)doc.Entities[i];
+                                    double ins_x = (double)ins.InsertionPoint.X;
+                                    double ins_y = (double)ins.InsertionPoint.Y;
+
+                                    foreach (DXFBlock block in doc.Blocks)
+                                    {
+                                        if (block.BlockName.ToString() == ins.BlockName)
+                                        {
+                                            if (dxfComments)
+                                            {
+                                                gcode.Comment(gcodeString[gcodeStringIndex], "Color: " + block.ColorNumber.ToString());
+                                                gcode.Comment(gcodeString[gcodeStringIndex], "Block: " + block.BlockName.ToString() + " at " + ins_x.ToString() + " " + ins_y.ToString());
+                                            }
+                                            foreach (DXFEntity blockEntity in block.Children)
+                                            {
+                                                processEntities(blockEntity, ins_x, ins_y);
+                                            }
+                                            if (dxfComments)
+                                                gcode.Comment(gcodeString[gcodeStringIndex], "Block: " + block.BlockName.ToString() + " end");
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (generation)
+                                    {
+                                        if (doc.Entities[i].GetType() == typeof(DXFCircle))
+                                        {
+                                            DXFCircle circle = (DXFCircle)doc.Entities[i];
+                                            #region 全钻
+                                            if (drill == 3)
+                                            {
+                                                foreach (var item in parameter)
+                                                {
+                                                    double num = circle.Radius * 2;
+                                                    if (item.Aperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
+                                                    {
+                                                        if (j == 0)
+                                                        {
+                                                            if (circle.ColorNumber == 0)
+                                                            {
+                                                                if (move != "" && xy.Count != 0 && xy[q].Id == q)
+                                                                {
+                                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                                }
+                                                                else
+                                                                {
+                                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (item.Aperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
+                                                    {
+                                                        if (j == 1)
+                                                        {
+                                                            if (circle.ColorNumber != 0)
+                                                            {
+                                                                if (move != "" && xy.Count != 0 && xy[q].Id == q)
+                                                                {
+                                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                                }
+                                                                else
+                                                                {
+                                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                            #endregion
+                                            q++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        #endregion
+                    }
                 }
                 #endregion
                 #region 攻丝
-                if (model == 2)
+                if (model == 2 || model == 3)
                 {
                     if (tapping == 1 || tapping == 2)
                     {
+                        int q = 0;
                         #region 白孔红孔
-                        for(int i = 0; i < doc.Entities.Count; i++)
+                        for (int i = 0; i < doc.Entities.Count; i++)
                         {
                             dxfBezierAccuracy = (int)Properties.Settings.Default.importSVGBezier;
                             gcodeReduce = Properties.Settings.Default.importSVGReduce;
@@ -381,45 +403,49 @@ namespace GRBL_Plotter //DXFImporter
                             {
                                 if (generation)
                                 {
-                                    DXFCircle circle = (DXFCircle)doc.Entities[i];
-                                    foreach (var item in tappingT)
+                                    if (doc.Entities[i].GetType() == typeof(DXFCircle))
                                     {
-                                        if (item.Taperture == Math.Truncate(circle.Radius*2))
+                                        DXFCircle circle = (DXFCircle)doc.Entities[i];
+                                        foreach (var item in tappingT)
                                         {
-                                            if (tapping == 1)
+                                            double num = circle.Radius * 2;
+                                            if (item.Taperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
                                             {
-                                                if (circle.ColorNumber == 0)
+                                                if (tapping == 1)
                                                 {
-                                                    if (move != "" && xy.Count != 0 && xy[i].Id == i)
+                                                    if (circle.ColorNumber == 0)
                                                     {
-                                                        processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
-                                                    }
-                                                    else
-                                                    {
-                                                        processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                        if (move != "" && xy.Count != 0 && xy[q].Id == q)
+                                                        {
+                                                            processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                        }
+                                                        else
+                                                        {
+                                                            processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                        }
                                                     }
                                                 }
                                             }
-                                            if (tapping == 2)
+                                            if (item.Taperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
                                             {
-                                                if (circle.ColorNumber != 0)
+                                                if (tapping == 2)
                                                 {
-                                                    if (move != "" && xy.Count != 0 && xy[i].Id == i)
+                                                    if (circle.ColorNumber != 0)
                                                     {
-                                                        processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
-                                                    }
-                                                    else
-                                                    {
-                                                        processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                        if (move != "" && xy.Count != 0 && xy[q].Id == q)
+                                                        {
+                                                            processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                        }
+                                                        else
+                                                        {
+                                                            processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
+                                        q++;
                                     }
-                                }
-                                else
-                                {
-                                    processEntities(doc.Entities[i]);
                                 }
                             }
                         }
@@ -430,6 +456,7 @@ namespace GRBL_Plotter //DXFImporter
                         #region 全钻
                         for (int j = 0; j < 2; j++)
                         {
+                            int q = 0;
                             for (int i = 0; i < doc.Entities.Count; i++)
                             {
                                 dxfBezierAccuracy = (int)Properties.Settings.Default.importSVGBezier;
@@ -471,47 +498,52 @@ namespace GRBL_Plotter //DXFImporter
                                 {
                                     if (generation)
                                     {
-                                        DXFCircle circle = (DXFCircle)doc.Entities[i];
-                                        #region 全钻
-                                        foreach (var item in tappingT)
+                                        if (doc.Entities[i].GetType() == typeof(DXFCircle))
                                         {
-                                            if (item.Taperture == Math.Truncate(circle.Radius*2))
+                                            DXFCircle circle = (DXFCircle)doc.Entities[i];
+                                            #region 全钻
+                                            foreach (var item in tappingT)
                                             {
-                                                if (j == 0)
+                                                double num = circle.Radius * 2;
+                                                if (item.Taperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
                                                 {
-                                                    if (circle.ColorNumber == 0)
+                                                    if (j == 0)
                                                     {
-                                                        if (move != "" && xy.Count != 0 && xy[i].Id == i)
+                                                        if (circle.ColorNumber == 0)
                                                         {
-                                                            processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
-                                                        }
-                                                        else
-                                                        {
-                                                            processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                            if (move != "" && xy.Count != 0 && xy[q].Id == q)
+                                                            {
+                                                                processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                            }
+                                                            else
+                                                            {
+                                                                processEntities1(doc.Entities[i], model, item.TWhiteZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                            }
                                                         }
                                                     }
                                                 }
-                                                else if (j == 1)
+                                                if (item.Taperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero))
                                                 {
-                                                    if (circle.ColorNumber != 0)
+                                                    if (j == 1)
                                                     {
-                                                        if (move != "" && xy.Count != 0 && xy[i].Id == i)
+                                                        if (circle.ColorNumber != 0)
                                                         {
-                                                            processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
-                                                        }
-                                                        else
-                                                        {
-                                                            processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                            if (move != "" && xy.Count != 0 && xy[q].Id == q)
+                                                            {
+                                                                processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString(), Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                            }
+                                                            else
+                                                            {
+                                                                processEntities1(doc.Entities[i], model, item.TRedZ, item.TPlaneR, item.TpitchF, item.TrevolutionsS, item.Tcutting, item.Tid.ToString());
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
+                                            #endregion
+                                            q++;
                                         }
-                                        #endregion
-                                    }
-                                    else
-                                    {
-                                        processEntities(doc.Entities[i]);
+
                                     }
                                 }
                             }
@@ -521,6 +553,7 @@ namespace GRBL_Plotter //DXFImporter
                 }
                 #endregion
                 #region 倒角
+                int a= 0;
                 for (int i = 0; i < doc.Entities.Count; i++)
                 {
                     dxfBezierAccuracy = (int)Properties.Settings.Default.importSVGBezier;
@@ -562,20 +595,25 @@ namespace GRBL_Plotter //DXFImporter
                     {
                         if (generation)
                         {
-                            DXFCircle circle = (DXFCircle)doc.Entities[i];
-                            foreach (var item in parameterd)
+                            if (doc.Entities[i].GetType() == typeof(DXFCircle))
                             {
-                                if (item.Aperture == Math.Truncate(circle.Radius*2))
+                                DXFCircle circle = (DXFCircle)doc.Entities[i];
+                                foreach (var item in parameterd)
                                 {
-                                    if (move != "" && xy.Count != 0 && xy[i].Id == i)
+                                    double num = circle.Radius * 2;
+                                    if (item.Aperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero) && item.Id != 0)
                                     {
-                                        processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[i].X), Convert.ToDouble(xy[i].Y));
-                                    }
-                                    else
-                                    {
-                                        processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                        if (move != "" && xy.Count != 0 && xy[a].Id == a)
+                                        {
+                                            processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[a].X), Convert.ToDouble(xy[a].Y));
+                                        }
+                                        else
+                                        {
+                                            processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                        }
                                     }
                                 }
+                                a++;
                             }
                         }
                     }
@@ -1085,7 +1123,7 @@ namespace GRBL_Plotter //DXFImporter
             {   askPenUp = true; }//
         }
 
-        /// <summary>
+        /// <summary> 
         /// Insert G1 gcode command
         /// </summary>
         private static void gcodeMoveTo(double x, double y, string cmt)
@@ -1108,7 +1146,7 @@ namespace GRBL_Plotter //DXFImporter
         /// Insert G1 gcode command
         /// </summary>
         private static void gcodeMoveTo(System.Windows.Point orig, string cmt)
-        {
+        { 
             if (!dxfComments)
                 cmt = "";
             System.Windows.Point coord = translateXY(orig);

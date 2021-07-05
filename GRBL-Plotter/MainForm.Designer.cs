@@ -1445,7 +1445,7 @@ namespace GRBL_Plotter
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.White;
-            this.pictureBox1.BackgroundImage = global::GRBL_Plotter.Properties.Resources.modell2;
+            this.pictureBox1.BackgroundImage = global::GRBL_Plotter.Properties.Resources.modell21;
             resources.ApplyResources(this.pictureBox1, "pictureBox1");
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.ContextMenuStrip = this.cmsPictureBox;
