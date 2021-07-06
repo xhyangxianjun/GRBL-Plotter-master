@@ -55,7 +55,6 @@ namespace GRBL_Plotter
         public xyzPoint(double x, double y, double z, double a = 0)
         { X = x; Y = y; Z = z; A = a; }
     };
-
     public partial class MainForm : Form
     {
         ControlSerialForm _serial_form = null;
@@ -95,6 +94,8 @@ namespace GRBL_Plotter
         List<Parameter> parameterd = new List<Parameter>();
         List<Tapping> tappingT = new List<Tapping>();
         string moveXY = "";
+        double OffsetX = 0;
+        double OffsetY = 0;
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -941,8 +942,6 @@ namespace GRBL_Plotter
         {
             lastSource = source;
             int num = 0;
-           // this.Cursor = Cursors.WaitCursor;
-            // MessageBox.Show(Fcode);
             List<gcodeLine> listgcode =visuGCode.getines();
             if (listgcode != null)
             {
@@ -1583,8 +1582,6 @@ namespace GRBL_Plotter
             frmAbout.ShowDialog();
         }
 
-
-
         private void showLaserMode()
         {
             if (!_serial_form.isGrblVers0 && _serial_form.isLasermode)
@@ -1971,7 +1968,6 @@ namespace GRBL_Plotter
             return;
         }
 
-
         #region GUI Objects
 
 
@@ -2150,7 +2146,6 @@ namespace GRBL_Plotter
 
         #endregion
 
-
         /// <summary>
         /// Handling of RichTextBox rtBCode
         /// </summary>
@@ -2303,8 +2298,6 @@ namespace GRBL_Plotter
 
         #endregion
 
-
-
         #region paintBox
         // onPaint drawing
         private Pen penUp = new Pen(Color.Green, 0.1F);
@@ -2417,6 +2410,7 @@ namespace GRBL_Plotter
         // find closest coordinate in GCode and mark
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            fCTBCode.Text=Fcode;
             if (fCTBCode.LinesCount > 2)
             {
                 int line;
@@ -2426,6 +2420,7 @@ namespace GRBL_Plotter
                 fCTBCodeMarkLine();
                 fCTBCode.DoCaretVisible();
             }
+            fCTBCode.Text = "";
         }
 
         private Matrix pBoxTransform = new Matrix();
@@ -2473,8 +2468,6 @@ namespace GRBL_Plotter
         private float transformMousePos(float old, float offset)
         { return old * zoomRange + offset; }
         #endregion
-
-
 
         private int findEndOfPath(int startLine, bool toEnd)
         {
@@ -2590,15 +2583,25 @@ namespace GRBL_Plotter
                         fCTBCodeMarkLine();
                     }
                     fCTBCode.DoCaretVisible();
-                    redrawGCodePath();
+                    redrawGCodePath();//画图函数
                     return;
                 }
             }
-            MessageBox.Show("Path start / end could not be identified");
+            CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
+            if (ci.ToString() == "zh")
+            {
+                MessageBox.Show("无法识别路径开始/结束");
+            }
+            else if (ci.ToString() == "en")
+            {
+                MessageBox.Show("Path start / end could not be identified");
+            }
+            
         }
 
         private void deleteThisCodeLineToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            fCTBCode.Text = Fcode;
             if (fCTBCode.LinesCount < 1) return;
             fCTBCodeClickedLineLast = 1;
             fCTBCodeMarkLine();
@@ -2610,21 +2613,135 @@ namespace GRBL_Plotter
             }
             fCTBCode.DoCaretVisible();
             redrawGCodePath();
+            Fcode = fCTBCode.Text;
+            fCTBCode.Text = "";
             return;
         }
+        private void checkTheDiameterOfTheHoleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fCTBCode.Text = Fcode;
+            if (fCTBCode.LinesCount < 1) return;
+            fCTBCodeClickedLineLast = 1;
+            fCTBCodeMarkLine();
+            List<gcodeLine> listgcode = visuGCode.getines();
+            double? zhij = 0;
+            int isnu = 0;
+            for (int i = 0; i < listgcode.Count; i++)
+            {
+                if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
+                {
+                    isnu = 1;
+                    if (listgcode[i + 2].i < 0)
+                    {
+                        zhij = -listgcode[i + 2].i * 2;
+                    }
+                    else
+                    {
+                        zhij = listgcode[i + 2].i * 2;
+                    }
+                  
+                }
+            }
+            Fcode = fCTBCode.Text;
+            fCTBCode.Text = "";
+            if (isnu!=0)
+            {
+                if (zhij == null)
+                {
+                    MessageBox.Show("找不到此孔的孔径");
+                }
+                else
+                {
+                    MessageBox.Show("孔的直径为：" + zhij + "");
+                }
+            }
+        }
+        //声明一个委托来相互传值
+        void ShowText(double x,double y)
+        {
+            OffsetX = x;
+            OffsetY = y;
+        }
 
+        private void pictureBox1_DoubleClick(object sender, EventArgs e)
+        {
+            fCTBCode.Text = Fcode;
+            if (fCTBCode.LinesCount < 1) return;
+            fCTBCodeClickedLineLast = 1;
+            fCTBCodeMarkLine();
+            List<gcodeLine> listgcode = visuGCode.getines();
+            double? zhij = 0;
+            for (int i = 0; i < listgcode.Count; i++)
+            {
+                if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
+                {
+                    if (listgcode[i + 2].i < 0)
+                    {
+                        zhij = -listgcode[i + 2].i * 2;
+                    }
+                    else
+                    {
+                        zhij = listgcode[i + 2].i * 2;
+                    }
+                    if (zhij != null)
+                    {
+                        offsetXY xy = new offsetXY(listgcode[i].x, listgcode[i].y, ShowText);
+                        fCTBCode.Text = "";
+                        xy.ShowDialog();
+                        fCTBCode.Text = Fcode;
+                        string G00 = string.Format("G00 X{0} Y{1}", OffsetX, OffsetY);
+                        string G02 = "";
+                        if (listgcode[i + 2].codeLine.Contains("ssss"))
+                        {
+                             G02 = string.Format("G02 X-{0} Y{1} I{2} J{3} F{4}  ssss", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                        }
+                        else
+                        {
+                             G02 = string.Format("G02 X-{0} Y{1} I{2} J{3} F{4}", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                        }
+                        listgcode[fCTBCodeClickedLineLast].codeLine = G00;
+                        listgcode[fCTBCodeClickedLineLast + 2].codeLine = G02;
+                    }
+                }
+            }
+            Fcode = "";
+            for (int i = 0; i < listgcode.Count; i++)
+            {
+                Fcode += listgcode[i].codeLine+ "\r\n";
+            }
+            fCTBCode.Text = Fcode;
+            redrawGCodePath();
+            fCTBCode.Text = "";
+        }
         private bool deleteMarkedCode = false;
         private void deletenotMarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
             if (deleteMarkedCode)
             {
                 deleteMarkedCode = false;
-                deletenotMarkToolStripMenuItem.Text = "Mark (not delete)";
+                if (ci.ToString() == "zh")
+                {
+                    deletenotMarkToolStripMenuItem.Text = "不可删除";
+                }
+                else if (ci.ToString() == "en")
+                {
+                    deletenotMarkToolStripMenuItem.Text = "Mark (not delete)";
+                }
+                
             }
             else
             {
                 deleteMarkedCode = true;
-                deletenotMarkToolStripMenuItem.Text = "Delete (not mark)";
+                if (ci.ToString() == "zh")
+                {
+                    deletenotMarkToolStripMenuItem.Text = "可删除";
+                }
+                else if (ci.ToString() == "en")
+                {
+                    deletenotMarkToolStripMenuItem.Text = "Delete (not mark)";
+                }
+                
             }
         }
 
@@ -2702,9 +2819,6 @@ namespace GRBL_Plotter
 
         private void pasteFromClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         { loadFromClipboard(); }
-
-
-
 
         private void btnOverrideFR0_Click(object sender, EventArgs e)
         { sendRealtimeCommand(144); }     // 0x90 : Set 100% of programmed rate.    
@@ -3315,7 +3429,6 @@ namespace GRBL_Plotter
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
-          
             #region 钻孔
             if (txt_caoPlane.Text != "" )
             {
@@ -4976,5 +5089,7 @@ namespace GRBL_Plotter
             redrawGCodePath();//画图的函数
             fCTBCode.Text="";
         }
+
+       
     }
 }

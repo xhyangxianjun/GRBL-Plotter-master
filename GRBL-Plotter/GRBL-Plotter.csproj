@@ -161,6 +161,12 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="offsetXY.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="offsetXY.Designer.cs">
+      <DependentUpon>offsetXY.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MachineControl\ControlSerialForm.cs">
@@ -304,6 +310,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.zh.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="offsetXY.resx">
+      <DependentUpon>offsetXY.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

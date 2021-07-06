@@ -688,7 +688,7 @@
     <value>172, 22</value>
   </data>
   <data name="deleteThisCodeLineToolStripMenuItem.Text" xml:space="preserve">
-    <value>删除此代码行</value>
+    <value>删除图形</value>
   </data>
   <data name="moveToFirstPosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>172, 22</value>
@@ -714,8 +714,14 @@
   <data name="setTheStartingCoordinatePositionToolStripMenuItem.Text" xml:space="preserve">
     <value>设定起始坐标位置</value>
   </data>
+  <data name="checkTheDiameterOfTheHoleToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 22</value>
+  </data>
+  <data name="checkTheDiameterOfTheHoleToolStripMenuItem.Text" xml:space="preserve">
+    <value>查看孔的直径</value>
+  </data>
   <data name="cmsPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 198</value>
+    <value>173, 220</value>
   </data>
   <data name="button1.Location" type="System.Drawing.Point, System.Drawing">
     <value>76, 353</value>
