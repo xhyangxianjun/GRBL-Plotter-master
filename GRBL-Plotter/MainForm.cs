@@ -819,7 +819,7 @@ namespace GRBL_Plotter
             generateGCode = sender.ToString();
             Fcode = fCTBCode.Text;
             pictureBox1.BackColor = Color.Black;
-            fCTBCode.Text = "";
+            //fCTBCode.Text = "";
         }
 
         private void loadFile(string fileName, bool generation = false)
@@ -838,7 +838,6 @@ namespace GRBL_Plotter
                     return;
                 }
             }
-            //Cursor.Current = Cursors.WaitCursor;
 
             pictureBox1.BackgroundImage = null;
             visuGCode.setPosMarker(0, 0);
@@ -871,7 +870,7 @@ namespace GRBL_Plotter
                 _image_form.loadExtern(fileName);
             }
             SaveRecentFile(fileName);
-            setLastLoadedFile("Data from file: " + fileName);
+            setLastLoadedFile("Data from file: " + fileName );
 
             if (ext == ".url")
             { getURL(fileName); }
@@ -966,7 +965,7 @@ namespace GRBL_Plotter
                         {
                             xy.Add(new MoveXY() { Id = id, X = listgcode[i].x, Y = listgcode[i].y });
                             id++;
-                        }
+                        } 
                     }
             }
             string gcode = GCodeFromDXF.ConvertFile(xy, moveXY, source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex, com_TappingSetting.SelectedIndex, parameter, parameterd, tappingT, generation);
@@ -2420,7 +2419,7 @@ namespace GRBL_Plotter
                 fCTBCodeMarkLine();
                 fCTBCode.DoCaretVisible();
             }
-            fCTBCode.Text = "";
+            //fCTBCode.Text = "";
         }
 
         private Matrix pBoxTransform = new Matrix();
@@ -2671,44 +2670,54 @@ namespace GRBL_Plotter
             fCTBCodeMarkLine();
             List<gcodeLine> listgcode = visuGCode.getines();
             double? zhij = 0;
-            for (int i = 0; i < listgcode.Count; i++)
+            if (listgcode!=null)
             {
-                if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
+                for (int i = 0; i < listgcode.Count; i++)
                 {
-                    if (listgcode[i + 2].i < 0)
+                    if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
                     {
-                        zhij = -listgcode[i + 2].i * 2;
-                    }
-                    else
-                    {
-                        zhij = listgcode[i + 2].i * 2;
-                    }
-                    if (zhij != null)
-                    {
-                        offsetXY xy = new offsetXY(listgcode[i].x, listgcode[i].y, ShowText);
-                        fCTBCode.Text = "";
-                        xy.ShowDialog();
-                        fCTBCode.Text = Fcode;
-                        string G00 = string.Format("G00 X{0} Y{1}", OffsetX, OffsetY);
-                        string G02 = "";
-                        if (listgcode[i + 2].codeLine.Contains("ssss"))
+                        if (listgcode[i + 2].i < 0)
                         {
-                             G02 = string.Format("G02 X-{0} Y{1} I{2} J{3} F{4}  ssss", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                            zhij = -listgcode[i + 2].i * 2;
                         }
                         else
                         {
-                             G02 = string.Format("G02 X-{0} Y{1} I{2} J{3} F{4}", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                            zhij = listgcode[i + 2].i * 2;
                         }
-                        listgcode[fCTBCodeClickedLineLast].codeLine = G00;
-                        listgcode[fCTBCodeClickedLineLast + 2].codeLine = G02;
+                        if (zhij != null)
+                        {
+                            offsetXY xy = new offsetXY(listgcode[i].x, listgcode[i].y, ShowText);
+                            fCTBCode.Text = "";
+                            xy.ShowDialog();
+                            fCTBCode.Text = Fcode;
+                            string G00 = string.Format("G00 X{0} Y{1}", OffsetX, OffsetY);
+                            string G02 = "";
+                            if (listgcode[i + 2].codeLine.Contains("ssss"))
+                            {
+                                G02 = string.Format("G02 X{0} Y{1} I{2} J{3} F{4}  ssss", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                            }
+                            else
+                            {
+                                G02 = string.Format("G02 X{0} Y{1} I{2} J{3} F{4}", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                             }
+                            if (Math.Round((double)listgcode[i + 2].i + Convert.ToDouble(listgcode[i].x), 3, MidpointRounding.AwayFromZero)==listgcode[i+4].x)
+                            {
+                                string G = string.Format("G00 X{0} Y{1}", OffsetX + listgcode[i + 2].i, OffsetY);
+                                listgcode[fCTBCodeClickedLineLast + 4].codeLine = G;
+                            }
+                            listgcode[fCTBCodeClickedLineLast].codeLine = G00;
+                            listgcode[fCTBCodeClickedLineLast + 2].codeLine = G02;
+                           
+                        }
                     }
                 }
+                Fcode = "";
+                for (int i = 0; i < listgcode.Count; i++)
+                {
+                    Fcode += listgcode[i].codeLine + "\r\n";
+                }
             }
-            Fcode = "";
-            for (int i = 0; i < listgcode.Count; i++)
-            {
-                Fcode += listgcode[i].codeLine+ "\r\n";
-            }
+           
             fCTBCode.Text = Fcode;
             redrawGCodePath();
             fCTBCode.Text = "";
