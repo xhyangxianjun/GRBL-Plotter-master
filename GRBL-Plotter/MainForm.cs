@@ -57,7 +57,7 @@ namespace GRBL_Plotter
     };
     public partial class MainForm : Form
     { 
-        ControlSerialForm _serial_form = null;
+        ControlSerialForm _serial_form = null;   
         ControlSerialForm _serial_form2 = null;
         Control2ndGRBL _2ndGRBL_form = null;
         ControlStreamingForm _streaming_form = null;
