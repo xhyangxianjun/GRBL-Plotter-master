@@ -33,5 +33,17 @@ namespace GRBL_Plotter
             txt_x.Text = X.ToString();
             txt_y.Text = Y.ToString();
         }
+
+        private void offsetXY_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //this._del(Convert.ToDouble(txt_x.Text), Convert.ToDouble(txt_y.Text));
+            //this.Close();
+        }
+
+        private void offsetXY_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this._del(Convert.ToDouble(txt_x.Text), Convert.ToDouble(txt_y.Text));
+            this.Close();
+        }
     }
 }

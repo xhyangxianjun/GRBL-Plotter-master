@@ -87,9 +87,14 @@
             this.Controls.Add(this.txt_x);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.HelpButton = true;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "offsetXY";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "偏移XY";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.offsetXY_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.offsetXY_FormClosed);
             this.Load += new System.EventHandler(this.offsetXY_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
