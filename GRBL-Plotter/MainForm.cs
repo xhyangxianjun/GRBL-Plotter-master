@@ -56,8 +56,8 @@ namespace GRBL_Plotter
         { X = x; Y = y; Z = z; A = a; }
     };
     public partial class MainForm : Form
-    { 
-        ControlSerialForm _serial_form = null;   
+    {
+        ControlSerialForm _serial_form = null;
         ControlSerialForm _serial_form2 = null;
         Control2ndGRBL _2ndGRBL_form = null;
         ControlStreamingForm _streaming_form = null;
@@ -93,9 +93,11 @@ namespace GRBL_Plotter
         List<Parameter> parameter = new List<Parameter>();
         List<Parameter> parameterd = new List<Parameter>();
         List<Tapping> tappingT = new List<Tapping>();
+        List<MoveXY> xy = new List<MoveXY>();
         string moveXY = "";
         double OffsetX = 0;
         double OffsetY = 0;
+        bool generate = false;
         public MainForm()
         {
             CultureInfo ci = new CultureInfo(Properties.Settings.Default.language);
@@ -750,11 +752,7 @@ namespace GRBL_Plotter
         // open a file via dialog
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
-            //判断所有参数是否为空
-            //isNUllParameterz
-            //if (dxcb!="")
-            //{
-           
+            generate = false;
             Fcode = "";
             openFileDialog1.FileName = "";
             openFileDialog1.Filter = "DXF files (*.dxf)|*.dxf|SVG files (*.svg)|*.svg|gcode files (*.nc)|*.nc|All files (*.*)|*.*";
@@ -768,7 +766,7 @@ namespace GRBL_Plotter
                 fCTBCode.Text = "";
                 isHeightMapApplied = false;
             }
-          
+
         }
         // handle MRU List
         private int MRUnumber = 20;
@@ -814,6 +812,7 @@ namespace GRBL_Plotter
         }
         private void RecentFile_click(object sender, EventArgs e)
         {
+            generate = false;
             Fcode = "";
             loadFile(sender.ToString());
             generateGCode = sender.ToString();
@@ -870,7 +869,7 @@ namespace GRBL_Plotter
                 _image_form.loadExtern(fileName);
             }
             SaveRecentFile(fileName);
-            setLastLoadedFile("Data from file: " + fileName );
+            setLastLoadedFile("Data from file: " + fileName);
 
             if (ext == ".url")
             { getURL(fileName); }
@@ -936,12 +935,12 @@ namespace GRBL_Plotter
             this.Cursor = Cursors.Default;
             updateControls();
         }
-        List<MoveXY> xy = new List<MoveXY>();
+
         private void startConvertDXF(string source, bool generation = false)
         {
             lastSource = source;
             int num = 0;
-            List<gcodeLine> listgcode =visuGCode.getines();
+            List<gcodeLine> listgcode = visuGCode.getines();
             if (listgcode != null)
             {
                 for (int i = 0; i < listgcode.Count; i++)
@@ -952,21 +951,21 @@ namespace GRBL_Plotter
                     }
                 }
             }
-            if (num !=0)
+            if (num != 0)
             {
                 xy = new List<MoveXY>();
             }
             int id = 0;
             if (listgcode != null)
             {
-                    for (int i = 0; i < listgcode.Count; i++)
+                for (int i = 0; i < listgcode.Count; i++)
+                {
+                    if (listgcode[i].codeLine.Contains("G02"))
                     {
-                        if (listgcode[i].codeLine.Contains("G02"))
-                        {
-                            xy.Add(new MoveXY() { Id = id, X = listgcode[i].x, Y = listgcode[i].y });
-                            id++;
-                        } 
+                        xy.Add(new MoveXY() { Id = id, X = listgcode[i].x, Y = listgcode[i].y });
+                        id++;
                     }
+                }
             }
             string gcode = GCodeFromDXF.ConvertFile(xy, moveXY, source, com_ModelSetting.SelectedIndex, com_drillingSetting.SelectedIndex, com_TappingSetting.SelectedIndex, parameter, parameterd, tappingT, generation);
             if (gcode.Length > 2)
@@ -983,7 +982,7 @@ namespace GRBL_Plotter
             updateControls();
             //moveXY = "";
         }
-       
+
         bool blockRTBEvents = false;
         private void loadGcode()
         {
@@ -2409,17 +2408,32 @@ namespace GRBL_Plotter
         // find closest coordinate in GCode and mark
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            fCTBCode.Text = Fcode;
-            if (fCTBCode.LinesCount > 2)
+            if (generate)
             {
-                int line;
-                line = visuGCode.setPosMarkerNearBy(picAbsPosX, picAbsPosY);
-                fCTBCode.Selection = fCTBCode.GetLine(line);
-                fCTBCodeClickedLineNow = line;
-                fCTBCodeMarkLine();
-                fCTBCode.DoCaretVisible();
+                if (fCTBCode.LinesCount > 2)
+                {
+                    int line;
+                    line = visuGCode.setPosMarkerNearBy(picAbsPosX, picAbsPosY);
+                    fCTBCode.Selection = fCTBCode.GetLine(line);
+                    fCTBCodeClickedLineNow = line;
+                    fCTBCodeMarkLine();
+                    fCTBCode.DoCaretVisible();
+                }
             }
-            fCTBCode.Text = "";
+            else
+            {
+                fCTBCode.Text = Fcode;
+                if (fCTBCode.LinesCount > 2)
+                {
+                    int line;
+                    line = visuGCode.setPosMarkerNearBy(picAbsPosX, picAbsPosY);
+                    fCTBCode.Selection = fCTBCode.GetLine(line);
+                    fCTBCodeClickedLineNow = line;
+                    fCTBCodeMarkLine();
+                    fCTBCode.DoCaretVisible();
+                }
+                fCTBCode.Text = "";
+            }
         }
 
         private Matrix pBoxTransform = new Matrix();
@@ -2595,67 +2609,70 @@ namespace GRBL_Plotter
             {
                 MessageBox.Show("Path start / end could not be identified");
             }
-            
+
         }
         private void pictureBox1_DoubleClick(object sender, EventArgs e)
         {
-            fCTBCode.Text = Fcode;
-            if (fCTBCode.LinesCount < 1) return;
-            fCTBCodeClickedLineLast = 1;
-            fCTBCodeMarkLine();
-            List<gcodeLine> listgcode = visuGCode.getines();
-            double? zhij = 0;
-            if (listgcode != null)
+            if (!generate)
             {
-                for (int i = 0; i < listgcode.Count; i++)
+                fCTBCode.Text = Fcode;
+                if (fCTBCode.LinesCount < 1) return;
+                fCTBCodeClickedLineLast = 1;
+                fCTBCodeMarkLine();
+                List<gcodeLine> listgcode = visuGCode.getines();
+                double? zhij = 0;
+                if (listgcode != null)
                 {
-                    if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
+                    for (int i = 0; i < listgcode.Count; i++)
                     {
-                        if (listgcode[i + 2].i < 0)
+                        if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
                         {
-                            zhij = -listgcode[i + 2].i * 2;
-                        }
-                        else
-                        {
-                            zhij = listgcode[i + 2].i * 2;
-                        }
-                        if (zhij != null)
-                        {
-                            offsetXY xy = new offsetXY(listgcode[i].x, listgcode[i].y, ShowText);
-                            fCTBCode.Text = "";
-                            xy.ShowDialog();
-                            fCTBCode.Text = Fcode;
-                            string G00 = string.Format("G00 X{0} Y{1}", OffsetX, OffsetY);
-                            string G02 = "";
-                            if (listgcode[i + 2].codeLine.Contains("ssss"))
+                            if (listgcode[i + 2].i < 0)
                             {
-                                G02 = string.Format("G02 X{0} Y{1} I{2} J{3} F{4}  ssss", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                                zhij = -listgcode[i + 2].i * 2;
                             }
                             else
                             {
-                                G02 = string.Format("G02 X{0} Y{1} I{2} J{3} F{4}", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                                zhij = listgcode[i + 2].i * 2;
                             }
-                            if (Math.Round((double)listgcode[i + 2].i + Convert.ToDouble(listgcode[i].x), 3, MidpointRounding.AwayFromZero) == listgcode[i + 4].x)
+                            if (zhij != null)
                             {
-                                string G = string.Format("G00 X{0} Y{1}", OffsetX + listgcode[i + 2].i, OffsetY);
-                                listgcode[fCTBCodeClickedLineLast + 4].codeLine = G;
-                            }
-                            listgcode[fCTBCodeClickedLineLast].codeLine = G00;
-                            listgcode[fCTBCodeClickedLineLast + 2].codeLine = G02;
+                                offsetXY xy = new offsetXY(listgcode[i].x, listgcode[i].y, ShowText);
+                                fCTBCode.Text = "";
+                                xy.ShowDialog();
+                                fCTBCode.Text = Fcode;
+                                string G00 = string.Format("G00 X{0} Y{1}", OffsetX, OffsetY);
+                                string G02 = "";
+                                if (listgcode[i + 2].codeLine.Contains("ssss"))
+                                {
+                                    G02 = string.Format("G02 X{0} Y{1} I{2} J{3} F{4}  ssss", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                                }
+                                else
+                                {
+                                    G02 = string.Format("G02 X{0} Y{1} I{2} J{3} F{4}", OffsetX, OffsetY, listgcode[i + 2].i, listgcode[i + 2].j, 2000);
+                                }
+                                if (Math.Round((double)listgcode[i + 2].i + Convert.ToDouble(listgcode[i].x), 3, MidpointRounding.AwayFromZero) == listgcode[i + 4].x)
+                                {
+                                    string G = string.Format("G00 X{0} Y{1}", OffsetX + listgcode[i + 2].i, OffsetY);
+                                    listgcode[fCTBCodeClickedLineLast + 4].codeLine = G;
+                                }
+                                listgcode[fCTBCodeClickedLineLast].codeLine = G00;
+                                listgcode[fCTBCodeClickedLineLast + 2].codeLine = G02;
 
+                            }
                         }
                     }
+                    Fcode = "";
+                    for (int i = 0; i < listgcode.Count; i++)
+                    {
+                        Fcode += listgcode[i].codeLine + "\r\n";
+                    }
                 }
-                Fcode = "";
-                for (int i = 0; i < listgcode.Count; i++)
-                {
-                    Fcode += listgcode[i].codeLine + "\r\n";
-                }
-            }
 
-            fCTBCode.Text = Fcode;
-            redrawGCodePath();
-            fCTBCode.Text = "";
+                fCTBCode.Text = Fcode;
+                redrawGCodePath();
+                fCTBCode.Text = "";
+            }
         }
 
 
@@ -2718,51 +2735,54 @@ namespace GRBL_Plotter
         }
         private void checkTheDiameterOfTheHoleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fCTBCode.Text = Fcode;
-            if (fCTBCode.LinesCount < 1) return;
-            fCTBCodeClickedLineLast = 1;
-            fCTBCodeMarkLine();
-            List<gcodeLine> listgcode = visuGCode.getines();
-            double? zhij = 0;
-            int isnu = 0;
-            for (int i = 0; i < listgcode.Count; i++)
+            if (!generate)
             {
-                if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
+                fCTBCode.Text = Fcode;
+                if (fCTBCode.LinesCount < 1) return;
+                fCTBCodeClickedLineLast = 1;
+                fCTBCodeMarkLine();
+                List<gcodeLine> listgcode = visuGCode.getines();
+                double? zhij = 0;
+                int isnu = 0;
+                for (int i = 0; i < listgcode.Count; i++)
                 {
-                    isnu = 1;
-                    if (listgcode[i + 2].i < 0)
+                    if (listgcode[i].codeLine.Contains(fCTBCode.Lines[fCTBCodeClickedLineLast]))
                     {
-                        zhij = -listgcode[i + 2].i * 2;
+                        isnu = 1;
+                        if (listgcode[i + 2].i < 0)
+                        {
+                            zhij = -listgcode[i + 2].i * 2;
+                        }
+                        else
+                        {
+                            zhij = listgcode[i + 2].i * 2;
+                        }
+
+                    }
+                }
+                Fcode = fCTBCode.Text;
+                fCTBCode.Text = "";
+                if (isnu != 0)
+                {
+                    if (zhij == null)
+                    {
+                        MessageBox.Show("找不到此孔的孔径");
                     }
                     else
                     {
-                        zhij = listgcode[i + 2].i * 2;
+                        MessageBox.Show("孔的直径为：" + zhij + "");
                     }
-                  
-                }
-            }
-            Fcode = fCTBCode.Text;
-            fCTBCode.Text = "";
-            if (isnu!=0)
-            {
-                if (zhij == null)
-                {
-                    MessageBox.Show("找不到此孔的孔径");
-                }
-                else
-                {
-                    MessageBox.Show("孔的直径为：" + zhij + "");
                 }
             }
         }
         //声明一个委托来相互传值
-        void ShowText(double x,double y)
+        void ShowText(double x, double y)
         {
             OffsetX = x;
             OffsetY = y;
         }
 
-        
+
         private bool deleteMarkedCode = false;
         private void deletenotMarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2778,7 +2798,7 @@ namespace GRBL_Plotter
                 {
                     deletenotMarkToolStripMenuItem.Text = "Mark (not delete)";
                 }
-                
+
             }
             else
             {
@@ -2791,7 +2811,7 @@ namespace GRBL_Plotter
                 {
                     deletenotMarkToolStripMenuItem.Text = "Delete (not mark)";
                 }
-                
+
             }
         }
 
@@ -3274,6 +3294,15 @@ namespace GRBL_Plotter
             {
                 MessageBox.Show("请选择你要的模式设置"); return;
             }
+            int model = com_ModelSetting.SelectedIndex;
+            if (model == 3)
+            {
+                if (com_drillingSetting.SelectedIndex != com_TappingSetting.SelectedIndex)
+                {
+                    MessageBox.Show("先钻后功需要设置一致，请重新设置");
+                    return;
+                }
+            }
             if (txt_caoRevolutions.Text == "")
             {
                 MessageBox.Show("倒角刀号不能为空"); return;
@@ -3304,8 +3333,6 @@ namespace GRBL_Plotter
             {
                 MessageBox.Show("孔径设置有误，请重新设置"); return;
             }
-
-            int model = com_ModelSetting.SelectedIndex;
             #region 钻孔
             if (model == 1 || model == 3)
             {
@@ -3439,6 +3466,7 @@ namespace GRBL_Plotter
 
         private void button1_Click(object sender, EventArgs e)
         {
+
             bool MyGeneration = true;
             if (generateGCode != "")
             {
@@ -3447,6 +3475,7 @@ namespace GRBL_Plotter
                 {
                     loadFile(generateGCode, MyGeneration);
                     fCTBCode.Text = Fcode;
+                    generate = true;
                 }
             }
             else
@@ -3480,7 +3509,7 @@ namespace GRBL_Plotter
         private void timer1_Tick(object sender, EventArgs e)
         {
             #region 钻孔
-            if (txt_caoPlane.Text != "" )
+            if (txt_caoPlane.Text != "")
             {
                 int knife = 0;
                 try
@@ -3491,7 +3520,7 @@ namespace GRBL_Plotter
                 {
                     MessageBox.Show("钻孔刀号输入有误，请重新输入");
                 }
-                
+
 
                 var model = parameter.FirstOrDefault();
                 try
@@ -4102,7 +4131,7 @@ namespace GRBL_Plotter
             }
             #endregion
             #region 功丝
-            if (txt_yuanSpeed.Text != "" )
+            if (txt_yuanSpeed.Text != "")
             {
                 int tapping = 0;
                 try
@@ -5040,7 +5069,7 @@ namespace GRBL_Plotter
             }
             catch (Exception)
             {
-               // MessageBox.Show("攻丝刀号输入有误，请重新输入");
+                // MessageBox.Show("攻丝刀号输入有误，请重新输入");
             }
             var model = tappingT.Where(c => c.Tid == knife).FirstOrDefault();
             if (knife != 0)
@@ -5126,7 +5155,7 @@ namespace GRBL_Plotter
             if (fCTBCode.Lines.Count > 1)
             {
                 fCTBCode.Cursor = Cursors.WaitCursor;
-                fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset1,picAbsPosX,picAbsPosY);
+                fCTBCode.Text = visuGCode.transformGCodeOffset(-offsetx, -offsety, GCodeVisuAndTransform.translate.Offset1, picAbsPosX, picAbsPosY);
                 updateDrawing();
                 fCTBCodeClickedLineNow = fCTBCodeClickedLineLast;
                 fCTBCodeClickedLineLast = 0;
@@ -5137,9 +5166,7 @@ namespace GRBL_Plotter
             Cursor.Current = Cursors.Default;
             Fcode = fCTBCode.Text;
             redrawGCodePath();//画图的函数
-            fCTBCode.Text="";
+            fCTBCode.Text = "";
         }
-
-       
     }
 }

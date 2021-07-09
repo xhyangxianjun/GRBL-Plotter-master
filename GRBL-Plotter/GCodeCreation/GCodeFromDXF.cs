@@ -214,11 +214,11 @@ namespace GRBL_Plotter //DXFImporter
                                                     {
                                                         if (move != "" && xy.Count != 0 && xy[q].Id == q)
                                                         {
-                                                            processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                            processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
                                                         }
                                                         else
                                                         {
-                                                            processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                                            processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ);
                                                         }
                                                     }
                                                 }
@@ -231,11 +231,11 @@ namespace GRBL_Plotter //DXFImporter
                                                     {
                                                         if (move != "" && xy.Count != 0 && xy[q].Id == q)
                                                         {
-                                                            processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                            processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
                                                         }
                                                         else
                                                         {
-                                                            processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                                            processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ);
                                                         }
                                                     }
                                                 }
@@ -315,11 +315,11 @@ namespace GRBL_Plotter //DXFImporter
                                                             {
                                                                 if (move != "" && xy.Count != 0 && xy[q].Id == q)
                                                                 {
-                                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
                                                                 }
                                                                 else
                                                                 {
-                                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                                                    processEntities(doc.Entities[i], model, drill, item.WhiteZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ);
                                                                 }
                                                             }
                                                         }
@@ -332,11 +332,11 @@ namespace GRBL_Plotter //DXFImporter
                                                             {
                                                                 if (move != "" && xy.Count != 0 && xy[q].Id == q)
                                                                 {
-                                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
+                                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ, Convert.ToDouble(xy[q].X), Convert.ToDouble(xy[q].Y));
                                                                 }
                                                                 else
                                                                 {
-                                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                                                    processEntities(doc.Entities[i], model, drill, item.RedZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ);
                                                                 }
                                                             }
                                                         }
@@ -603,14 +603,37 @@ namespace GRBL_Plotter //DXFImporter
                                     double num = circle.Radius * 2;
                                     if (item.Aperture == Math.Round((double)num, 1, MidpointRounding.AwayFromZero) && item.Id != 0)
                                     {
-                                        if (move != "" && xy.Count != 0 && xy[a].Id == a)
+                                        if (drill == 1)
                                         {
-                                            processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ, Convert.ToDouble(xy[a].X), Convert.ToDouble(xy[a].Y));
+                                            if (circle.ColorNumber == 0)
+                                            {
+                                                if (move != "" && xy.Count != 0 && xy[a].Id == a)
+                                                {
+                                                    processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ, Convert.ToDouble(xy[a].X), Convert.ToDouble(xy[a].Y));
+                                                }
+                                                else
+                                                {
+                                                    processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ);
+                                                }
+                                            }
                                         }
-                                        else
+
+                                        if (drill == 2)
                                         {
-                                            processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.SpeedF, item.Id, item.CuttingQ);
+                                            if (circle.ColorNumber != 0)
+                                            {
+                                                if (move != "" && xy.Count != 0 && xy[a].Id == a)
+                                                {
+                                                    processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ, Convert.ToDouble(xy[a].X), Convert.ToDouble(xy[a].Y));
+                                                }
+                                                else
+                                                {
+                                                    processEntities(doc.Entities[i], model, drill, item.ChamferingZ, item.PlaneR, item.SpeedF, item.RevolutionsS, item.Id, item.CuttingQ);
+                                                }
+                                            }
                                         }
+
+
                                     }
                                 }
                                 a++;
